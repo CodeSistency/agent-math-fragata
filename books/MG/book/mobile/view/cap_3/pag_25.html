@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 25</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/ownerStyles.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+
+</head>
+
+<body>
+
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas</h3>
+    <hr>
+    <div class="text-center">
+      <h3 class="superTitle"><strong>EJEMPLOS DE POLINOMIOS</strong></h3>
+      <p class="infoText">Observe: diagramas diferentes, mismo polinomio</p>
+    </div>
+    <p class="infoText" style="margin-left: 100px;">Complete:</p>
+    <math-field id="test" virtual-keyboard-mode="onfocus"></math-field>
+
+    <!-- style="max-width: 1050px" -->
+    <div id="mainArtifact" style="max-width: 1200px">
+      <div id="contenedor" class="mainContent">
+        <div id="titulo"></div>
+      </div>
+    </div> <br>
+
+    <!-- <p class="text-center">En su cuaderno, haga al menos dos diagramas diferentes para cada uno de los polinomios:</p>
+ 
+  <div style=" display: flex;
+   justify-content: center;
+   align-items: center;
+   ">
+    <math-field style="font-size: 18px;" disabled>
+      3x^2-2x+1,\quad 4x^4+x,\quad 5-x+2x^3,\quad x+x^2
+    </math-field>
+  </div> -->
+    <template id="template">
+      <div id="artifact"></div>
+    </template>
+    <p class="infoText">En su cuaderno, haga al menos dos diagramas diferentes para cada uno de los polinomios:</p>
+    <span class="operationContainer">
+      <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off' fonts-directory='fonts' keypress-sound="none">a) 3x^2-2x+1
+      </math-field>
+      <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off' fonts-directory='fonts' keypress-sound="none">
+        \quad b) 4x^4+x\quad
+
+      </math-field>
+      <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off' fonts-directory='fonts' keypress-sound="none">
+        \quad c) 5-x+2x^3 \quad
+      </math-field>
+
+      <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off' fonts-directory='fonts' keypress-sound="none">
+        \quad d) x+x^2 \quad
+      </math-field>
+
+    </span>
+
+    <p class="infoText">
+      Los diagramas ramificados , sirven para hacer fórmulas de " polinomios" y de " funciones
+      racionales" . Las operaciones que se pueden poner en los cuadritos que están entre dos "ramas"
+      del diagrama son la suma, el producto, la resta y la división, entendiéndose en los dos últimos
+      casos que la fórmula que resta o divide es la que proviene de la rama derecha.</p>
+
+
+  </div>
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive.min.js"></script>
+  <script src="../../../dist/library/computeEngine.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/cap_3/mathEngine.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/engineOwner.min.js"></script>
+
+  <!-- definition -->
+  <script src="../../../dist/definitions/cap_3/pag_25.min.js"></script>
+</body>
+
+</html>

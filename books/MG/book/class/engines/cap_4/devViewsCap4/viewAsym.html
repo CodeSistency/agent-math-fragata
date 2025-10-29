@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asintota</title>
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../libraries/css/cap_4/styles_cap_4.css" />
+</head>
+
+<body>
+
+  <div class=" d-flex flex-wrap justify-content-center pt-3">
+    <div class="artifactSumConstant " data-artifact="artifact_1" data-board="board_1"></div>
+    <div class="artifactSumConstant mx-2" data-artifact="artifact_2" data-board="board_2"></div>
+
+  </div>
+
+
+
+  <template id="engineSumConstant-tmp">
+    <div class="engineSumConstant">
+      <div class="engineSumConstantContainer">
+        <!-- container artefact -->
+        <div class="engineSumConstant__notification transitionNotification" data-show="false">
+        </div>
+
+        <div class="engineSumConstant__content">
+          <div class="engineSumConstant__Board" id="boad1" data-board="board_" data-artifact="artifact_"></div>
+        </div>
+
+
+        <!-- donde se inserta el menu -->
+        <div class="artifactCurve__menu ">
+          <section class="closeContent">
+            <p class="textSelect">Selecciona la Curva</p>
+            <button class="close-btn"> </button>
+
+          </section>
+          <section class="funtionContent">
+
+          </section>
+        </div>
+
+        <div class="engineSumConstant__btnContainer btnContainer btn-all">
+          <button class=" asyntote button-marg buttonTertiary buttonKey buttonAux" title="Asintota">
+            <svg width="100%" height="100%" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">
+              <circle cx="50%" cy="50%" r="12%" fill="none" stroke="#000" stroke-width="2" />
+              <circle cx="50%" cy="50%" r="22%" fill="none" stroke="#000" stroke-width="2" />
+              <line x1="50%" y1="0" x2="50%" y2="100%" stroke="#000" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class=" xSlice button-marg buttonTertiary buttonKey buttonAux" title="Asintota">
+            <svg width="100%" height="100%" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;">
+
+              <line x1="100%" y1="50%" x2="0%" y2="50%" stroke="#000" stroke-width="2" stroke-linecap="round" />
+              <line x1="80%" y1="100%" x2="20%" y2="0%" stroke="#000" stroke-width="2" stroke-linecap="round" />
+              <line x1="50%" y1="100%" x2="50%" y2="0%" stroke="#000" stroke-width="2" stroke-linecap="round" />
+
+            </svg>
+          </button>
+          <div class="engineSumConstant__Otherbtn">
+
+
+
+            <button class="button-marg_menu buttonSecundary_menu buttonKey_menu curve_menu btnCurve" id="btnChose-0" data-status='inactive' data-select='null'>
+          </div>
+          <div>
+
+            <button class="help-btn button-marg buttonSecundary buttonKey d-none"></button>
+            <button class="reset button-marg buttonSecundary buttonKey"></button>
+            <button class="check button-marg buttonPrimary buttonKey"></button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- template de  curvas menu -->
+  <template id="tmp-ImagenMenu">
+    <div class="cardfuntionMenu justify-content-center">
+
+      <img src="" alt="" class="svgCurves">
+    </div>
+  </template>
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <!-- <script src="../libraries/mathLive-V0.9.js"></script> -->
+  <script src="../../../libraries/mathLive-V0.9.js"></script>
+  <script src="../../../libraries/computeEngine-0.2.js"></script>
+
+
+
+  <!-- Motores -->
+  <script src="../../genericEngines/mathKeyboard.js"></script>
+  <script src="../../genericEngines/mod_G.js"></script>
+  <script src="../../genericEngines/engineMaker.js"></script>
+  <script src="./notificationAlert.js"></script>
+  <script src="../engineAsym.js"></script>
+
+  <!-- Definition -->
+  <!-- Definition -->
+  <script src="./definitionAsym.js"></script>
+</body>
+
+</html>

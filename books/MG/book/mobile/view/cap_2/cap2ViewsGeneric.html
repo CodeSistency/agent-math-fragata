@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta-data android:name="android.webkit.WebView.EnableFileAccessFromFileURLs" android:value="true" />
+  <meta-data android:name="android.content.securityPolicy" />
+  <title></title>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+</head>
+
+<body>
+  <!-- <script src="http://172.17.12.86:3070/artifact"></script> -->
+
+  <section class='main'></section>
+  <!-- html independiente del brain estructura local -->
+  <script type="module">
+    const respMovile = typeof Android !== 'undefined' ? JSON.parse(Android.capPage()) : null;
+    const respDefault = {
+      pag: 'pag_1',
+      cap: '2',
+      ejs: `<h1> ay dios amigo!!! está  por defecto.</h1>`,
+      ...respMovile
+    };
+
+
+    respDefault.ejs = respDefault.ejs.replace(/\\/gi, '');
+    respDefault.ejs = respDefault.ejs.replace(/<\s+/g, "<");
+
+    const ejsclean = JSON.parse(JSON.stringify(respDefault));
+    console.log(ejsclean.ejs.replace(/\\/gi, '').replace(/<\s+/g, "<"));
+
+    async function initPage(respMovile) {
+      const pagina = respMovile.ejs; //await obtenerPagina(respMovile);
+      if (!pagina) {
+        console.warn('error en la ruta de la pagina');
+      }
+      const $container = document.querySelector('.main');
+      $container.insertAdjacentHTML("beforeend", pagina);
+      const script = document.createElement('script');
+      script.setAttribute('src', `../../../dist/definitions/cap_${respMovile.cap}/${respMovile.pag}.js`);
+
+      document.body.appendChild(script);
+    };
+    initPage(respDefault); // Llama a la función para obtener la página
+  </script>
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive.min.js"></script>
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/cap_1/boardDefault.min.js"></script>
+
+  <script src="../../../dist/class/engines/cap_2/engineToWay.min.js"></script>
+
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/engineOwner.min.js"></script>
+  <script src="../../../dist/class/engines/cap_2/engineOperations.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+  <!-- definicion -->
+
+</body>
+
+</html>

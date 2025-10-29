@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {
+            console.log(
+                'Service Worker registered with scope:',
+                registration.scope,
+            );
+            })
+            .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+            });
+        }
+    </script>
+    <!-- //////////////////////////////////// css por defecto ///////////////////////////////////// -->
+    <link rel="stylesheet" href="/msmg/CSS/generic/jsxgraph" />
+    <link rel="stylesheet" href="/msmg/CSS/generic/mathlive-static" />
+    <!--  ////////////////////////////// css general /////////////////////////////////////////// -->
+    <% sources?.library?.forEach(item=> { %>
+        <script defer src="/msmg/LIB/<%=item%>"></script>
+        <% }); %>
+            <% sources?.style?.forEach(cssFile=> { %>
+                <link rel="stylesheet" href="/msmg/CSS/<%= cssFile %>">
+                <% }); %>
+                    <!-- ////////////////////////////////// librerias ////////////////////////////////////// -->
+
+                    <!-- /////////////////////////////////// fin librerias ////////////////////////////////////// -->
+</head>
+
+<body>
+    <style>
+        :root {
+            --keyboard-zindex: 10000;
+            /* Asegúrate de que el valor sea mayor al de otros elementos */
+        }
+    </style>

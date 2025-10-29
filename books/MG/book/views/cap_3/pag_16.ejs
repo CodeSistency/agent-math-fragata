@@ -1,0 +1,34 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas</h3>
+    <hr>
+    <p class="infoText">
+      Haga mentalmente los pasos de aplicación y simplificación.</p>
+    <p class="note"> <br />-En caso de error o que no sea solución, colocar ∄
+      <br /> -Recuerde utilizar 6 decimales si es necesario
+      <br />-Utilice la calculadora en radianes
+    </p>
+    <p> Recuerde que las fracciones son números.</p>
+    <div class="contentArtifactMath">
+      <div id="mainArtifact" style="max-width: 1050px">
+        <div id="contenedor" class="mainContent"></div>
+      </div>
+    </div>
+
+    <template id="template">
+      <div id="artifact"></div>
+    </template>
+  </div>
+
+  <style>
+    .defRoad {
+      width: fit-content;
+
+    }
+
+    .col-6 {
+      flex: 0 0 0%;
+    }
+  </style>
+  </div>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

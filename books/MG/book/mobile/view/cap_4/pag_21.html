@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 21</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/ownerStyles.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/cap_2/styles_cap_2.min.css">
+  <link rel="stylesheet" href="../../../dist/css/cap_4/styles_cap_4.min.css">
+
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+
+</head>
+
+
+<body>
+
+  <div class="containerNormal background-gray">
+    <nav class="mb-5 border-bottom border-dark">
+      <div class="d-flex justify-content-between">
+        <p class="navbar-brand font-italic text-break">Operaciones con Curvas</p>
+      </div>
+    </nav>
+
+
+    <p>Grafique <math>
+        <mrow>
+          <mi>f</mi>
+          <mrow>
+            <mo fence="true" form="prefix">(</mo>
+            <mi>x</mi>
+            <mo fence="true" form="postfix">)</mo>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mi>sin</mi>
+            <mo>⁡</mo>
+          </mrow>
+          <mrow>
+            <mo fence="true" form="prefix">(</mo>
+            <mn>2</mn>
+            <mi>x</mi>
+            <mo fence="true" form="postfix">)</mo>
+          </mrow>
+        </mrow>
+      </math> haciendo los caminos que salen desde los puntos marcados sobre el eje x.</p>
+
+
+
+
+
+    <div style="display: flex ; justify-content: center;">
+
+      <div class="defRoad  " data-board="board_0"> </div>
+    </div>
+
+    <div style="display: flex ; justify-content: center; ">
+
+      <div id="rendering_1" style="margin-top: 10px;"></div>
+
+    </div>
+
+    <div id="mainOwner"></div>
+
+
+
+
+    <div class=" container d-flex justify-content-between">
+      <div class="row d-flex justify-content-between">
+        <div id="globalContainer">
+          <div class="d-flex flex-wrap justify-content-center ">
+            <div class="">
+              <div id="oneContainer" class="contenedor-preguntas "></div>
+            </div>
+            <div class="" style="height: min-content;">
+              <div id="twoContainer" class="contenedor-preguntas"></div>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap justify-content-center align-items-center">
+            <div id="thirdContainer" class="contenedor-preguntas "></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <template id="tmp-road">
+
+      <div class="rContainer-xl">
+
+        <div class="rEncunciado_container borderDefault mb-1 rounded text-center rounded-1">
+          <p class="rEnunciadoTop">f(g(x))</p>
+        </div>
+
+
+        <div class="jxgbox defRoadBoard borderDefault rounded rounded-1 " style="min-height: 300px;"></div>
+
+        <div class="rEncunciado_container borderDefault mb-1 rounded text-center rounded-1">
+          <p class="rEnunciadoBottom">f(g(x))</p>
+        </div>
+        <div class="btn-all d-flex flex-row rBotones borderDefault rounded rounded-1  ">
+
+          <div class="rButtons_paths ">
+            <button class="rUp_arrow  buttonKey " title=" camino  hacia arriba"></button>
+            <button class="rRight_arrow  buttonKey" title="camino hacia derecha"></button>
+            <button class="rLeft_arrow  buttonKey  " title="camino hacia izquierda"></button>
+            <button class="rDown_arrow  buttonKey  " title="camino hacia abajo"></button>
+          </div>
+
+          <div class="d-flex flex-wrap rBtns">
+            <div class="rInteractiveOne Interactive">
+
+              <button class="finishRoad buttonAux button-marg  buttonKey" title="Punto final"></button>
+              <button class="visible buttonAux button-marg  buttonKey" title="Visible">
+                <svg width="80%" height="80%" fill="none" strokeWidth="1.5" viewBox="0 0 24 24" color="#000000">
+                  <path stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                  <path stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M21 12c-1.889 2.991-5.282 6-9 6s-7.111-3.009-9-6c2.299-2.842 4.992-6 9-6s6.701 3.158 9 6Z">
+                  </path>
+                </svg>
+              </button>
+
+              <button hidden class="help buttonSecundary button-marg buttonKey" title="Ayuda"></button>
+            </div>
+
+            <div class="rInteractiveTow Interactive">
+              <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+              <button class="reset buttonSecundary button-marg buttonKey" title="Reiniciar"></button>
+              <button class="check buttonPrimary button-marg buttonKey " title="Validar"></button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </template>
+
+    <template id="template">
+      <div class="content_1">
+        <div class="content_2">
+        </div>
+      </div>
+    </template>
+
+
+  </div>
+  </div>
+
+</body>
+<!-- Librerías -->
+<script src="../../../dist/library/jsxgraphcore.min.js"></script>
+<script src="../../../dist/library/mathLive.min.js"></script>
+
+<!-- Motores -->
+<script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+
+<script src="../../../dist/class/engines/cap_2/engineRoad.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/engineOwner.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+
+<script src="../../../dist/class/engines/cap_4/quizEngine.min.js"></script>
+<script src="../../../dist/class/engines/cap_4/keyboardsList.min.js"></script>
+
+
+<!-- definicion -->
+<script src="../../../definitions/cap_4/pag_21.js"></script>
+
+</body>
+
+</html>

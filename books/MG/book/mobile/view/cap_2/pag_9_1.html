@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 9.1</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+  <script src="../../../dist/library/computeEngine.min.js"></script>
+
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/ownerStyles.min.css" />
+
+</head>
+
+<body>
+
+  <style>
+    .card {
+      min-width: 280px;
+    }
+
+    /* .contenedor-preguntas .row{
+      display: flex;
+      justify-content: space-between ;
+   } */
+    /* #content{
+      display: flex;
+      justify-content: center;
+   } */
+    math-field {
+      display: flex;
+      justify-content: center;
+      width: 70% !important;
+
+    }
+
+    .card-footer {
+      padding: 0px
+    }
+
+    .toValidate {
+
+
+      display: inline;
+      justify-content: space-between;
+    }
+
+    @media only screen and (max-width: 900) {
+
+      math-field {
+
+        display: flex;
+        justify-content: center;
+        width: 100% !important;
+
+      }
+
+
+    }
+
+    .question__content {
+      padding: 10px !important
+    }
+  </style>
+
+
+  <div class="containerNormal background-gray " style="flex-wrap:wrap" id="globalContainer">
+    <nav class="mb-5 border-bottom border-dark  ">
+      <div class="d-flex justify-content-between  ">
+        <p class="navbar-brand   text-break">Operaciones con Curvas</p>
+      </div>
+    </nav>
+    <!-- <div style="width:min-content"> -->
+
+    <div id="mainOwner" class="d-flex" style="flex-wrap: wrap ;
+          justify-content: center;
+          gap: 10px;">
+
+      <template id="template">
+        <div class="content_1">
+          <div class="content_2"></div>
+        </div>
+      </template>
+
+
+    </div>
+    <!-- </div> -->
+
+
+    <template id="card-template">
+
+      <div class="card mb-2" style=" min-width: 280px !important; padding:0px; border: 1px solid var(--azulMedio);border-radius: 10px; width: min-content;">
+        <div class="card-header text-center">Utiliza los caminos correspondientes</div>
+        <div class="card-body" style="height: fit-content; padding:0px !important">
+
+        </div>
+        <div class="card-footer  d-flex justify-content-center">
+
+        </div>
+      </div>
+
+    </template>
+    <template id="cardCol">
+      <div class="" style="min-width: 280px;">
+
+      </div>
+      <div>
+
+      </div>
+
+    </template>
+    <!--                                    fin  template                                 -->
+    <template id="tmp-road">
+
+      <div class="rContainer">
+
+        <div class="rEncunciado_container borderDefault mb-1 rounded text-center rounded-1">
+          <p class="rEnunciadoTop">f(g(x))</p>
+        </div>
+
+        <div class="jxgbox defRoadBoard borderDefault rounded rounded-1 " style="min-height: 300px;"></div>
+
+        <div class="rEncunciado_container borderDefault mb-1 rounded text-center rounded-1">
+          <p class="rEnunciadoBottom">f(g(x))</p>
+        </div>
+        <div class="btn-all d-flex flex-row rBotones borderDefault rounded rounded-1  ">
+
+          <div class="rButtons_paths ">
+            <button class="rUp_arrow  buttonKey " title=" camino  hacia arriba"></button>
+            <button class="rRight_arrow  buttonKey" title="camino hacia derecha"></button>
+            <button class="rLeft_arrow  buttonKey  " title="camino hacia izquierda"></button>
+            <button class="rDown_arrow  buttonKey  " title="camino hacia abajo"></button>
+          </div>
+
+          <div class="d-flex flex-wrap rBtns">
+            <div class="rInteractiveOne Interactive">
+
+              <button class="finishRoad buttonAux button-marg  buttonKey" title="Punto final"></button>
+              <button class="visible buttonAux button-marg  buttonKey" title="Visible">
+                <svg width="80%" height="80%" fill="none" strokeWidth="1.5" viewBox="0 0 24 24" color="#000000">
+                  <path stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                  <path stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M21 12c-1.889 2.991-5.282 6-9 6s-7.111-3.009-9-6c2.299-2.842 4.992-6 9-6s6.701 3.158 9 6Z">
+                  </path>
+                </svg>
+              </button>
+
+              <button hidden class="help buttonSecundary button-marg buttonKey" title="Ayuda"></button>
+            </div>
+
+            <div class="rInteractiveTow Interactive">
+              <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+              <button class="reset buttonSecundary button-marg buttonKey" title="Reiniciar"></button>
+              <button class="check buttonPrimary button-marg buttonKey " title="Validar"></button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </template>
+
+    <!-- fin  template -->
+    <template id="template">
+      <div class="content_1">
+        <div class="content_2">
+        </div>
+      </div>
+    </template>
+
+    <template id="globalTemplate">
+      <div id="artifact-container" class="d-flex flex-wrap justify-content-center rounded btn-all artifact-container question">
+        <div id="content" class="question__content">
+        </div>
+        <div class="d-flex w-100 flex-wrap justify-content-center  rounded btn-all question__footer">
+          <div class="d-flex flex-row">
+            <div class="d-flex flex-wrap justify-content-start "></div>
+            <button class="reset button-marg buttonSecundary buttonKey question__footer__reset" title="Reiniciar"></button>
+            <button class="check button-marg buttonPrimary buttonKey question__footer__check" title="Validar"></button>
+
+          </div>
+        </div>
+
+      </div>
+
+    </template>
+
+    <template id="templateSelect">
+      <div class='' id="selectq">
+        <div class="">
+          <label for="opciones"></label>
+        </div>
+        <div class="">
+          <select class="form-select form-controlx" name="opciones" id="opciones" style="width:fit-content">
+        </div>
+        </select>
+      </div>
+    </template>
+
+    <template id="templateCheck">
+
+      <div class=" row d-flex" id="radioContainer">
+        <div class="title col-4 justify-content-start">
+
+        </div>
+        <div class="content col-6 justify-content-start">
+
+        </div>
+      </div>
+
+    </template>
+
+    <template id="templateInput">
+      <div class="">
+        <div id="title" class=""></div>
+        <div id="content" class="row d-flex justify-content-center"></div>
+      </div>
+
+    </template>
+  </div>
+</body>
+
+<!-- Librerías -->
+<script src="../../../dist/library/jsxgraphcore.min.js"></script>
+<script src="../../../dist/library/mathLive.min.js"></script>
+<script src="../../../dist/library/computeEngine.min.js"></script>
+
+<!-- Motores -->
+<script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+<script src="../../../dist/class/engines/cap_2/engineToWay.min.js"></script>
+<script src="../../../dist/class/engines/cap_2/engineRoad.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/engineOwner.min.js"></script>
+<script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+
+<!-- Definitions -->
+<script src="../../../dist/definitions/cap_2/pag_9_1.min.js"></script>
+</body>
+
+</html>

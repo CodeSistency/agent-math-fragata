@@ -1,0 +1,390 @@
+/* Contenedor de preguntas */
+
+.question {
+  background-color: white;
+  outline: 2px solid var(--azulMedio) !important;
+  border-radius: 0.5rem !important;
+  min-width: 200px;
+  max-width: 500px;
+  /* width: fit-content !important; */
+  display: flex;
+  justify-content: center !important;
+  margin: 0.5em !important;
+  overflow: hidden;
+}
+
+.table__mathfield {
+
+  min-width: 60px;
+}
+
+.table .toValidate {
+  max-width: 100%;
+
+}
+
+.question__content {
+  /* background-color: #fff; */
+  padding: 30px !important;
+  margin-right: 10px !important;
+  margin-left: 10px !important;
+}
+
+.question__content__table {
+  min-width: 200px !important;
+  width: inherit !important;
+  padding: 0px !important;
+  height: auto;
+}
+
+.question:hover {
+  box-shadow: 7px 7px 7px 7px rgba(159, 159, 159, 0.20);
+}
+
+.question__footer {
+  width: 100%;
+  /* background-color: #fff; */
+  border-top: 1px solid var(--azulMedio) !important;
+  border-radius: 0 0 10px 10px !important;
+  padding: 10px;
+
+}
+
+table {
+  background-color: white;
+  margin: 0px !important
+}
+
+.question>table {
+  padding: 0px !important;
+
+  margin-bottom: 0px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table td {
+  padding-left: 0.1em !important;
+  padding-right: 0.1em !important;
+  vertical-align: middle !important;
+  max-height: none;
+}
+
+/* .ML__container{
+  height: 500px !important;
+  background-color: blue !important;
+  border:1px !important;
+} */
+.question select {
+  max-width: none !important;
+  border: none !important;
+  margin: 0px !important;
+}
+
+.contentCol math-field {
+  /* background-color: rgb(226, 226, 226) !important; */
+  width: 100%;
+}
+
+/* td math-field{
+  max-width: none !important ;
+  margin:0px !important;
+
+} */
+table math-field[read-only] {
+  border: 0px solid var(--azulMedio);
+  /* background-color: rgba(255, 255, 255, 0) !important; */
+
+}
+
+table math-field {
+  border: 1px solid var(--azulMedio);
+  margin: 1px;
+  /* background-color: rgba(255, 255, 255, 0) !important; */
+
+}
+
+
+td {
+  margin: none !important;
+
+  align-items: middle !important;
+}
+
+td p {
+  display: flex;
+  justify-content: center;
+  margin: 0.6rem !important;
+
+  padding: none !important;
+}
+
+th span.ML_content {
+  margin: 0px !important;
+  max-width: none;
+  height: 400px !important;
+  width: 100%;
+}
+
+td :focus {
+  border: none !important;
+
+}
+
+@media screen and (max-width: 600px) {
+
+  td,
+  option {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .question .input-for-way {
+    font-size: 15px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  td {
+    font-size: 15px !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+
+  td,
+  select,
+  option {
+    padding: 0px;
+    font-size: 10px;
+  }
+
+  .question .input-for-way {
+    font-size: 15px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  td {
+    font-size: 10px !important;
+  }
+}
+
+/* .question__footer__reset, .question__footer__check{
+    background-color: rgb(197, 197, 197) !important;
+}
+.reset::after{
+    color:rgb(116, 116, 116)
+}
+
+.check{
+    background-color: rgb(197, 197, 197) !important;
+}
+.check::after{
+    color:rgb(116, 116, 116)
+} */
+/* Contenedor de preguntas */
+
+
+
+/* Selects */
+
+.question .toValidate {
+  border: 1px solid rgb(101, 168, 173) !important;
+
+  /* background-color: rgb(226, 226, 226); */
+  width: 90%;
+}
+
+#selectq {
+  padding-top: 0.8rem !important;
+  padding-bottom: 0.8rem;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form-controlx {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  /* background-color: #fff; */
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+#selectq {
+  display: flex;
+  justify-content: center;
+}
+
+#selectq label {
+  margin-bottom: 0.5rem;
+  margin: 0.5em !important;
+  font-weight: bold;
+
+}
+
+#selectq select {
+  width: 100% !important;
+  /* margin: 0.5em !important; */
+  border: solid 1px var(--azulMedio) !important;
+
+  /* background-color: var(--seletsColor); */
+  font-weight: bold;
+  background-position: right center;
+}
+
+/* Selects */
+
+/* Radio */
+
+#radioContainer {
+  align-items: center;
+}
+
+.title {
+
+  display: block !important;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.question__content .content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center !important;
+}
+
+.content .radioRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content .radioCol {
+  display: inline-block;
+
+  width: fit-content !important;
+}
+
+.content input[type="radio"] {
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  margin-top: 0.2em;
+  margin-bottom: 1em;
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-right: 5px;
+
+}
+
+/* Radio */
+
+
+/* Input */
+.templateInput {
+  padding: 0.5rem;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+
+.templateInput #title {
+  text-decoration: none !important;
+}
+
+.templateInput #content {
+  display: flex;
+  justify-content: center;
+}
+
+.templateInput math-field {
+
+  border-bottom: none !important;
+  /* background-color: rgba(255, 255, 255, 0) !important; */
+  display: block !important;
+  width: 200px;
+  justify-content: center !important;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: center;
+}
+
+/* Estilos para los títulos */
+
+/* Input */
+td {
+  padding: 0px !important;
+
+}
+
+select.input-for-way {
+  border-radius: 0px;
+  min-height: 45px !important;
+
+  border-bottom: rgba(108, 105, 105, 0.25) 1px solid !important;
+
+}
+
+
+math {
+  font-size: 1.3em;
+  margin: 0.2em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wrapper>div {
+  flex: 1 1 200px;
+}
+.inlineInput {
+  width: 20%;
+  border: none;
+  font-size: 13pt;
+  border: 1px solid var(--azulMedio);
+
+  /* background-color: #e8e5e5; */
+  height: 45px;
+  min-width: 10px;
+  border-radius: 5px;
+  margin-inline: 4px;
+  transition: width 1s ease-in-out;
+}

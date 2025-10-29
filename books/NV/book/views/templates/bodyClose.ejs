@@ -1,0 +1,17 @@
+<script src="/gateway/file/NV/GENERIC/abstract/send"></script>
+<% sources?.library?.forEach(item=> { %>
+    <script src="/gateway/file/NV/LIB/<%=item%>"></script>
+    <% }); %>
+        <% sources?.engine?.forEach(item=> { %>
+            <script src="/gateway/file/NV/ENG/<%= item %>"></script>
+            <% }); %>
+                <% sources?.generic?.forEach(item=> { %>
+                    <script src="/gateway/file/NV/GENERIC/<%= item %>"></script>
+                    <% }); %>
+                        <% sources?.validation?.forEach(item=> { %>
+                            <script src="/gateway/file/NV/VAL/<%= item %>"></script>
+                            <% }); %>
+                                <script defer src="/gateway/file/NV/DEF/<%= sources?.definition %>"></script>
+                                </body>
+
+                                </html>

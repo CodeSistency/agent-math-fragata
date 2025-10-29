@@ -1,0 +1,49 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas y curvas</h3>
+    <hr>
+    <p class="infoText">En este capítulo conectamos las nociones de curva y fórmula desarrollada en los tres primeros
+      capítulos anteriores. La idea de esa conexión se atribuye a Descartes y Fermat. Es una idea imprescindible en la
+      vida moderna: sin ella ni siquiera tendríamos televisores</p>
+
+    <p>Cada tecla (y más en general cada fórmula) se puede hacer corresponder con una única curva.</p>
+    <p class="centerText">¿Cómo se "fabrica" la curva que corresponde a una tecla?</p>
+    <p class="centerText">El primer método se llama <strong>"punto a punto".</strong></p>
+    <p class="centerText">Pero, ¿cómo se marcan los primeros puntos?</p>
+
+    <section class="examples flexGrid" style="gap: 20px;justify-content: center;">
+      <div class="example_1 borderDefault">
+      </div>
+
+
+      <div id="mainArtifact" class="borderDefault"
+        style="max-width: 1050px;  height: 340px; display: flex;  flex-direction: column; justify-content: center;">
+        <div id="contenedor" class="mainContent"></div>
+        <strong style="padding: 5px">Transforme el valor n usando la tecla K( )</strong>
+      </div>
+
+
+      <div class="example_2"></div>
+
+    </section>
+
+    <section class="examples2 flexGrid padding-2 borderDefault margin-2">
+      <p>El punto Negro, de coordenadas <span class="expression"><strong>(n,K(n))</strong></span>, es uno de los puntos
+        de la curva que corresponde a K</p>
+      <div class="example_3"></div>
+    </section>
+    <section class="marginTop-2">
+      <p class="centerText">Una curva puede verse como una infinidad de puntos.</p>
+      <p class="centerText">La curva "aparece" si marcas cada uno de estos puntos.</p>
+      <p class="centerText">En la práctica esto es imposible y lo que se suele hacer es marcar solo algunos puntos y
+        luego unirlos.</p>
+      <p class="centerText">Esto suele ser suficiente para tener una idea de la verdadera curva.</p>
+    </section>
+
+  </div>
+
+
+  <template id="template">
+    <div id="artifact"></div>
+  </template>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

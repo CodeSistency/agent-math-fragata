@@ -1,0 +1,127 @@
+<%- include(rutes+'/head.min.ejs'); %>
+    <div class="containerNormal background-gray">
+        <h3>Fórmulas y Curvas</h3>
+        <hr>
+
+        <div class="d-flex flex-wrap justify-content-center marginTop-2">
+            <div class="rendering_1"></div>
+        </div>
+
+        <div class="flexGrid marginTop-2">
+            <p class="infoText">Hasta ahora se han utilizado la suma, el producto y la composición de curvas para
+                graficar
+                fórmulas complicadas. A continuación se da un ejemplo donde se usa el cociente (o recíproca) de una
+                curva.
+            </p>
+
+        </div>
+        <div class="flexGrid marginTop-2 d-flex justify-content-center">
+            <p class="infoText"> Como Cosecante = <math class="tml-display" style="display: math;">
+                    <mfrac>
+                        <mn>1</mn>
+                        <mn>Seno</mn>
+                    </mfrac>
+                </math> la curva de la Cosecante es la curva recíproca del Seno. &nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+        </div>
+        <div class="flexGrid marginTop-2 d-flex justify-content-center">
+            <p class="infoText">Grafique la Cosecante. &nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+        </div>
+        <!-----------------Artefacto de colorArtifact------------- -->
+
+        <section class=" d-flex justify-content-center">
+            <div class="centerElement colorArtifact colorArtifact--lg " data-definition="artifact_1"
+                data-board="board_0">
+            </div>
+        </section>
+
+
+        <div class="flexGrid marginTop-2">
+            <div class="rendering_2"></div>
+            <div class="rendering_3"></div>
+            <div class="rendering_4"></div>
+            <div class="rendering_5"></div>
+        </div>
+    </div>
+
+
+
+    <!-------------------------------------------------------------------- -->
+
+    <div class=" container d-flex justify-content-between">
+        <div class="row d-flex justify-content-between">
+            <div id="globalContainer">
+                <div class="d-flex flex-wrap justify-content-center ">
+                    <div class="">
+                        <div id="oneContainer" class="contenedor-preguntas "></div>
+                    </div>
+                    <div class="" style="height: min-content;">
+                        <div id="twoContainer" class="contenedor-preguntas"></div>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center align-items-center">
+                    <div id="thirdContainer" class="contenedor-preguntas "></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 
+
+<img src="../../../assets/cap_2/3.png" alt="" style="width: 100%;  max-width: 700px;">
+-->
+
+
+    <!-- TemplateEngineColor -->
+
+
+    <template id="templateExample">
+
+        <div class="artifactColor">
+            <div class="artifactColor__notification transitionNotification " data-show="false">
+                <!-- Selección de franjas inadecuada -->
+
+            </div>
+
+            <div class="artifactColor__Board" id="" data-board="board_" data-artifact="artifact_">
+            </div>
+            <div class="artifactColor__menu">
+                <span class="arrowToClose"></span>
+
+                <div class="artifactColor__menuContent">
+                    <div class="artifactColor__menuColors" data-position='positive' data-select="null">
+
+                    </div>
+                    <div class="artifactColor__menuColors" data-position='negative' data-select="null">
+
+                    </div>
+                </div>
+            </div>
+            <div class="artifactColor__btnContainer btn-all">
+
+                <div class="choseColors">
+
+                    <div class="choseColors__elements">
+
+                        <button class="choseColors__select" id="btnChose-0" data-status='inactive' data-select='null'>
+
+                        </button>
+                        <button class="btnChangePosition" title="Aplicar la inversa a los puntos"></button>
+                        <button class="choseColors__select" id="btnChose-1" data-status='inactive' data-select='null'>
+                        </button>
+                    </div>
+                </div>
+                <div class="artifactColor__Otherbtn">
+                </div>
+                <div>
+                    <button class="  help-btn button-marg buttonSecundary buttonKey d-none"></button>
+                    <button class=" reset button-marg buttonSecundary buttonKey"></button>
+                    <button class="  check button-marg buttonPrimary buttonKey"></button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- fin TemplateEngineColor -->
+    <%- include(rutes+'/bodyClose.min.ejs'); %>

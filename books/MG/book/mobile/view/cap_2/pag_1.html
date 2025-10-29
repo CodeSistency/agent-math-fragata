@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página 1</title>
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+</head>
+
+<body>
+  <style>
+    .exampleETW .etwArtifact {
+      min-width: 280px;
+      width: 90%;
+    }
+
+    .etwArtifact__Board .etwBoard .jxgbox {
+      min-width: 280px;
+      width: 90%;
+    }
+  </style>
+
+  <!-- <nav class="mb-5 border-bottom border-dark">
+      <div class="d-flex justify-content-between">
+         <p class="navbar-brand font-italic text-break paragraph" id="titleA">Estudio de Curvas</p>
+      </div>
+   </nav> -->
+  <div class="containerNormal background-gray">
+    <h3>Operaciones con curvas</h3>
+    <hr />
+    <h2 class="superTitle">
+      <strong>LOS TRES CAMINOS FUNDAMENTALES</strong>
+    </h2>
+
+    <!-- se puede crear cualquier estructura, es aconsejable que se encuentre dentro de etwAllArtifact -->
+
+    <!-- <div class="etwAllArtifact"> -->
+
+    <!-- <h3 class="title"><strong>LOS TRES CAMINOS FUNDAMENTALES</strong></h3> -->
+
+    <div class="d-flex justify-content-center">
+      <div class="container-fluid d-flex flex-column">
+        <div class="d-flex flex-row flex-wrap justify-content-center">
+          <div class="elementEtw exampleETW margin-2" data-artifact="artifact_1" data-board="board_0"></div>
+          <div class="elementEtw exampleETW margin-2" data-artifact="artifact_2" data-board="board_6"></div>
+          <div class="elementEtw exampleETW margin-2" data-artifact="artifact_3" data-board="board_1"></div>
+        </div>
+        <br />
+        <br />
+        <p class="infoText">
+          Ponga los nombres que faltan: los puntos iniciales o finales de la
+          curva
+        </p>
+
+        <div class="d-flex flex-wrap flexGrid justify-content-center">
+          <div class="elementEtw margin-2" data-artifact="artifact_4" data-board="board_5"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_5" data-board="board_5"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_6" data-board="board_5"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_7" data-board="board_5"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_8" data-board="board_2"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_9" data-board="board_3"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_10" data-board="board_3"></div>
+          <div class="elementEtw margin-2" data-artifact="artifact_11" data-board="board_4"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 
+         Si se quiere agregar mas artefactos deben estar agregada la etiqueta y la definicion
+      <div class="elementEtw" data-board="board_1"></div>
+
+      class: campo obligatorio. xxxxx No eliminar xxx
+      data-board: contiene el board declarado en 'etwDefBoards' que se usuara en el el artefacto
+       -->
+
+    <!-- </div> -->
+
+    <!-- Inicio template que utiliza el motor-->
+
+    <template id="tmp-way">
+      <div id="artifact-" class="etwArtifact">
+        <div class="etwArtifact__title"></div>
+        <div class="etwArtifact__Board etwBoard jxgbox" data-board="board_" data-artifact="artifact_"></div>
+
+        <div class="etwArtifact__elements"></div>
+
+        <div class="etwArtifact__btnContainer btn-all">
+          <div>
+            <button class="help-btn button-marg buttonSecundary buttonKey d-none"></button>
+            <button class="reset button-marg buttonSecundary buttonKey"></button>
+            <button class="etwArtifact__btnValidate check button-marg buttonPrimary buttonKey"></button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+
+
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/cap_2/engineToWay.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/cap_2/engineToWay.min.js"></script>
+  <!--  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script> -->
+
+  <!-- Definition -->
+  <script src="../../../dist/definitions/cap_2/pag_1.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1458 @@
+:root {
+  --verdeLibro: #adf9b8;
+  --greenValid: #adf9b8;
+  --failedColor: #cb4e1f66;
+  --failedInLibrary: #eab8a5;
+  --passInLibrary: #b6f3bf;
+  --roadColor: #da0037;
+  --warn: #ffb11f;
+
+  /* boton secundario */
+  --btnSecundarybg: #d8dce0;
+  /* color de fondo general */
+  /*  #f3eff6; */
+  /* #f7fbfc; */
+  --background: #f7fbfc;
+
+  --grayContentButton: #646363;
+  /* escala desde gris a azul oscuro */
+  --gris: #f5f7f8;
+
+  --grisMedio: #ababab;
+  --grisAzulado: #e9f8f9;
+  --blueSkip: #b3daf1;
+  --blueSkip2: #bdebf6;
+  --azulAgregado: #91c2d2;
+  --grisAzuladoOscuro: #87c7d6;
+  --azulClaro: #0aa1dd;
+  --azulMedio: #217e9d;
+  --azulOscuro: #076382;
+
+  --rojo: #f1604d;
+  --amarrillo: #f9d949;
+  --linealProgressColor: var(--verdeLibro);
+
+  --seletsColor: var(--gris);
+  --inputsbr: var(--azulMedio);
+  --buttonkeyColorh: rgba(172, 186, 186, 0.8);
+  --keyActive: rgba(172, 186, 186, 0.8);
+  /* cap 0 interval */
+  --disabledGraphColor: #eeeeee;
+
+  /* reset */
+  --resetColor: var(--azulClaro);
+  /* back o return */
+  --backColor: var(--azulClaro);
+  --gray-dark: #343a40;
+  /* usado para lios titulos  */
+  --borderBaseColor: #000000;
+  --colorRanking: #134761;
+  --colorText: #152E37;
+}
+
+/* fonts mathlive */
+@font-face {
+  font-family: openSans-regular;
+  src: url(fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_AMS;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_AMS-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Caligraphic;
+  font-style: normal;
+  font-weight: 700;
+  src: url(fonts/KaTeX_Caligraphic-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Caligraphic;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Caligraphic-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Fraktur;
+  font-style: normal;
+  font-weight: 700;
+  src: url(fonts/KaTeX_Fraktur-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Fraktur;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Fraktur-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Main;
+  font-style: italic;
+  font-weight: 700;
+  src: url(fonts/KaTeX_Main-BoldItalic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Main;
+  font-style: normal;
+  font-weight: 700;
+  src: url(fonts/KaTeX_Main-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Main;
+  font-style: italic;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Main-Italic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Main;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Main-Regular.ttf) format("ttf");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Math;
+  font-style: italic;
+  font-weight: 700;
+  src: url(fonts/KaTeX_Math-BoldItalic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: "KaTeX_Math";
+  font-style: italic;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Math-Italic.ttf) format("ttf");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: "KaTeX_SansSerif";
+  font-style: normal;
+  font-weight: 700;
+  src: url(fonts/KaTeX_SansSerif-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: "KaTeX_SansSerif";
+  font-style: italic;
+  font-weight: 400;
+  src: url(fonts/KaTeX_SansSerif-Italic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: "KaTeX_SansSerif";
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_SansSerif-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Script;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Script-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Size1;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Size1-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Size2;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Size2-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Size3;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Size3-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Size4;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Size4-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: "swap";
+  font-family: KaTeX_Typewriter;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/KaTeX_Typewriter-Regular.woff2) format("woff2");
+}
+
+/* fin fonts mathlive */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+/* Aqui comienza los iconos es formato unicode de los botones*/
+.reset::after,
+.check::after,
+.return::after {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  /* Ajusta el tamaño del ícono */
+  height: 30px;
+  /* Ajusta el tamaño del ícono */
+  background: no-repeat center;
+  background-size: cover;
+  /* Escala el SVG correctamente */
+}
+
+.reset::after {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25.5" height="25.5" viewBox="0 0 12 13" fill="none"><path d="M4.31407 2.5167C4.81347 2.36471 5.36306 2.26251 5.98306 2.26003C8.74304 2.24901 10.992 4.48004 11.003 7.24002C11.014 9.99999 8.78299 12.2489 6.02301 12.26C3.26304 12.271 1.0141 10.0399 1.00308 7.27997M5.25699 0.74292L3.60463 2.65954L5.55029 4.07178" stroke="%23217E9D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center;
+}
+
+.check::after {
+  background: url('data:image/svg+xml;utf8,<svg width="25.5" height="25.5" viewBox="0 0 5.5 6.5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 3.5L1.66471 6L5 1" stroke="white" stroke-linecap="round" stroke-linejoin="round" /></svg>') no-repeat center;
+}
+.return::after{
+    background-image: url('data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7.12988%2018.3101H15.1299C17.8899%2018.3101%2020.1299%2016.0701%2020.1299%2013.3101C20.1299%2010.5501%2017.8899%208.31006%2015.1299%208.31006H4.12988%22%20stroke%3D%22%23217E9D%22%20stroke-width%3D%222%22%20stroke-miterlimit%3D%2210%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M6.43012%2010.8099L3.87012%208.24994L6.43012%205.68994%22%20stroke%3D%22%23217E9D%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');
+}
+
+.curves::after {
+  content: "";
+  display: inline-block;
+  width: 25.5px;
+  /* Ajusta el tamaño del ícono */
+  height: 25.5px;
+  /* Ajusta el tamaño del ícono */
+  background: no-repeat center;
+  background-size: contain;
+  /* Escala el SVG correctamente */
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25.5" height="25.5" viewBox="0 0 42 25" fill="none"><path d="M36 21C36 10.5066 29.2843 2 21 2C12.7157 2 6 10.5066 6 21" stroke="%23F1604D" stroke-width="4"/><circle cx="36.5" cy="19.5" r="5.5" transform="rotate(180 36.5 19.5)" fill="%23F1604D"/><circle cx="5.5" cy="19.5" r="5.5" transform="rotate(180 5.5 19.5)" fill="%23F1604D"/></svg>') no-repeat center;
+}
+
+.conect::after {
+  color: #d65d06;
+  content: "\2933";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.infinite::after {
+  color: #d65d06;
+  content: "\221E";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.pointOpen::before {
+  color: #d65d06;
+  content: "○";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.pointClose::after {
+  color: #d65d06;
+  content: "●";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.mayorEqual::after {
+  color: #646363;
+  content: "\2265";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.minorEqual::after {
+  color: #646363;
+  content: "\2264";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.mayor::after {
+  color: #646363;
+  content: "\003E";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.minor::after {
+  color: #646363;
+  content: "\003C";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.equal::after {
+  color: #646363;
+  content: "\003D";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.notEqual::after {
+  color: #646363;
+  content: "\2260";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.empty::after {
+  color: #646363;
+  content: "\2205";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.setOf::after {
+  color: #646363;
+  content: "\22C3";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.notExist::after {
+  color: #646363;
+  content: "\2204";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+.gear::after {
+  color: #000000;
+  content: "\2699";
+  font-family: Noto Emoji;
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+/*dominio*/
+.domKey::after {
+  position: relative;
+  top: -5px;
+  left: 3.5px;
+  color: #d65d06;
+  content: "\2847";
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+.rangKey::after {
+  position: relative;
+  top: -12px;
+  left: 0px;
+  color: #d65d06;
+  content: "\2508";
+  font-weight: bolder;
+  font-size: 45px;
+}
+
+/*cota superior*/
+.coteTop::after {
+  color: #d65d06;
+  content: "\2912";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+/*cota inferior*/
+.coteDown::after {
+  color: #d65d06;
+  content: "\2913";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+/* retroceder */
+.back::after {
+  color: var(--color, #000000);
+  content: "\21B6";
+  /* ó    ---> 21BA*/
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+/*unicode del boton para abrir el keyboard*/
+.keyBoard::after {
+  color: rgb(0, 0, 0);
+  content: "⌨";
+  font-size: 30px;
+  position: relative;
+  top: -12px;
+  left: -6px;
+}
+
+/*unicode de la X para cerrar el keyboard cap 0*/
+.closed::after {
+  color: #000000;
+  content: "\2715";
+  font-size: 24px;
+  position: relative;
+}
+
+/* /////////////////////////////////// unicode motor de caminos //////////////////////*/
+
+.road::before {
+  color: var(--color, #d65d06);
+  content: "\2608";
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+.finishRoad::after {
+  color: var(--color, black);
+  content: " \0298";
+  font-weight: lighter;
+  font-size: 26px;
+}
+
+/* unicode Asymptotas */
+.btnAsymptotes::after {
+  color: var(--color, #d65d06);
+  content: "|";
+  font-size: 26px;
+  position: relative;
+}
+
+/* boton de ayuda */
+.help::after {
+  color: #000000;
+  content: "\2691";
+  font-weight: bolder;
+  font-size: 26px;
+}
+
+/* boton para cerrrar la ayuda */
+.btnCloseMsg::after {
+  content: "\00AB";
+}
+
+.arrowUp {
+  display: inline-block;
+  width: 2.5em;
+  height: 2.5em;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23076382' fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5'/%3E%3C/svg%3E");
+
+}
+
+.arrowDown {
+  display: inline-block;
+  width: 2.5em;
+  height: 2.5em;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23076382' fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1'/%3E%3C/svg%3E");
+
+}
+
+/* Aqui Termina los iconos es formato unicode de los botones*/
+
+/* --------------------------------------------------------------------- */
+
+/* Termina Estilos de los botones primarios, secuandarios y tercearios */
+
+math-field::part(virtual-keyboard-toggle) {
+  display: none;
+}
+
+math-field[disabled] {
+  pointer-events: none;
+}
+
+.opContainerTop {
+  border-top: solid 2px var(--azulMedio);
+  padding: 10px;
+}
+
+.opContainerBottom {
+  border-bottom: solid 2px var(--azulMedio);
+  padding: 6px;
+}
+
+.colorInput {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  min-width: 45px;
+  min-height: 25px;
+  background-color: #ffffff;
+  z-index: 100;
+  font-size: 18px;
+  text-align: center;
+  overflow: hidden;
+  opacity: 1;
+}
+
+/* estilo para el capitulo 3 */
+
+.contentBoardArc {
+  width: 450px;
+  height: 100px;
+}
+
+.contentBoardArc2 {
+  width: 450px;
+  height: 150px;
+}
+
+.contentBoardStructure {
+  width: 450px;
+  height: 120px;
+}
+
+.inputLittle {
+  border: solid 2px var(--azulMedio);
+  width: 35px;
+  height: 35px;
+  border-radius: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.circle-min {
+  width: 40px;
+  height: 33px;
+  border-radius: 0.9rem;
+  border: solid 2px var(--azulMedio);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.inputLittle-min {
+  border: solid 2px var(--azulMedio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  border-radius: 0.8rem;
+  opacity: 1;
+}
+
+
+.inputLittle-min-transparent {
+  border: transparent;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  border-radius: 0.8rem;
+  opacity: 1;
+}
+
+.inputLittle-transparent {
+  border: transparent;
+  background: transparent;
+  width: 35px;
+  height: 35px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.inputLargeStructure {
+  border: solid 2px var(--azulMedio);
+  width: 60px;
+  height: 25px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.contentBoardExample {
+  width: 350px;
+  height: 120px;
+}
+
+.inputCircle {
+  border: solid 2px var(--azulMedio);
+  width: 70px;
+  height: 70px;
+  border-radius: 2rem;
+}
+
+.inputFormula {
+  border: solid 2px var(--azulMedio);
+  height: 32px;
+  width: 320px;
+  overflow: hidden;
+}
+
+.inputXpansion {
+  border: solid 2px var(--azulMedio);
+  width: 110px;
+  height: 70px;
+}
+.inputSteps{
+padding: 2px;
+}
+.inputXpansionMin {
+  border-radius: 2rem;
+  background-color: white;
+  max-width: 60px;
+  font-size: 13px;
+  width: 60px;
+  border: solid 2px var(--azulMedio);
+  padding: 2px;
+  height: 40px;
+  position: relative;
+}
+
+.disabled-border-colored {
+  border: solid 2px var(--azulMedio) !important;
+  /* Borde con color cuando el input está deshabilitado */
+  cursor: none;
+  pointer-events: none;
+}
+
+.inputSquare {
+  font-size: 18px;
+  text-align: center;
+  width: 10px;
+  height: 10px;
+  border: solid 2px var(--azulMedio);
+}
+
+@media only screen and (max-width: 450px) {
+  .inputCircle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .inputSquare {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 5px;
+  }
+
+  .inputXpansion {
+    width: 90px;
+    height: 45px;
+  }
+
+  .textBase {
+    width: 280px;
+    height: 350px;
+  }
+
+}
+
+
+.textCenter {
+  text-align: center;
+  font-size: 12px;
+  padding: 2px;
+}
+
+.titleHeader {
+  margin-right: 1rem;
+  font-style: italic;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+
+
+}
+
+@media (min-height: 786px) {
+  .titleHeader {
+    margin-right: 2rem;
+  }
+}
+
+.textTitle {
+  width: 100%;
+  margin: 1rem 0 0 1rem;
+  font-style: italic;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+
+
+}
+
+@media (min-height: 786px) {
+  .textTitle {
+    margin-right: 2rem;
+  }
+}
+
+/*////////////////
+agregado boton para las curvas
+centrado de texto
+copia de del borde de la libreria
+agregado estilo de incorrecto y correcto sin opasidad para usarlo en el board
+//////////////*/
+.curve::before {
+  color: #d65d06;
+  content: "\007E";
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+/* ///////////////////////////////////////////\/\\\
+/////////////////////////////////////////////////
+///////////////////////////////////////////////
+///////////////////////////////////////////////////
+
+*/
+/*cuadros de textos pra el html*/
+
+.textBase {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 515px;
+  height: 257px;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  border-style: solid;
+  border-width: 3px;
+  border-color: var(--azulMedio);
+  border-radius: 10px;
+
+}
+
+.textLexico {
+  display: flex;
+
+  justify-content: center;
+}
+
+
+.centerContent {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+
+/* estilo de las notas */
+
+.examples_1 {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  border: 2px solid var(--azulMedio);
+  background-color: white;
+}
+
+
+.ubicard {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.noteTransparent {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  color: var(--azulOscuro);
+  width: 90%;
+  background-color: transparent;
+  height: fit-content;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  padding: 0px 10px;
+
+}
+
+.noteTransparent p {
+  padding: 10px 0;
+
+
+}
+
+.note {
+  display: flex;
+  border-radius: 10px;
+  padding: 10px;
+  width: 500px;
+  background-color: #9fd9eb87;
+  height: fit-content;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  flex-direction: column;
+  align-items: center;
+  color: var(--azulOscuro);
+  gap: 3px;
+}
+
+.note p {
+  padding: 10px;
+  font-size: 17px;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--azulOscuro);
+}
+
+
+
+
+.noteArtifac {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  color: var(--azulOscuro);
+  border-radius: 10px;
+  width: max-content;
+  max-width: 600px;
+  background-color: #9fd9eb87;
+  height: fit-content;
+  padding: 10px;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: var(--azulOscuro);
+
+
+}
+
+
+
+.note-text {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  width: max-content;
+  background-color: #9fd9eb87;
+  height: fit-content;
+  margin: 20px;
+  text-align: center;
+  width: fit-content;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: var(--azulOscuro);
+  padding: 10px;
+}
+
+@media (min-width:600px) {
+  .note-text {
+    padding: 30px;
+    max-width: 800px;
+  }
+}
+
+.note-text p {
+  color: var(--azulOscuro);
+  padding: 10px 0;
+  font-size: 18px;
+  line-height: 150%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.pseudoTitle {
+  font-weight: bold;
+}
+
+.noteRegular {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  align-items: center;
+  width: 680px;
+  background-color: #9fd9eb87;
+  height: fit-content;
+  text-align: center;
+  padding: 20px 0 20px 0;
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: var(--azulOscuro);
+}
+
+.noteRegular p {
+  padding: 10px 0;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.noteRegular h1 {
+  padding: 10px 0;
+}
+
+
+
+/*borde negro del board*/
+.border-board-dark {
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  margin: 0;
+  -ms-touch-action: none;
+}
+
+/* centrar contenedor */
+.itemContenFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* clase para el efecto de los botones */
+/* base color buttons */
+/* Inicio de Estilos de los botones primarios, secuandarios y tercearios */
+
+.buttonKey {
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  box-shadow: 0 3px #587883;
+}
+
+/*hover de los botones */
+.buttonKey:hover {
+  background-color: #899c;
+}
+
+/* al pulsar el boton se mueve hacia abajo 2 pixeles y cambia el fondo*/
+.buttonKey:active {
+  background-color: #797c;
+  box-shadow: 0 2px #666;
+  transform: translateY(2px);
+}
+
+.buttonKeyRed {
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+}
+
+.buttonKeyRed:hover {
+  background-color: #899c;
+}
+
+.buttonKeyRed:active {
+  background-color: #797c;
+  box-shadow: 0 2px #666;
+  transform: translateY(2px);
+}
+
+
+/* estado active de los botones mantiene pulsado el boton */
+.buttonDownActive {
+  background-color: #797c;
+  box-shadow: 0 2px #666;
+  transform: translateY(2px);
+}
+
+.buttonPrimary {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: var(--azulMedio);
+  border: none;
+  border-radius: 0.25rem;
+  box-shadow: 0 3px #91d4e7;
+}
+
+.buttonCurves {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: var(--background);
+  border-color: var(--rojo);
+  border-radius: 0.25rem;
+  box-shadow: 0 3px #c945085d;
+
+}
+
+.buttonCurvesclick {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #bb4839;
+  border: none;
+  border-radius: 0.25rem;
+
+}
+
+.curvesClick::after {
+  content: "";
+  display: inline-block;
+  width: 25.5px;
+  /* Ajusta el tamaño del ícono */
+  height: 25.5px;
+  /* Ajusta el tamaño del ícono */
+  background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2225.5%22%20height%3D%2225.5%22%20viewBox%3D%220%200%2042%2025%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M36%2021C36%2010.5066%2029.2843%202%2021%202C12.7157%202%206%2010.5066%206%2021%22%20stroke%3D%22%23fff0ed%22%20stroke-width%3D%224%22%20%2F%3E%3Ccircle%20cx%3D%2236.5%22%20cy%3D%2219.5%22%20r%3D%225.5%22%20transform%3D%22rotate(180%2036.5%2019.5)%22%20fill%3D%22%23fff0ed%22%20%2F%3E%3Ccircle%20cx%3D%225.5%22%20cy%3D%2219.5%22%20r%3D%225.5%22%20transform%3D%22rotate(180%205.5%2019.5)%22%20fill%3D%22%23fff0ed%22%20%2F%3E%3C%2Fsvg%3E') no-repeat center;
+  background-size: contain;
+}
+
+.buttonSecundary {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #d8dce0;
+  border: none;
+  border-radius: 0.25rem;
+  box-shadow: 0 3px #b9b8bd;
+}
+
+/* #a4abb1 */
+.buttonTertiary {
+  display: inline-block;
+  color: #000000;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid var(--azulClaro);
+  border-color: var(--azulClaro);
+  border-radius: 0.25rem;
+}
+
+.buttonAux {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #e17055;
+  border-radius: 0.25rem;
+}
+
+.margen-button {
+  line-height: normal;
+  margin-bottom: 20px;
+}
+
+/* estatusValidate colors */
+
+.failedInLibrary {
+  /* border: solid #000000 1px; */
+  background-color: #eab8a5 !important;
+}
+
+.warnInLibrary {
+  border: solid #ffb11f 1px;
+  background-color: #eab8a5;
+}
+
+.passInLibrary {
+  /* border: solid #000000 1px; */
+  background-color: #b6f3bf !important;
+}
+
+.pass {
+  background-color: rgba(73, 225, 94, 0.4) !important;
+  accent-color: rgba(73, 225, 94, 0.4) !important;
+}
+
+.failed {
+  background-color: rgba(203, 78, 31, 0.4) !important;
+  accent-color: rgba(203, 78, 31, 0.4) !important;
+}
+
+.pass:hover {
+  background-color: rgba(35, 194, 53, 0.6);
+}
+
+.failed:hover {
+  background-color: rgba(167, 62, 22, 0.6);
+}
+
+.yellow {
+  background-color: rgba(236, 184, 12, 0.4) !important;
+  accent-color: rgba(236, 184, 12, 0.4);
+}
+
+/* inputs  si no son interactives tanto validado o sin validar */
+.input-default {
+  background-color: #f6f3c9;
+}
+
+.input-sended {
+  background-color: #f5d101;
+}
+
+.input_invalid {
+  background-color: #eab8a5;
+}
+
+.input_valid {
+  background-color: #b6f3bf;
+}
+
+/*------ base board --------*/
+.note h3 {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.artifact-base {
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  border: 3px solid var(--azulMedio);
+  border-radius: 10px;
+}
+
+.default-border {
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--azulMedio);
+  border-radius: 10px;
+  margin: 0;
+  -ms-touch-action: none;
+}
+
+.btn-base {
+  padding: 4px;
+  gap: 4px;
+  display: flex;
+  border-color: var(--borderBaseColor);
+  border-top: 3px solid var(--azulMedio);
+  justify-content: end;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.settionBtn {
+  width: fit-content;
+}
+
+/* estilos de los ennunciados superiores */
+
+.statement-top {
+  padding: 6px 0;
+  gap: 4px;
+  display: none;
+  align-content: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--azulMedio);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* estilos del modal general */
+
+.modalGeneric {
+  background-color: rgba(245, 5, 5, 0.4);
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  overflow: auto;
+  display: none;
+  z-index: 200;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+/* Modal Content/Box */
+.modalGeneric-content {
+  min-width: 300px;
+  border-radius: 20px;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+  height: 50%;
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+/* Modal header */
+.modalGeneric-header {
+  height: 10%;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-right: 10px;
+  background-color: #5cb85c;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Modal body */
+.modalGeneric-body {
+  background-color: #007bff;
+  height: 80%;
+}
+
+/* Modal Footer */
+.modalGeneric-footer {
+  height: 10%;
+
+  background-color: #5cb85c;
+  color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* The Close Button */
+.modalGenericClose {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #006ebb;
+  float: right;
+  font-weight: bold;
+}
+
+.modalGenericClose:hover,
+.modalGenericClose:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modalGeneric-body>table {
+  border-collapse: collapse;
+}
+
+.modalGeneric-body>th,
+td {
+  text-align: center;
+  border: 1.5px solid black;
+  padding: 8px;
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* seccion de bordes */
+/* borderTop */
+.brtop {
+  border-top: 2px solid var(--azulMedio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.centerFlex {
+  justify-content: center;
+  align-items: center;
+}
+
+.p-5 {
+  padding: 5px;
+}
+
+.px-20 {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.py-10 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.contentAuxiliar {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+
+
+}
+
+@media (min-width:600px) {
+  .contentAuxiliar {
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    justify-content: center;
+  }
+}
+
+.containerBasePage {
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: var(--grisAzulado);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.lae {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.intervals {
+  width: 400px;
+  height: 200px;
+  background-color: #fff;
+  border: 5px solid var(--azulOscuro);
+  border-radius: 10px;
+
+
+}
+.intervalsSquare {
+  width: 300px;
+  height: 120px;
+  background-color: #fff;
+  border: 2px solid var(--azulOscuro);
+  border-radius: 10px;
+
+}
+.trajectoryContainer{
+  width: 300px;
+  height: 200px;
+  background-color: #fff;
+  border: 5px solid var(--azulOscuro);
+  border-radius: 10px;
+
+
+}
+.column {
+  flex-direction: column;
+}
+
+.gap-25 {
+  gap: 25px;
+}
+
+/* estilos de formulario de raiting */
+
+
+.contentSmileys {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+
+}
+
+@media (min-width:600px) {
+  .contentSmileys {
+    flex-direction: row;
+  }
+}
+
+.inputRaiting {
+  display: none;
+}
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.sectionBtn{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 5px;
+}
+.closedSvg{
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 14 14"><path fill="%23f1604d" fill-rule="evenodd" d="M6.545.998a1 1 0 0 0 0 2h2.728a2.638 2.638 0 0 1 0 5.275H4.817V6.545a1 1 0 0 0-1.707-.707L.384 8.564a1 1 0 0 0-.22 1.09q.073.18.218.327l2.728 2.728a1 1 0 0 0 1.707-.707v-1.729h4.456a4.638 4.638 0 1 0 0-9.275z" clip-rule="evenodd" /></svg>');
+  background-size: auto; /* O 'contain' dependiendo de cómo quieras que se ajuste */
+  background-repeat: no-repeat; /* Evita que se repita el SVG */
+  background-position: center;
+}
+.OpenMainCurves {
+  background-image: url('data:image/svg+xml;utf8,<svg width="45px" height="45px" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="45px" height="45px" fill="none"/><g clip-path="url(%23clip0_0_1)"><path d="M24 17.2916C24 11.999 20.4183 7.70831 16 7.70831C11.5817 7.70831 8 11.999 8 17.2916" stroke="%23F1604D" stroke-width="2" stroke-dasharray="2.5 2.5"/><path d="M8.11111 14.25C6.63835 14.25 5.44445 15.5372 5.44445 17.125C5.44445 18.7128 6.63835 20 8.11111 20C9.58387 20 10.7778 18.7128 10.7778 17.125C10.7778 15.5372 9.58387 14.25 8.11111 14.25Z" fill="%23F1604D"/></g><g clip-path="url(%23clip1_0_1)"><path d="M25 17.5C25 12.2073 21.4183 7.91669 17 7.91669C12.5817 7.91669 9 12.2073 9 17.5" stroke="%23F1604D" stroke-width="2.4"/><path d="M24.8889 14.25C23.4161 14.25 22.2222 15.5372 22.2222 17.125C22.2222 18.7128 23.4161 20 24.8889 20C26.3616 20 27.5556 18.7128 27.5556 17.125C27.5556 15.5372 26.3616 14.25 24.8889 14.25Z" fill="%23F1604D"/></g><line x1="14" y1="16" x2="18" y2="16" stroke="%23F1604D" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="14" x2="16" y2="18" stroke="%23F1604D" stroke-width="2" stroke-linecap="round"/><defs><clipPath id="clip0_0_1"><rect width="40px" height="23px" fill="" transform="translate(2,1)"/></clipPath><clipPath id="clip1_0_1"><rect width="40px" height="23px" fill="none" transform="translate(18,6)"/></clipPath></defs></svg>');
+  background-size: auto; /* Ajusta el tamaño del fondo */
+  background-repeat: no-repeat; /* Evita que se repita */
+  background-position: center; 
+}

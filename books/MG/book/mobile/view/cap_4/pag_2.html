@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+
+  <link rel="stylesheet" href="../../../dist/css/cap_4/styles_cap_4.min.css" />
+</head>
+
+<body>
+
+
+
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas y curvas</h3>
+    <hr>
+    <p class="infoText centerText">Marque los puntos definidos por los diagramas y luego únalos con trazos simples</p>
+    <div class="borderDefault newContent">
+
+
+      <div class="boardElement1">
+        <div class="operationCurves centerElement" data-artifact="artifact_1" data-board="board_1"></div>
+      </div>
+      <div class="examples">
+        <div id="mainArtifact" class="flexGrid" style="">
+          <div id="contenedor" class="mainContent "></div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <template id="template">
+    <div id="artifact"></div>
+  </template>
+
+  <!-- template para operation curves -->
+  <template id="tmp-SRP">
+    <div id="artifacts" class="d-flex flex-column borderDefault m-2 squares-div">
+
+      <div class="defRoadBoard jxgbox mb-1 boardResp" data-board="board_0" data-artifact="artifact_1"> </div>
+
+      <div class="d-flex w-100 flex-wrap justify-content-center border border-dark rounded btn-all">
+        <div class="d-flex flex-row">
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-wrap justify-content-center">
+
+              <button class="curve button-marg buttonTertiary buttonKey buttonAux" title="Crear curva con los puntos finales"></button>
+              <button class="pointClose button-marg buttonTertiary buttonKey buttonAux" title="Punto para la curva"></button>
+
+            </div>
+            <div class="d-flex flex-wrap">
+              <button class="help buttonSecundary button-marg  buttonKey" title="Ayuda"></button>
+              <button class="gear buttonSecundary button-marg  buttonKey"> </button>
+              <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+              <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+              <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive.min.js"></script>
+  <script src="../../../dist/library/computeEngine.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/engineLayout.min.js"></script>
+  <script src="../../../dist/class/engines/cap_2/engineOperations.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/cap_3/mathEngine.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+
+  <!-- Definition -->
+  <script src="../../../dist/definitions/cap_4/pag_2.min.js"></script>
+</body>
+
+</html>

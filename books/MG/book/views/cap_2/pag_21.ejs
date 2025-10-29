@@ -1,0 +1,296 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <style>
+    .artifactExample {
+      margin: auto;
+      width: 600px;
+
+      margin-bottom: 20px;
+    }
+
+    .operationContainer {
+      text-align: center;
+      width: 70%;
+      margin: 10px auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .artifactExample {
+        width: 100%;
+      }
+
+      .operationContainer {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <div class="containerNormal background-gray">
+    <h3>Operaciones con curvas</h3>
+    <hr>
+    <h5 class="superTitle">CURVA COCIENTE o RECÍPROCA</h5>
+    <section class="">
+      <div class="colorArtifact artifactExample " data-definition="artifact_1" data-board="board_0"></div>
+    </section>
+
+    <div class="d-flex justify-content-center flex-column">
+      <div id="mainOwner" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;">
+      </div>
+      <div id="grid" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;">
+      </div> <br>
+      <template id="template">
+        <div class="content_1">
+          <div class="content_2">
+          </div>
+        </div>
+      </template>
+
+      <div class="note">
+
+        Para responder a la altura aproximada del nuevo punto, se debe agregar la altura aproximada correspondiente.
+        El ejemplo del punto P' se utiliza para ilustrar cómo obtener este resultado.
+      </div>
+
+      <div id="globalContainer" class="">
+        <div class="row" id="contenedorTablass">
+
+          <div id="tabla1" class=" col-sm-12 col-md-6   d-flex justify-content-center"></div>
+
+
+          <div id="tabla2" class="col-sm-12 col-md-6   d-flex justify-content-center"></div>
+
+        </div>
+
+
+        <p> Una los nuevos puntos que quedan a la izquierda de T y una los nuevos puntos que quedan a la derecha de
+          T.
+          La curva que ha obtenido (y que tiene dos trozos) es aproximadamente la <strong>curva cociente o
+            recíproca</strong> de f, la
+          llamaremos curva <math xmlns='http://www.w3.org/1998/Math/MathML'>
+            <mfrac>
+              <mn>1</mn>
+              <mn>2</mn>
+            </mfrac>
+          </math>.
+        </p>
+
+        <p>Preguntas.</p>
+
+      </div> <br> <br>
+
+
+      <div class="d-flex justify-content-center">
+        <div id="oneContainer" class="contenedor-preguntas"></div>
+
+      </div>
+    </div> <br>
+    <!-- template para operation curves -->
+    <template id="tmp-SRP">
+      <div id="artifacts" class="d-flex flex-column borderDefault m-2 big4-board squares-div">
+
+        <div class="defRoadBoard jxgbox mb-1 w-100 big4-board boardResp" data-board="board_0"
+          data-artifact="artifact_1">
+
+        </div>
+
+        <div class="d-flex w-100 flex-wrap justify-content-center border border-dark rounded btn-all">
+          <div class="d-flex flex-row">
+            <div class="d-flex flex-column">
+              <div class="d-flex flex-wrap justify-content-center">
+
+                <button class="curve button-marg buttonTertiary buttonKey"
+                  title="Crear curva con los puntos finales"></button>
+                <button class="pointClose button-marg buttonTertiary buttonKey" title="Punto para la curva"></button>
+                <button class="btnAsymptotes button-marg buttonTertiary buttonKey" title="Asintota"></button>
+
+              </div>
+              <div class="d-flex flex-wrap">
+                <button class="help buttonSecundary button-marg  buttonKey" title="Ayuda"></button>
+                <button class="gear buttonSecundary button-marg  buttonKey"> </button>
+                <button class="infinite buttonSecundary button-marg  buttonKey"> </button>
+                <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+                <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+                <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+
+    <template id="tableTemplate">
+
+      <table class="table table-bordered">
+
+      </table>
+
+    </template>
+    <template id="simpleTemplateInput">
+      <math-field style=" width:100%;">
+
+      </math-field>
+
+    </template>
+    <template id="simpleTemplateSelect">
+      <div>
+        <select class="form-select form-control" name="opciones" id="opciones"
+          style="max-width:100%; max-height:100%; border:none; ">
+
+
+      </div>
+      </select>
+    </template>
+    <template id="simpleTemplateRadio">
+      <div class="form-check ml-3 mr-4 mt-1" style="display:inline-block !important; width:fit-content">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <label class="form-check-label " for="flexRadioDefault1">
+          Test
+        </label>
+      </div>
+    </template>
+
+
+
+    <template id="tmp-config">
+      <div
+        class="centerFloat pr-1 pl-1 toggleDisplay divConfig d-flex flex-row justify-content-left align-items-center">
+        <div class="configTop">
+          <h5 style="margin-top: 10px; border-bottom: solid 2px black;">
+            Configuraciones
+          </h5>
+          <button class="btnClose closed buttonKey button-marg"></button>
+        </div>
+        <ul>
+          <li>
+            <p>
+              Holgura de la curva
+              <input class="rangeConfig" min="0.0" max="1" step="0.1" ; orient="vertical" type="range" />
+            </p>
+          </li>
+          <li>
+            <p>
+              Color: <input class="colorConfig" type="color" name="" id="" />
+            </p>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <!-- fin templates necesarios para opreration curves -->
+    <!-- TEMPLATE PPREGUNTAS -->
+    <template id="globalTemplate">
+      <div id="artifact-container"
+        class="d-flex w-100 flex-wrap justify-content-center rounded btn-all artifact-container question">
+        <div id="content" class="">
+        </div>
+        <div class="d-flex w-100 flex-wrap justify-content-center  rounded btn-all question__footer">
+          <div class="d-flex flex-row">
+            <div class="d-flex flex-wrap justify-content-start "></div>
+            <button class="reset button-marg buttonSecundary buttonKey question__footer__reset"
+              title="Reiniciar"></button>
+            <button class="check button-marg buttonPrimary buttonKey question__footer__check" title="Validar"></button>
+
+          </div>
+        </div>
+
+      </div>
+
+    </template>
+
+    <template id="cardCol">
+      <div class="col-6">
+
+      </div>
+      <div>
+
+      </div>
+
+    </template>
+
+    <template id="templateSelect">
+      <div class='' id="selectq">
+        <div class="">
+          <label for="opciones"></label>
+        </div>
+        <div class="">
+          <select class="form-select form-controlx" name="opciones" id="opciones" style="width:fit-content">
+        </div>
+        </select>
+      </div>
+    </template>
+    <template id="templateCheck">
+
+      <div class="" id="radioContainer">
+        <div class="title ">
+        </div>
+        <div class="content  ">
+        </div>
+      </div>
+    </template>
+    <template id="templateInput">
+      <div class="row">
+        <div id="title" class=""></div>
+        <div id="content" class=""></div>
+      </div>
+
+    </template>
+    <div id="globalContainer" class="">
+      <div id="oneContainer" class="contenedor-preguntas"></div>
+    </div> <br>
+
+
+
+    <!-- TemplateEngineColor -->
+
+
+    <template id="templateExample">
+
+      <div class="artifactColor">
+        <div class="artifactColor__notification transitionNotification " data-show="false">
+          <!-- Selección de franjas inadecuada -->
+
+        </div>
+
+        <div class="artifactColor__Board" id="" data-board="board_" data-artifact="artifact_">
+        </div>
+        <div class="artifactColor__menu">
+          <span class="arrowToClose"></span>
+
+          <div class="artifactColor__menuContent">
+            <div class="artifactColor__menuColors" data-position='positive' data-select="null">
+
+            </div>
+            <div class="artifactColor__menuColors" data-position='negative' data-select="null">
+
+            </div>
+          </div>
+        </div>
+        <div class="artifactColor__btnContainer btn-all">
+
+          <div class="choseColors">
+
+            <div class="choseColors__elements">
+
+              <button class="choseColors__select" id="btnChose-0" data-status='inactive' data-select='null'>
+
+              </button>
+              <button class="btnChangePosition" title="Aplicar la inversa a los puntos"></button>
+              <button class="choseColors__select" id="btnChose-1" data-status='inactive' data-select='null'>
+              </button>
+            </div>
+          </div>
+          <div class="artifactColor__Otherbtn">
+          </div>
+          <div>
+            <button class="  help-btn button-marg buttonSecundary buttonKey d-none"></button>
+            <button class=" reset button-marg buttonSecundary buttonKey"></button>
+            <button class="  check button-marg buttonPrimary buttonKey"></button>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- fin TemplateEngineColor -->
+
+
+  </div>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

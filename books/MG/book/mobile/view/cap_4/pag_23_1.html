@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página 23.1</title>
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/mathlive-static.css" />
+
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/cap_4/styles_cap_4.min.css" />
+</head>
+
+<body>
+  <div class="containerNormal background-gray">
+    <h3>Operaciones con curva</h3>
+    <hr>
+    <p class="infoText">Para dibujar las curvas debe:</p>
+    <ol class="infoText marginLeft-1">
+      <li>Abrir el menú y seleccionar las curvas que indica el ejercicio</li>
+      <li>Presionar los botones de creación de puntos</li>
+      <li>Aplicar la operación con las coordenadas en x, dadas por los puntos, de las curvas seleccionadas</li>
+      <li>Si movió los puntos a las coordenadas correctas deben crear una curva</li>
+
+    </ol>
+
+    <div class="flexGrid marginLeft-1">
+      <div class="artifactSumConstant " data-artifact="artifact_1" data-board="board_1"></div>
+      <div class="artifactSumConstant" data-artifact="artifact_2" data-board="board_2"></div>
+
+    </div>
+  </div>
+
+  <template id="engineSumConstant-tmp">
+    <div class="engineSumConstant ">
+      <div class="engineSumConstantContainer">
+        <!-- container artefact -->
+
+        <!-- container de enunciado -->
+        <div class="instructionText">
+
+        </div>
+
+
+        <div class="engineSumConstant__notification transitionNotification" data-show="false">
+        </div>
+
+        <div class="engineSumConstant__content">
+          <div class="engineSumConstant__Board" id="boad1" data-board="board_" data-artifact="artifact_">
+          </div>
+        </div>
+
+
+        <!-- donde se inserta el menu -->
+        <div class="artifactCurve__menu ">
+          <section class="closeContent">
+            <p class="textSelect">Selecciona la Curva</p>
+            <button class="close-btn"> </button>
+
+          </section>
+          <section class="funtionContent">
+
+          </section>
+        </div>
+
+        <div class="engineSumConstant__btnContainer btnContainer btn-all">
+
+          <div class="engineSumConstant__Otherbtn">
+
+            <button class="button-marg_menu buttonSecundary_menu buttonKey_menu curve_menu btnCurve" id="btnChose-0" data-status='inactive' data-select='null' title="menú de curvas">
+          </div>
+          <div>
+            <button class=" asyntote button-marg buttonTertiary buttonKey buttonAux" title="verticales en 0">
+              <svg xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;" width="36" height="36" viewBox="0 0 48 48">
+                <path fill="none" stroke="#31363F" stroke-linecap="round" stroke-linejoin="round" d="M9.5 5.5h29a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4h-29a4 4 0 0 1-4-4v-29a4 4 0 0 1 4-4" />
+                <path fill="none" stroke="#31363F" stroke-linecap="round" stroke-linejoin="round" d="M26.872 24.788a2.25 2.25 0 0 1 2.25-2.25h0m-2.25 0V28.5m-14.162-9h5.963l-5.963 9h5.963m5.683-1.135a2.25 2.25 0 0 1-1.955 1.135h0a2.25 2.25 0 0 1-2.25-2.25v-1.462a2.25 2.25 0 0 1 2.25-2.25h0a2.25 2.25 0 0 1 2.25 2.25v.73h-4.5m10.639-.73a2.25 2.25 0 0 1 4.5 0v1.462a2.25 2.25 0 0 1-4.5 0z" />
+              </svg>
+            </button>
+            <button class=" xSlice button-marg buttonTertiary buttonKey buttonAux" title="puntos a desplazar">
+              <svg xmlns="http://www.w3.org/2000/svg" style="pointer-events: none;" width="24" height="24" viewBox="0 0 2048 2048">
+                <path fill="#686D76" d="M1600 896q40 0 75 15t61 41t41 61t15 75v384q0 119-45 224t-124 183t-183 123t-224 46q-144 0-268-55t-226-156l-472-472q-28-28-43-65t-15-76q0-42 16-78t43-64t63-42t78-16q82 0 141 59l107 106V853q-59-28-106-70t-80-95t-52-114t-18-126q0-93 35-174t96-143t142-96T832 0q93 0 174 35t143 96t96 142t35 175q0 93-37 178t-105 149q35 9 63 30t49 52q45-25 94-25q50 0 93 23t69 66q45-25 94-25M512 448q0 75 34 143t94 113V448q0-40 15-75t41-61t61-41t75-15t75 15t61 41t41 61t15 75v256q60-45 94-113t34-143q0-66-25-124t-69-101t-102-69t-124-26t-124 25t-102 69t-69 102t-25 124m1152 640q0-26-19-45t-45-19q-34 0-47 19t-16 47t-1 62t0 61t-16 48t-48 19q-37 0-50-23t-16-60t2-77t2-77t-15-59t-51-24q-34 0-47 19t-16 47t-1 62t0 61t-16 48t-48 19q-37 0-50-23t-16-60t2-77t2-77t-15-59t-51-24q-34 0-47 19t-16 47t-1 62t0 61t-16 48t-48 19q-26 0-45-19t-19-45V448q0-26-19-45t-45-19t-45 19t-19 45v787q0 23-8 42t-23 35t-35 23t-42 9q-22 0-42-8t-37-24l-139-139q-21-21-50-21t-50 21t-22 51q0 29 21 50l472 473q84 84 184 128t219 45q93 0 174-35t142-96t96-142t36-175z" />
+              </svg>
+            </button>
+
+            <button class="help-btn button-marg buttonSecundary buttonKey d-none"></button>
+            <button class="reset button-marg buttonSecundary buttonKey" title="Reset"></button>
+            <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- template de  curvas menu -->
+  <template id="tmp-ImagenMenu">
+    <div class="cardfuntionMenu justify-content-center">
+
+      <img src="" alt="" class="svgCurves">
+    </div>
+  </template>
+
+
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive-V0.9.min.js"></script>
+  <script src="../../../dist/library/computeEngine-0.2.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/engineMaker.min.js"></script>
+
+  <script src="../../../dist/class/engines/cap_4/engineSumConstant.min.js"></script>
+
+  <!-- Definition -->
+  <script src="../../../dist/definitions/cap_4/pag_23_1.min.js"></script>
+
+</body>
+
+</html>

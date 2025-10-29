@@ -1,0 +1,84 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <div class="containerNormal background-gray">
+
+    <div class="d-flex flex-column">
+      <div class="navbar-brand">
+        <h3>Fórmulas</h3>
+        <hr>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+
+    </div>
+    <p class="mt-3 infoText">Simplificación de una compuesta de funciones por cancelación</p>
+
+    <div class="d-flex justify-content-center">
+      <p class="infoText">Complete:</p>
+
+    </div>
+
+    <!-- style="max-width: 1050px" -->
+    <div class="d-flex justify-content-center">
+
+
+      <div id="mainArtifact" style="max-width: 1200px ;" class="d-flex justify-content-center flex-row">
+        <div id="contenedor" class="mainContent">
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center flex-row">
+      <div class="infoText">
+        <p class="text-center" style="margin-bottom: auto; margin-top: auto;">Las expresiones que están en una misma
+          elipse designan el mismo valor. Por ello se pueden igualar</p>
+        <br>
+        <p style="display: flex; flex-direction: row; justify-content: center; margin: auto;"> El ejercicio anterior
+          muestra que <span class="expression">x</span></p> <br>
+
+        <p style="display: flex; flex-direction: row; justify-content: center; margin-top:auto;"> <math-field
+            class="example expression" read-only virtual-keyboard-mode='off' fonts-directory='fonts'
+            keypress-sound="none">
+            \quad f^{-1}\left(f\left(x\right)\right) \quad
+          </math-field> y <math-field class="example expression" read-only virtual-keyboard-mode='off'
+            fonts-directory='fonts' keypress-sound="none">
+            \quad f\left(f^{-1}\left(x\right)\right) \quad </math-field> </p>
+
+        <p class="text-center"> tienen el mismo valor.</p>
+
+
+
+        <p style="display: flex; flex-direction: row; justify-content: center; margin-bottom: auto;"> <math-field
+            class="example expression" virtual-keyboard-mode='off' fonts-directory='fonts' keypress-sound="none">
+            $$ f^{-1}\left(f\left(x\right)\right)=x \quad
+          </math-field> y <math-field class="example expression" virtual-keyboard-mode='off' fonts-directory='fonts'
+            keypress-sound="none">
+            \quad f\left(f^{-1}\left(x\right)\right)=x $$ </math-field> </p> <br>
+
+
+        <p style="display: flex; flex-direction: row; justify-content: center;">Se dice que <span
+            class="expression">x</span></p>
+
+        <p style="display: flex; flex-direction: row; justify-content: center;">es una <span
+            class="ml-1 mr-1"><b>simplificación</b> </span> de:</p>
+
+        <p style="display: flex; flex-direction: row; justify-content: center; margin-bottom: auto;"> <math-field
+            read-only class="example expression" virtual-keyboard-mode='off' fonts-directory='fonts'
+            keypress-sound="none">
+            \quad f^{-1}\left(f\left(x\right)\right) \quad
+          </math-field> o <math-field class="example expression" read-only virtual-keyboard-mode='off'
+            fonts-directory='fonts' keypress-sound="none">
+            \quad f\left(f^{-1}\left(x\right)\right) $$ </math-field> </p>
+
+      </div>
+    </div>
+
+    <template id="template">
+      <div id="artifact">
+
+      </div>
+
+    </template>
+  </div>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

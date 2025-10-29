@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="fragata-icono-fff.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#fff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.0164632"
+     inkscape:cx="396.47277"
+     inkscape:cy="246.44275"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:transparent;stroke:none;stroke-width:5.35877"
+       id="rect1"
+       width="135.46666"
+       height="135.46666"
+       x="0"
+       y="0"
+       rx="9.6310253"
+       ry="9.6310253" />
+    <g
+       id="layer1-1"
+       transform="matrix(0.26458333,0,0,0.26458333,-102.38675,-76.703456)"
+       style="fill:#fff">
+      <g
+         id="g2"
+         style="fill:#fff">
+        <path
+           id="path1"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.935176;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="M 605.98378,438.62325 554.99282,468.06289 548.0328,397.1285 Z" />
+        <path
+           id="path2"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.935176;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="M 559.39415,546.6825 478.4258,675.90402 524.25053,485.81196 Z" />
+        <path
+           id="path3"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.935176;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="M 671.86968,481.74472 824.26267,476.23501 636.72608,420.87419 Z" />
+        <path
+           id="path4"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.832581;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="m 668.11043,483.91514 -18.65597,87.92174 -11.88902,-140.8272 z" />
+        <path
+           id="path5"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.832581;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="m 563.15341,544.51209 85.4702,27.80447 -116.01517,-80.70991 z" />
+        <path
+           id="path6"
+           style="fill:##fff;fill-opacity:1;stroke:none;stroke-width:0.832581;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="m 676.65569,603.36149 67.69423,25.2221 -69.30835,-76.10324 z" />
+        <path
+           id="path7"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.832581;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="M 662.32435,611.63569 650.32049,682.8715 621.67997,583.28869 Z" />
+        <path
+           id="path8"
+           style="fill:#f1604d;fill-opacity:1;stroke:none;stroke-width:0.935176;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="M 633.97575,438.27475 615.6589,514.26034 540.69503,492.1304 645.41765,565.80401 Z" />
+        <path
+           id="path9"
+           style="fill:#fff;fill-opacity:1;stroke:none;stroke-width:0.443578;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-opacity:1"
+           d="m 669.99454,549.77217 -14.99221,32.633 -33.1445,-4.84126 49.75789,33.61648 z" />
+      </g>
+    </g>
+  </g>
+</svg>

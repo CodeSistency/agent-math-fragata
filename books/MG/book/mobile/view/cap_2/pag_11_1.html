@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+
+  <script type="text/javascript" src="../../../dist/class/engines/genericEngines/polyfillsAllUsed.min.js"></script>
+
+  <!-- <script defer src="https://unpkg.com/mathlive"></script> -->
+
+  <title>Página 11.1</title>
+</head>
+
+<body>
+
+  <!-- <nav class="mb-5 border-bottom border-dark">
+      <div class="d-flex justify-content-between">
+         <p class="navbar-brand font-italic text-break">Operaciones con curvas</p>
+      </div>
+   </nav> -->
+  <div class="containerNormal background-gray">
+    <h3>Operaciones con curvas</h3>
+    <hr>
+
+    <p class="infoText">Trazar verticales que pasan por máximos o mínimos locales.</p>
+
+
+    <div id="mainOwner" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;"> </div>
+    <div id="grid" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;">
+    </div>
+
+
+  </div>
+
+  <template id="template">
+    <div class="content_1">
+      <div class="content_2">
+      </div>
+    </div>
+  </template>
+
+  <div class="d-flex justify-content-center flex-column">
+  </div>
+  <!-- template para operation curves -->
+  <template id="tmp-SRP">
+    <div id="artifacts" class="d-flex flex-column borderDefault m-2 squares-div">
+
+      <div class="defRoadBoard jxgbox mb-1 boardResp" data-board="board_0" data-artifact="artifact_1"> </div>
+
+      <div class="d-flex w-100 flex-wrap justify-content-center gborder-top rounded btn-all">
+        <div class="d-flex flex-row">
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-wrap justify-content-center">
+
+              <button class="curve button-marg buttonTertiary buttonKey buttonAux" title="Crear curva con los puntos finales"></button>
+              <button class="pointClose button-marg buttonTertiary buttonKey buttonAux" title="Punto para la curva"></button>
+              <button class="btnAsymptotes button-marg buttonTertiary buttonKey buttonAux" title="Asintota"></button>
+            </div>
+            <div class="d-flex flex-wrap">
+              <button class="help buttonSecundary button-marg  buttonKey" title="Ayuda"></button>
+              <button class="gear buttonSecundary button-marg  buttonKey"> </button>
+              <button class="infinite buttonSecundary button-marg  buttonKey"> </button>
+              <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+              <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+              <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <script src="../../../dist/library/mathLive.min.js"></script>
+
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+
+  <script src="../../../dist/class/engines/cap_2/engineRoad.min.js"></script>
+  <script src="../../../dist/class/engines/cap_2/engineOperations.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/engineOwner.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+
+
+  <!-- definicion -->
+  <script src="../../../dist/definitions/cap_2/pag_11_1.min.js"></script>
+
+  <!--    <script src="librery/MathLive.js"></script> -->
+
+</body>
+
+</html>

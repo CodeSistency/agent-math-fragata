@@ -1,0 +1,41 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <div class="containerNormal background-gray centerContent">
+
+    <h3>Fórmulas</h3>
+    <hr>
+    <h2 class="superTitle"><strong>EJEMPLOS DE POLINOMIOS</strong></h2>
+
+    <p class="infoText">Complete:</p>
+
+    <div class="contentArtifactMath">
+      <div id="mainArtifact" style="max-width: 1050px">
+        <div id="contenedor" class="mainContent"></div>
+      </div>
+    </div>
+    <div class="infoText">
+      <p>Haga en su cuaderno diagramas que corresponden a:</p>
+      <span class="operationContainer" style="display: inline-block;">
+        <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+          fonts-directory='fonts' keypress-sound="none">
+          \quad a\right)\frac{2x-4}{x^2+2} \quad
+          \quad b\right)3+\frac{2}{x-1} \quad
+        </math-field>
+        <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+          fonts-directory='fonts' keypress-sound="none">
+          \quad c\right)-2+\frac{3}{x+2} \quad
+          \quad d\right)1+\frac{-3}{x-1} \quad
+
+        </math-field>
+        <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+          fonts-directory='fonts' keypress-sound="none">
+          \quad e\right)\frac{3-x}{2x+1} \quad
+          \quad f\right)\frac{\frac{2x-4}{x^2+2}+\frac{x-1}{2x+1}}{2x^3-1} \quad
+        </math-field>
+
+      </span>
+    </div>
+    <template id="template">
+      <div id="artifact"></div>
+    </template>
+  </div>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

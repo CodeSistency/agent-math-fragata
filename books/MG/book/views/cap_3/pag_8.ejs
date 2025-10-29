@@ -1,0 +1,71 @@
+<%- include(rutes+'/head.min.ejs'); %>
+   <div class="containerNormal background-gray">
+
+      <div class="d-flex flex-column">
+         <div class="navbar-brand">
+            <h3>Fórmulas</h3>
+            <hr>
+
+
+            <h3 class="superTitle">Diagrama Bidireccional</h3>
+            <p class="text-center">En general:</p>
+
+            <p style="display: flex; flex-direction: row; justify-content: center;">
+               <span class="operationContainer">
+                  <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+                     fonts-directory='fonts' keypress-sound="none">
+                     \quad f^{-1}\left(\right) \quad
+                  </math-field> </span> designa la inversa de
+
+
+
+
+               <span class="operationContainer">
+
+
+                  <math-field class=" operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+                     fonts-directory='fonts' keypress-sound="none">
+                     \quad f\left(\right) \quad </math-field> </span> y
+            </p>
+
+
+            <p style="display: flex; flex-direction: row; justify-content: center;">
+               <span class="operationContainer">
+                  <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+                     fonts-directory='fonts' keypress-sound="none">
+                     \quad f\left(\right) \quad
+                  </math-field> </span> designa la inversa de
+
+               <span class="operationContainer">
+                  <math-field class="operationContainer--mathField  example" read-only virtual-keyboard-mode='off'
+                     fonts-directory='fonts' keypress-sound="none">
+                     \quad f^{-1}\left(\right) \quad </math-field>
+
+               </span>
+            </p>
+         </div>
+         <!-- style="max-width: 1050px" -->
+
+         <p class="note"> <br />-En caso de error o que no sea solución, colocar ∄
+            <br /> -Recuerde utilizar 6 decimales si es necesario
+            <br />-Utilice la calculadora en radianes
+         </p>
+
+      </div>
+
+      <div class="contentArtifactMath">
+         <div id="mainArtifact" style="max-width: 1050px">
+            <div id="contenedor" class="mainContent"></div>
+         </div>
+      </div>
+   </div>
+
+
+   <template id="template">
+      <div id="artifact">
+
+      </div>
+
+   </template>
+   </div>
+   <%- include(rutes+'/bodyClose.min.ejs'); %>

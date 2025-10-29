@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/mathlive-static.css" />
+
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/generalStylesFragata.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/cap_4/styles_cap_4.min.css" />
+
+  <title>Pagina 15</title>
+</head>
+
+<body>
+  <template id="template">
+    <div id="artifact">
+    </div>
+  </template>
+
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas y Curvas</h3>
+    <hr>
+    <br>
+    <h3 class="superTitle"><strong>ArcTan o inversa de la Tangente</strong></h3>
+    <br>
+    <p> Ten en cuenta que en otros lugares podemos ver expresiones como
+      <math class="tml-display">
+        <mrow>
+          <msup>
+            <mi>Tan</mi>
+            <mrow>
+              <mo lspace="0em" rspace="0em">−</mo>
+              <mn>1</mn>
+            </mrow>
+          </msup>
+          <mo>⁡</mo>
+          <mrow>
+            <mo fence="true" form="prefix">(</mo>
+            <mo fence="true" form="postfix">)</mo>
+          </mrow>
+        </mrow>
+      </math>
+      Pueden estar representados como ArcoTan o ArcTan
+
+
+    </p>
+    <p class="infoText">Complete:</p>
+    <!-- <div class="note">
+            <p>Hacer click en la elipses del diagrama para completar la gráfica</small> </p>
+            </p>
+        </div> -->
+    <div class="itemContenFlex flexGrid">
+      <div class="itemContenFlex marginTop-2 marginBottom-2">
+        <div id="globalContainer" class="">
+          <div id="mainArtifact" style="max-width: 1200px" class="d-flex justify-content-center">
+            <div id="contenedor" class="mainContent justify-content-start"></div>
+          </div>
+        </div>
+      </div>
+      <div id="rendering_1" class="itemContenFlex marginTop-2 marginBottom-2"></div>
+    </div>
+
+    <br>
+    <br>
+
+    <p class="infoText centerText">Traza la bisectriz. Marca los puntos sobre las verticales y únelos con trazos
+      sencillos</p>
+
+    <div class="alphabetEngine centerElement" data-artifact="artifact_2" data-board="board_1">
+    </div>
+    <br>
+
+    <p class="centerText marginTop-2 ">De acuerdo a la curva que se ha obtenido:</p>
+    <div class="rendering_questions itemContenFlex  marginTop-2" id="rendering_questions"></div>
+
+    <p class="infoText centerText marginTop-2 ">Para captar mejor el significado de la función, leer <span class="operationContainer operationContainer--mathField scaleHover">
+        <math-field read-only class="mathElementField" style="border: none; background-color: transparent;">\tan^{-1}\left(x\right)</math-field>
+      </span> como "arco cuya Tangente es x".</p>
+    <div class="flexGrid">
+      <div id="rendering_2" class="marginTop-2 marginBottom-2"></div>
+      <div id="rendering_3" class="marginTop-2 marginBottom-2"></div>
+      <div id="rendering_4" class="marginTop-2 marginBottom-2"></div>
+      <div id="rendering_5" class="marginTop-2 marginBottom-2"></div>
+
+    </div>
+  </div>
+
+  <template id="tmp-alphabet">
+    <div class="alphabetEngineContainer">
+      <div class="alphabetEngine__notification transitionNotification" data-show="false">
+        <!-- Selección de franjas inadecuada -->
+      </div>
+
+      <div class="alphabetEngine__Board" id="boad1" data-board="board_" data-artifact="artifact_"></div>
+      <div class="alphabetEngine__questions">
+        <div class="alphabetEngine__diagram">
+          <div class="alphabetEngine__rounded roundedPositionTop">
+            <math-field readonly class="alphabetEngine__rounded-math-field"></math-field>
+          </div>
+          <div class="alphabetEngine__square">
+            <math-field readonly class="alphabetEngine__square-math-field"></math-field>
+          </div>
+          <div class="arrowDown arrowDown--cap4"></div>
+          <div class="alphabetEngine__rounded roundedPositionBottom">
+            <math-field class="alphabetEngine__rounded-math-field" readonly></math-field>
+          </div>
+        </div>
+
+        <div class="alphabetEngine__btnsPars">
+          <div class="alphabetEngine__ordenatePars">
+            <div class="alphabetEngine__ordenatePar-input">
+              <span class="textOrdenatePar">(</span>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="x">x</math-field>
+              <spa class="textOrdenatePar">,</spa>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="y">y</math-field><span class="textOrdenatePar">)</span>
+            </div>
+          </div>
+          <div class="alphabetEngine__createPars">
+            <button class="createPointBtn">crear punto</button>
+          </div>
+        </div>
+      </div>
+      <div class="alphabetEngine__btnContainer btn-all">
+        <div class="alphabetEngine__Otherbtn"></div>
+        <div>
+          <button class="help-btn button-marg buttonSecundary buttonKey d-none">
+          </button>
+          <button class="reset button-marg buttonSecundary buttonKey"></button>
+          <button class="check button-marg buttonPrimary buttonKey"></button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+
+  <!-- Librerías -->
+
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <!-- <script src="../libraries/mathLive-V0.9.js"></scrip> -->
+  <script src="../../../dist/library/mathLive-V0.9.min.js"></script>
+  <script src="../../../dist/library/computeEngine-0.2.min.js"></script>
+  <!-- Motores -->
+  <script src="../../../dist/class/engines/genericEngines/mod_G.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/mathKeyboard.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/progressEngine.min.js"></script>
+  <script src="../../../dist/class/engines/cap_4/mathEngine.min.js"></script>
+  <script src="../../../dist/class/engines/genericEngines/engineMaker.min.js"></script>
+  <script src="../../../dist/class/engines/cap_4/engineAlphabet.min.js"></script>
+  <script src="../../../dist/class/engines/cap_4/quizEngine.min.js"></script>
+  <script src="../../../dist/class/engines/cap_4/keyboardsList.min.js"></script>
+
+
+  <script src="../../../dist/definitions/cap_4/pag_15.min.js"></script>
+
+</body>
+
+</html>

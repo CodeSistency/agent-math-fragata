@@ -1,0 +1,29 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <div class="containerNormal background-gray">
+    <h3>Fórmulas</h3>
+    <hr>
+    <h3 class="superTitle"><strong>POLINOMIOS DE GRADO 1.</strong></h3>
+
+    <div class="infoText" style="display: inline-block;">
+      <p>Una fórmula que tiene la forma<span class="expression">ax+b</span>donde<span class="expression"> a</span>y<span
+          class="expression"> b</span>son
+        números (positivos y negativos) es la forma ordenada de un polinomio de grado 1.
+        <span class="expression"> a</span>y<span class="expression"> b</span>son los coeficientes
+        del polinomio. Para completar puede utilizar que una resta puede escribirse
+        como una suma.Ejemplo:<span class="expression"> 3x-2=3x+(-2)</span>.La expresion<span class="expression">
+          x</span> puede escribirse como
+        <span class="expression">1*x</span> y <span class="expression">-x</span>como<span class="expression">-1*x</span>
+      </p>
+    </div>
+
+    <div class="contentArtifactMath">
+      <div id="mainArtifact" style="max-width: 1050px">
+        <div id="contenedor" class="mainContent"></div>
+      </div>
+    </div>
+
+    <template id="template">
+      <div id="artifact"></div>
+    </template>
+  </div>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

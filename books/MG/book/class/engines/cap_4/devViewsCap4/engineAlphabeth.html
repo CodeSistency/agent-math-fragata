@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cap 4</title>
+  <link rel="stylesheet" href="../../../dist/css/generic/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/styles.min.css" />
+  <link rel="stylesheet" href="../../../dist/css/generic/jsxgraph.min.css" />
+  <link rel="stylesheet" href="../../../libraries/css/cap_4/styles_cap_4.css" />
+  <link rel="stylesheet" href="../../../libraries/generalStylesFragata.css" />
+</head>
+
+<body>
+  <div class="flexGrid">
+    <div class="alphabetEngine centerElement" data-artifact="artifact_1" data-board="board_1"></div>
+    <div class="alphabetEngine centerElement" data-artifact="artifact_2" data-board="board_1"></div>
+    <div class="alphabetEngine centerElement" data-artifact="artifact_3" data-board="board_1"></div>
+  </div>
+  <template id="tmp-alphabet">
+    <div class="alphabetEngineContainer">
+      <div class="alphabetEngine__notification transitionNotification" data-show="false">
+        <!-- Selección de franjas inadecuada -->
+      </div>
+
+      <div class="alphabetEngine__Board" id="boad1" data-board="board_" data-artifact="artifact_"></div>
+      <div class="alphabetEngine__questions">
+        <div class="alphabetEngine__diagram">
+          <div class="alphabetEngine__rounded roundedPositionTop">
+            <math-field readonly class="alphabetEngine__rounded-math-field"></math-field>
+          </div>
+          <div class="alphabetEngine__square">
+            <math-field readonly class="alphabetEngine__square-math-field"></math-field>
+          </div>
+          <div class="arrowDown arrowDown--cap4"></div>
+          <div class="alphabetEngine__rounded roundedPositionBottom">
+            <math-field class="alphabetEngine__rounded-math-field" readonly></math-field>
+          </div>
+        </div>
+
+        <div class="alphabetEngine__btnsPars">
+          <div class="alphabetEngine__ordenatePars">
+            <div class="alphabetEngine__ordenatePar-input">
+              <span class="textOrdenatePar">(</span>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="x">x</math-field>
+              <spa class="textOrdenatePar">,</spa>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="y">y</math-field><span class="textOrdenatePar">)</span>
+            </div>
+          </div>
+          <div class="alphabetEngine__createPars">
+            <button class="createPointBtn">crear punto</button>
+          </div>
+        </div>
+      </div>
+      <div class="alphabetEngine__btnContainer btn-all">
+        <div class="alphabetEngine__Otherbtn"></div>
+        <div>
+          <button class="help-btn button-marg buttonSecundary buttonKey d-none"></button>
+          <button class="reset button-marg buttonSecundary buttonKey"></button>
+          <button class="check button-marg buttonPrimary buttonKey"></button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Librerías -->
+  <script src="../../../dist/library/jsxgraphcore.min.js"></script>
+  <!-- <script src="../libraries/mathLive-V0.9.js"></script> -->
+  <script src="../../../libraries/mathLive-V0.9.js"></script>
+  <script src="../../../libraries/computeEngine-0.2.js"></script>
+
+  <!-- Motores -->
+  <script src="../../genericEngines/mathKeyboard.js"></script>
+  <script src="../../genericEngines/mod_G.js"></script>
+  <script src="../../genericEngines/engineMaker.js"></script>
+
+  <script src="../engineAlphabet.js"></script>
+
+  <!-- Definition -->
+  <script src="./definitionTest.js"></script>
+</body>
+
+</html>

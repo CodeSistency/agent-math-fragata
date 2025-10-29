@@ -1,0 +1,120 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <template id="template">
+    <div id="artifact">
+    </div>
+  </template>
+
+  <div class="containerNormal background-gray">
+    <h3 class="superTitle">Fórmulas y Curvas</h3>
+    <hr>
+    <br>
+    <h3><strong>Identidad</strong></h3>
+    <br>
+
+    <p class="infoText ">La función identidad deja sin cambios al número. Se representa por ( ), porque n y (n) tienen
+      el
+      mismo valor.</p>
+    <div class="flexGrid">
+
+      <div id="globalContainer" class="">
+        <div id="mainArtifact" style="max-width: 1200px  ;" class="d-flex justify-content-center">
+          <div id="contenedor" class="mainContent  justify-content-start">
+          </div>
+        </div>
+
+      </div>
+      <!-- <div style=" min-height: 500px; min-width: 400px; width: 100%; height: 100%;background-color: gray; display: flex; justify-content: center; align-items: center; border-radius: 10px;"><p class="infoText ">Artefacto adicional</p> </div> -->
+
+
+
+      <div id="example_rendering" class="marginTop-2 marginBottom-2"></div>
+
+    </div>
+    <br>
+    <p class="infoText ">Como los puntos que forman la curva de una tecla K, son de la forma (n, K (n)), los puntos de
+      la
+      curva de la tecla ( ) serán de la forma (n, n), es decir, sus abscisas serán iguales a sus ordenadas.</p>
+
+    
+    <br>
+    <p class="infoText ">
+      Completa los pares ordenados y coloca los correspondientes puntos en el plano cartesiano.
+    </p>
+
+    <div class="note">
+      <p>Hacer click en la elipses del diagrama para completar la gráfica</small> </p>
+      </p>
+    </div>
+    <br>
+
+
+
+
+    <div class="alphabetEngine centerElement" data-artifact="artifact_2" data-board="board_1"></div>
+    <br>
+    <p class="infoText ">Además de dibujar la curva, conviene resumir sus propiedades. Las propiedades con las que
+      debes completar la siguiente tabla no son exactamente la curva que dibujaste, sino la
+      "prolongada" de forma natural. (Es decir, la sugerida por los puntos consecutivos).</p>
+
+
+    <div class="flexGrid">
+      <div id="rendering_1" class="marginTop-2 marginBottom-2"></div>
+
+      <div id="rendering_2" class="marginTop-2 marginBottom-2"></div>
+
+      <div id="rendering_3" class="marginTop-2 marginBottom-2"></div>
+
+    </div>
+  </div>
+
+
+
+
+
+  <template id="tmp-alphabet">
+    <div class="alphabetEngineContainer">
+      <div class="alphabetEngine__notification transitionNotification" data-show="false">
+        <!-- Selección de franjas inadecuada -->
+      </div>
+
+      <div class="alphabetEngine__Board" id="boad1" data-board="board_" data-artifact="artifact_"></div>
+      <div class="alphabetEngine__questions">
+        <div class="alphabetEngine__diagram">
+          <div class="alphabetEngine__rounded roundedPositionTop">
+            <math-field readonly class="alphabetEngine__rounded-math-field"></math-field>
+          </div>
+          <div class="alphabetEngine__square">
+            <math-field readonly class="alphabetEngine__square-math-field"></math-field>
+          </div>
+          <div class="arrowDown arrowDown--cap4"></div>
+          <div class="alphabetEngine__rounded roundedPositionBottom">
+            <math-field class="alphabetEngine__rounded-math-field" readonly></math-field>
+          </div>
+        </div>
+
+        <div class="alphabetEngine__btnsPars">
+          <div class="alphabetEngine__ordenatePars">
+            <div class="alphabetEngine__ordenatePar-input">
+              <span class="textOrdenatePar">(</span>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="x">x</math-field>
+              <spa class="textOrdenatePar">,</spa>
+              <math-field readonly class="alphabetEngine__ordenatePar-mathfield" data-par="y">y</math-field><span
+                class="textOrdenatePar">)</span>
+            </div>
+          </div>
+          <div class="alphabetEngine__createPars">
+            <button class="createPointBtn">crear punto</button>
+          </div>
+        </div>
+      </div>
+      <div class="alphabetEngine__btnContainer btn-all">
+        <div class="alphabetEngine__Otherbtn"></div>
+        <div>
+          <button class="help-btn button-marg buttonSecundary buttonKey d-none"></button>
+          <button class="reset button-marg buttonSecundary buttonKey"></button>
+          <button class="check button-marg buttonPrimary buttonKey"></button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

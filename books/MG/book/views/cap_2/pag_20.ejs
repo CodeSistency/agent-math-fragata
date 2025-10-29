@@ -1,0 +1,116 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <style>
+    .artifactExample {
+      margin: auto;
+      width: 600px;
+
+      margin-bottom: 20px;
+    }
+
+    .operationContainer {
+      text-align: center;
+      width: 70%;
+      margin: 10px auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .artifactExample {
+        width: 100%;
+      }
+
+      .operationContainer {
+        width: 100%;
+      }
+    }
+  </style>
+
+
+  <div class="containerNormal background-gray">
+    <h3>Operaciones con curvas</h3>
+    <hr>
+    <h4 class="superTitle">CURVA COCIENTE o RECIPROCA</h4>
+    <section class="">
+      <div class="colorArtifact artifactExample " data-definition="artifact_1" data-board="board_0"></div>
+    </section>
+
+    <section class="containerNormal">
+      <p class="infoText">En la vertical de cada uno de los puntos gruesos de las curvas se va a situar un nuevo
+        punto. La altura de cada nuevo punto se calcula así: </p>
+      <div class="operationContainer"> Altura del nuevo punto = <math-field
+          class="operationContainer--mathField ">\frac{1}{Altura \hspace*{5px} de \hspace*{5px} P}</math-field>
+      </div>
+      <p class="infoText margin-top-10">El transformado de un punto lo designaremos con la misma letra que designa el
+        punto pero con una prima o apóstrofe.
+        Por ejemplo el punto que le corresponde a P, al hacer la transformación, lo designaremos como P'. Así, la
+        altura de P' se calcula mediante la igualdad</p>
+      <div class="operationContainer"> Altura de P' = <math-field class="operationContainer--mathField ">\frac{1}{Altura
+          \hspace*{5px} de \hspace*{5px} P}</math-field>
+      </div>
+      <p class="infoText">La "posición vertical" de un punto se puede apreciar en la figura. Por ejemplo, de acuerdo
+        a la figura el punto Z está lejos del eje x
+        y por encima de él. El punto V está por encima y cerca del eje x.
+      </p>
+      <p class="infoText">
+        Las posiciones equivalentes por debajo del eje X, no se han puesto para no sobrecargar la figura. Se
+        sobreentiende que el punto P está por debajo y lejos del eje x.
+      </p>
+
+    </section>
+
+  </div>
+  <!-- 
+
+   <img src="../../../assets/cap_2/3.png" alt="" style="width: 100%;  max-width: 700px;">
+ -->
+
+
+  <!-- TemplateEngineColor -->
+
+
+  <template id="templateExample">
+
+    <div class="artifactColor">
+      <div class="artifactColor__notification transitionNotification " data-show="false">
+        <!-- Selección de franjas inadecuada -->
+
+      </div>
+
+      <div class="artifactColor__Board" id="" data-board="board_" data-artifact="artifact_">
+      </div>
+      <div class="artifactColor__menu">
+        <span class="arrowToClose"></span>
+
+        <div class="artifactColor__menuContent">
+          <div class="artifactColor__menuColors" data-position='positive' data-select="null">
+
+          </div>
+          <div class="artifactColor__menuColors" data-position='negative' data-select="null">
+
+          </div>
+        </div>
+      </div>
+      <div class="artifactColor__btnContainer btn-all">
+
+        <div class="choseColors">
+
+          <div class="choseColors__elements">
+
+            <button class="choseColors__select" id="btnChose-0" data-status='inactive' data-select='null'>
+
+            </button>
+            <button class="btnChangePosition" title="Aplicar la inversa a los puntos"></button>
+            <button class="choseColors__select" id="btnChose-1" data-status='inactive' data-select='null'>
+            </button>
+          </div>
+        </div>
+        <div class="artifactColor__Otherbtn">
+        </div>
+        <div>
+          <button class="  help-btn button-marg buttonSecundary buttonKey d-none"></button>
+          <button class=" reset button-marg buttonSecundary buttonKey"></button>
+          <button class="  check button-marg buttonPrimary buttonKey"></button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <%- include(rutes+'/bodyClose.min.ejs'); %>

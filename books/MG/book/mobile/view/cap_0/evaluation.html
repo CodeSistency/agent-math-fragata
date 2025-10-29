@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../css/generic/styles.css" />
+    <link rel="stylesheet" type="text/css" href="../../../dist/css/generic/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../css/generic/evaluationStyles.css" />
+    <link rel="stylesheet" type="text/css" href="../../../css/generic/jsxgraph.css" />
+    <script type="text/javascript" src="../../../library/jsxgraphcore.min.js"></script>
+    <script type="text/javascript" src="../../../library/html2canvas.min.js"></script>
+    <script type="text/javascript" src="../../../library/jspdf.min.js"></script>
+    <script type="text/javascript" src="../../../library/mathLive.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/generic/styles.css" />
+    <script type="text/javascript" src="../../../library/html2canvas.min.js"></script>
+    <script type="text/javascript" src="../../../library/jspdf.min.js"></script>
+
+
+
+</head>
+
+<body>
+
+    <div id="loading-container">
+        <img class="rotar-izquierda" id="loading" src="../../../assets/cap_0/fragata-cargando-full.svg">
+        </img>
+    </div>
+
+    <div id="mainContent">
+        <div class="information_card">
+            <div class="information_card__title">
+                <img src="../../../assets/cap_0/evaluation.svg"></img>
+                <p>Evaluación</p>
+            </div>
+            <div class="information_card__body">
+                <div class="information_card__body__left">
+                </div>
+                <div class="information_card__body__right">
+                </div>
+            </div>
+        </div>
+        <div id="grid" class="d-flex  flex-wrap justify-content-center">
+        </div>
+        <div id="middle-container">
+            <div id="evaluation-rules">
+                <div id="rules">
+                    <h2>Consideraciones para la evaluación</h2>
+                    <p id="rules-instructions"> ！ Antes de iniciar la evaluación, es fundamental que leas todas las
+                        consideraciones que se presentan a continuación. Asegúrate de estar completamente informado
+                        antes de
+                        comenzar.</p>
+
+                    <p> • Es importante que leas todas las consideraciones antes de comenzar la evaluación. Al responder
+                        una
+                        pregunta utilizando el botón correspondiente, se registrará la puntuación obtenida y el borde
+                        del
+                        botón se colocará en color amarillo, indicando que tu respuesta ha sido registrada.</p>
+
+                    <p> • Tienes la libertad de responder una pregunta tantas veces como necesites hasta que consideres
+                        que
+                        tu respuesta es correcta. Sin embargo, ten en cuenta que solo se registrará la puntuación de la
+                        última respuesta que envíes. Cada intento cuenta como un intento de respuesta, por lo que es
+                        recomendable reflexionar sobre tus respuestas antes de enviarlas.</p>
+
+                    <p> • Si deseas eliminar una respuesta, puedes hacerlo presionando el botón de reinicio y luego
+                        volver a
+                        responder la pregunta. Recuerda que al borrar una respuesta, la puntuación correspondiente a esa
+                        pregunta se registrará como 0.</p>
+
+                    <p> • Una vez que finalices la evaluación, tu puntuación final será registrada y se mostrará al
+                        presionar el
+                        botón de <strong>Enviar evaluación</strong>.
+
+                    <p> • La puntuación de la evaluación se califica sobre una base de 20 puntos.</p>
+
+                    <p> •Para iniciar la evaluación, es necesario que aceptes las
+                        reglas haciendo clic en el botón <strong>He leído las reglas</strong>.</p>
+
+                    <p id="last-rule-text">Recuerda seguir estas pautas para asegurar una experiencia adecuada durante
+                        tu evaluación. ¡Buena suerte!</p>
+                </div>
+
+
+
+                <div id="evaluation-content">
+                    <div class="d-flex w-100 justify-content-center">
+                        <div class="divFather  w-100 mb-1">
+                            <div class="artifacts d-flex flex-column ">
+                                <div class="containerOne w-100 d-flex flex-row justify-content-center mb-1">
+                                    <div
+                                        class="divEngInt1 order-1 jxgbox d-flex justify-content-center align-items-center inpEngInt-1">
+                                        <h6 class="w-100 text-center mt-2">Intervalos u operaciones con intervalos</h6>
+                                    </div>
+                                    <div id="board" class="order-2 d-flex jxgbox  align-items-center BoardEngInt">
+                                        <h6 class="w-100 text-center mt-2"> Representación en la recta</h6>
+                                    </div>
+                                    <div
+                                        class="divEngInt2 order-3 jxgbox d-flex justify-content-center align-items-center inpEngInt-1">
+                                        <h6 class="w-100 text-center mt-2" style="text-align: center;">
+                                            Representación algebraica y/o conjuntista
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="containerTow d-flex flex-row"> </div>
+                            </div>
+                            <div id="container-all-artifact"></div>
+                        </div>
+                        <div>
+                            <template id="template-interval">
+                                <div class="paddiv artifacts d-flex flex-column">
+                                    <div class="containerOne d-flex flex-row justify-content-center">
+                                        <div class="divEngInt1 colorInput order-1 inpEngInt-1 inpEngInt">
+                                            <math-field default-mode='text'
+                                                class='inpEngInt1 w-100 h-100 border-0 text-center math element'
+                                                virtual-keyboard-mode='onfocus' keypress-sound='none'></math-field>
+                                        </div>
+                                        <div id="board" class="jxgbox BoardEngInt order-2"></div>
+                                        <div class="divEngInt2 colorInput inpEngInt-1  order-3 inpEngInt">
+                                            <math-field default-mode='text'
+                                                class='inpEngInt2 w-100 h-100 border-0 text-center math element'
+                                                virtual-keyboard-mode='onfocus' keypress-sound='none'></math-field>
+                                        </div>
+                                    </div>
+                                    <div class="containerTow d-flex flex-row"> </div>
+                                    <div class="w-100 d-flex borderDefault" style="min-width: 200px;"
+                                        id="contentButtons">
+                                        <div class="ml-auto" id="resetVal" style="display:flex;">
+                                            <div class="allButtons mr-2">
+                                                <button id="btn-pointA"
+                                                    class=" pointOpen buttonAux button-marg buttonKey buttonTool"
+                                                    data-tool="pointA" data-placement="top"
+                                                    title="Punto abierto"></button>
+                                                <button id="btn-pointC"
+                                                    class=" pointClose buttonAux button-marg buttonKey buttonTool"
+                                                    data-tool="pointC" data-placement="top"
+                                                    title="Punto cerrado"></button>
+                                                <button id="btn-conect"
+                                                    class=" conect buttonAux button-marg buttonKey buttonTool"
+                                                    data-tool="conection" data-placement="top"
+                                                    title="Conectar"></button>
+                                            </div>
+                                            <button id="btn-reset"
+                                                class="buttonSecundary button-marg reset buttons-Target ml-auto p-2 mr-2 buttonKey"
+                                                data-tooltip="tooltip" data-placement="top" title="Reiniciar"></button>
+                                            <button id="btn-validation"
+                                                class="buttonPrimary button-marg check buttons-Target ml-auto p-2 mr-2 buttonKey"
+                                                data-tooltip="tooltip" data-placement="top" title="Validar"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div id="mainOwner" class="part2">
+
+                        <div class="intrucciones-cartesian">
+
+
+                            <h1>Plano Cartesiano</h1>
+                            <hr>
+                            <p>Sitúe, como puntos, los pares ordenados y escriba al lado de cada punto el par
+                                correspondiente.
+                                Debe
+                                hacerlo respetando las escalas</p>
+                            <div class="note">
+                                <p>Las entradas de cada punto se ocultan cuando pulsas o desplazas los puntos si vuelves
+                                    a
+                                    presionar
+                                    el punto aparecera de nuevo </p>
+                            </div>
+
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <img src="../../../assets/cap_0/notaInput.svg" alt="hello" style="width:3rem;">
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div id="evalaution-summary">
+
+
+                    <div class="tables-container">
+
+
+
+                        <div id="tables-container__main">
+                        </div>
+
+
+                    </div>
+                </div>
+                <div id="bottom-container">
+                    <button id="button-rules" data-html2canvas-ignore="true">He leído las reglas</button>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <div class="modal" id="modal">
+    </div>
+    <button id="buttonScroll">
+        <img src="../../../assets/cap_0/arrowUp.svg"></img>
+    </button>
+
+
+    <template id="globalTemplate">
+
+        <div id="artifact-container" class="  flex-wrap justify-content rounded btn-all artifact-container">
+            <div id="content" class="">
+
+            </div>
+            <div class="d-flex w-100 flex-wrap justify-content-center  rounded btn-all mb-3">
+                <div class="d-flex flex-row">
+                    <div class="d-flex flex-wrap justify-content-start"></div>
+
+                    <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+                    <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </template>
+    <template id="globalTemplate">
+        <div id="artifact-container" class="  flex-wrap justify-content rounded btn-all artifact-container">
+            <div id="content" class="">
+            </div>
+            <div class="d-flex w-100 flex-wrap justify-content-center  rounded btn-all mb-3">
+                <div class="d-flex flex-row">
+                    <div class="d-flex flex-wrap justify-content-start"></div>
+                    <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+                    <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="template">
+        <div class="content_1">
+            <div class="content_2">
+            </div>
+        </div>
+    </template>
+    <template id="tmp-cartesian">
+        <div id="artifacts" class="d-flex  flex-column border-board-dark m-2 squares-div">
+
+            <math-field virtual-keyboard-mode='onfocus' class='textTop w-100 border-board-dark' disabled></math-field>
+            <math-field virtual-keyboard-mode='onfocus' class='textTop w-100 border-board-dark' disabled></math-field>
+
+            <div class="defBoard jxgbox mb-1 boardResp" data-board="board_0"> </div>
+
+            <math-field virtual-keyboard-mode='onfocus' class='textBottom w-100 border-board-dark'
+                disabled></math-field>
+            <math-field virtual-keyboard-mode='onfocus' class='textBottom w-100 border-board-dark'
+                disabled></math-field>
+
+            <div class="d-flex w-100 flex-wrap justify-content-center border border-dark rounded btn-all">
+                <div class="d-flex flex-row">
+                    <div class="d-flex flex-wrap justify-content-center"></div>
+
+                    <button class="pointClose buttonAux button-marg buttonTertiary buttonKey"
+                        title="Punto para la curva"></button>
+                    <!--   button-marg buttonKey buttonTool -->
+                    <button class="help buttonSecundary button-marg  buttonKey" title="Ayuda"></button>
+                    <button class="back buttonSecundary button-marg  buttonKey" title="Retornar"></button>
+                    <button class="reset button-marg buttonSecundary buttonKey" title="Reiniciar"></button>
+                    <button class="check button-marg buttonPrimary buttonKey" title="Validar"></button>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </template>
+    <template id="card-template">
+        <div class="ccard">
+            <h3 class="card-title"> Pregunta </h3>
+            <div class="card-description"> </div>
+
+
+
+            <div class="info-footer">
+                <div class="intentos">Intentos: 0</div>
+                <div class="duracion">Duracion 0</div>
+            </div>
+        </div>
+    </template>
+
+    <script type="text/javascript" src="../../../class/engines/genericEngines/engineOwner.js"></script>
+    <script type="text/javascript" src="../../../class/engines/cap_0/engineCartesian.js"></script>
+    <script type="text/javascript" src="../../../class/engines/cap_0/engineInterval.js"></script>
+    <script type="text/javascript" src="../../../class/engines/genericEngines/mod_G.js"></script>
+    <script type="text/javascript" src="../../../brains/send.js"></script>
+
+    <script type="text/javascript" src="../../../class/engines/cap_0/evaluationEngine.js"></script>
+    <script type="text/javascript" src="../../../class/engines/genericEngines/mathKeyboard.js"></script>
+    <script type="text/javascript" src="../../../class/engines/genericEngines/progressEngine.js"></script>
+    <script type="text/javascript" src="../../../definitions/cap_0/evaluation.js"></script>
+
+
+</body>
+
+</html>

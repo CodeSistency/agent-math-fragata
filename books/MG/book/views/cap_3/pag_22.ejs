@@ -1,0 +1,166 @@
+<%- include(rutes+'/head.min.ejs'); %>
+   <div class="containerNormal background-gray">
+
+      <h3>Fórmulas</h3>
+      <hr>
+
+      <div class="text-center infoText">
+         <p class="superTitle"><strong>ECUACIONES con x a AMBOS LADOS del SIGNO =</strong></p>
+         <p>Es frecuente encontrarse con ecuaciones que se obtienen igualando dos fórmulas.
+         <p>Un ejemplo de este tipo de ecuaciones es:</p>
+         <span class="expression">3x+1 =2-x</span>
+         <p>Es decir, son de la forma:</p>
+         <span class="expression">f(x)=g(x)</span>
+         <p>Una manera de resolver rápidamente estas ecuaciones es restando a ambos lados de la igualdad una de las dos
+            fórmulas. Es decir, haciendo el paso:</p>
+         <span class="expression">f(x)-g(x)=g(x)-g(x)</span>
+         <p>Obteniéndose:</p>
+         <span class="expression">f(x)-g(x)=0</span>
+         <p>En el ejemplo que se ha dado estos pasos corresponden a:</p>
+         <span class="expression">3x+1-(2-x)=2-x-(2-x)</span> y <span class="expression"> 3x+1-(2-x)=0</span>
+
+         <p>Observe que se tomó todo lo que estaba a la derecha y se pusieron paréntesis para rodearlo, de esta manera
+            se
+            hace ver que se está restando toda esa parte. El problema ahora es cómo trabajar
+            con la parte que quedó a la izquierda para "despejar la <span class="expression"> x</span>". El primer paso
+            es
+            "eliminar los paréntesis", como hay un <span class="expression">-</span> delante, todos los signos <span
+               class="expression">( + o –)</span> que están dentro del paréntesis deben ser cambiados por sus contrarios
+            <span class="expression">(el + por – y el – por + )</span> Así se obtiene: <span
+               class="expression">3x+1-2+x=0</span>
+
+         </p>
+         <p>
+            (El<span class="expression"> 2</span> tenía un signo positivo, que no se ve porque no suele escribirse, al
+            cambiarlo queda <span class="expression">–2</span> )
+            El segundo paso es "agrupar los <span class="expression">x</span> ", es decir cambiar la posición de los
+            términos con <span class="expression">x</span>, de manera que queden en sucesión. Se obtiene <span
+               class="expression">(3x+x)+ 1 – 2 = 0</span>.
+         </p>
+
+         <p>Los términos con <span class="expression">x</span> se pueden convertir en un solo término con <span
+               class="expression">x</span> cuyo coeficiente es la suma de los coeficientes de los términos con <span
+               class="expression">x</span>. En nuestro ejemplo <span class="expression">3x</span> tiene coeficiente
+            <span class="expression">3</span> y <span class="expression">x</span> tiene coeficiente <span
+               class="expression">1</span> (porque <span class="expression"> x= 1.x</span>). Y por lo tanto la suma de
+            los coeficientes es <span class="expression">3+1 = 4</span>. Es decir, <span class="expression">3x+x</span>
+            se convierte en <span class="expression">4x</span>. Como <span class="expression">1– 2 = –1</span>, <span
+               class="expression">1–2</span> se convierte en <span class="expression">–1</span>.
+         </p>
+
+         <p>La ecuación pasa a la forma <span class="expression">4 x+(-1) = 0</span> . Esta ecuación es del tipo <i
+               class="expression">fórmula = número</i> (con una fórmula donde aparece una sola vez la <span
+               class="expression">x</span>) y por lo tanto se puede resolver utilizando inversas. Su solución es <span
+               class="expression">0.25</span>.
+         </p>
+
+         <p class="text-center">Resolución de ecuaciones con <span class="expression">x</span> a ambos lados del signo
+            igual <span class="expression"> = </span></p>
+         <p>Complete de acuerdo al modelo.</p>
+
+
+      </div>
+
+      <!-- style="max-width: 1050px" -->
+      <div class="d-flex justify-content-center">
+         <div id="mainArtifact" style="max-width: 1200px">
+            <div id="contenedor" class="mainContent">
+               <div id="titulo"></div>
+            </div>
+         </div>
+      </div>
+      <template id="template">
+         <div id="artifact"></div>
+      </template>
+
+      <!--_-------------------------------------------->
+      <div class="d-flex justify-content-center flex-column">
+         <div id="mainOwner" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;">
+         </div>
+         <div id="grid" class="d-flex flex-wrap justify-content-center" style="max-width: 1500px; margin: 0;">
+         </div>
+         <template id="template">
+            <div class="content_1">
+               <div class="content_2">
+               </div>
+            </div>
+         </template>
+
+         <div id="globalContainer" class="">
+            <div class="row flex-wrap" id="contenedorTablass">
+               <div id="tabla2" class=" col-md-6 col-sm-12"></div>
+
+               <div id="tabla1" class=" col-md-6 col-sm-12"></div>
+            </div>
+
+            <div id="oneContainer" class="contenedor-preguntas d-flex justify-content-center"></div>
+         </div>
+
+
+
+      </div>
+      <template id="globalTemplate">
+         <div id="artifact-container"
+            class="d-flex w-100 flex-wrap justify-content-center rounded btn-all artifact-container question">
+            <div id="content" class="question__content">
+            </div>
+            <div class="d-flex w-100 flex-wrap justify-content-center  rounded btn-all question__footer">
+               <div class="d-flex flex-row">
+                  <div class="d-flex flex-wrap justify-content-start "></div>
+                  <button class="reset button-marg buttonSecundary buttonKey question__footer__reset"
+                     title="Reiniciar"></button>
+                  <button class="check button-marg buttonPrimary buttonKey question__footer__check"
+                     title="Validar"></button>
+
+               </div>
+            </div>
+
+         </div>
+
+      </template>
+
+      <template id="cardCol">
+         <div class="col-6">
+
+         </div>
+         <div>
+
+         </div>
+
+      </template>
+
+      <template id="templateSelect">
+         <div class='' id="selectq">
+            <div class="">
+               <label for="opciones"></label>
+            </div>
+            <div class="">
+               <select class="form-select form-controlx" name="opciones" id="opciones" style="width:fit-content">
+            </div>
+            </select>
+         </div>
+      </template>
+      <template id="templateCheck">
+
+         <div class="" id="radioContainer">
+            <div class="title ">
+            </div>
+            <div class="content  ">
+            </div>
+         </div>
+      </template>
+      <template id="templateInput">
+         <div class="row">
+            <div id="title" class=""></div>
+            <div id="content" class=""></div>
+         </div>
+
+      </template>
+
+
+      <div id="globalContainer" class="">
+         <div id="oneContainer" class="contenedor-preguntas"></div>
+      </div>
+
+   </div>
+   <%- include(rutes+'/bodyClose.min.ejs'); %>

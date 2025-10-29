@@ -1,0 +1,43 @@
+---
+alwaysApply: true
+---
+
+# Cursor Rules para Math Agent Frontend
+
+## Uso de Mastra MCP
+
+Cuando sea necesario trabajar con Mastra o necesites información sobre Mastra, DEBES usar las herramientas MCP de Mastra disponibles en lugar de depender únicamente de conocimiento general:
+
+### Usa Mastra MCP para:
+
+1. **Documentación de Mastra**: 
+   - Cuando necesites consultar documentación de Mastra, usa `mcp_mastra_mastraDocs` con los paths o keywords relevantes
+   - Prioriza usar paths específicos cuando sepas la ubicación de la documentación
+   - Ejemplos de paths: `agents/`, `workflows/`, `memory/`, `rag/`, `reference/agents/`, etc.
+
+2. **Ejemplos de código**:
+   - Cuando necesites ver ejemplos de implementación, usa `mcp_mastra_mastraExamples`
+   - Puedes buscar por nombre de ejemplo o keywords del dominio (agentes, workflows, memoria, etc.)
+
+3. **Changelog y actualizaciones**:
+   - Para ver cambios y actualizaciones de paquetes específicos, usa `mcp_mastra_mastraChanges` con el nombre del paquete
+
+4. **Blog y anuncios**:
+   - Para información del blog de Mastra o changelogs publicados, usa `mcp_mastra_mastraBlog`
+
+5. **Curso de Mastra**:
+   - Si el usuario quiere aprender Mastra, usa las herramientas del curso (`startMastraCourse`, `getMastraCourseStatus`, etc.)
+
+### Directrices:
+
+- **SIEMPRE** consulta la documentación oficial de Mastra a través de MCP antes de hacer suposiciones sobre APIs o funcionalidades
+- **PREFIERE** ejemplos de código oficiales de Mastra sobre ejemplos genéricos
+- **VERIFICA** las versiones más recientes usando los changelogs cuando sea relevante
+- Si necesitas instalar paquetes de Mastra, usa `pnpm` y especifica el comando con el tag `latest` (no alpha a menos que se solicite explícitamente)
+
+### Prioridad:
+
+1. Primero intenta usar MCP de Mastra para obtener información oficial y actualizada
+2. Si no encuentras lo que necesitas, entonces puedes combinar con conocimiento general
+3. Siempre cita la fuente (path de documentación o ejemplo) cuando uses información de MCP
+

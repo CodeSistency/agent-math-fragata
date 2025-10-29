@@ -1,0 +1,96 @@
+<%- include(rutes+'/head.min.ejs'); %>
+  <style>
+    .contenedorGrid {
+      display: wrap !important;
+      flex-wrap: wrap !important;
+
+    }
+
+    .content_2 p {
+      display: flex;
+      justify-content: center !important;
+    }
+  </style>
+
+  <body>
+    <div class="containerNormal background-gray">
+      <nav class="mb-5 border-bottom border-dark">
+        <div class="d-flex justify-content-between">
+          <p class="navbar-brand font-italic text-break">Operaciones con curvas</p>
+        </div>
+      </nav>
+
+      <section class="containerNormal flexGrid">
+        <div class="colorArtifact  " data-definition="artifact_1" data-board="board_1"></div>
+        <div class="colorArtifact  " data-definition="artifact_2" data-board="board_2"></div>
+        <div class="colorArtifact  " data-definition="artifact_3" data-board="board_3"></div>
+        <div class="colorArtifact  " data-definition="artifact_4" data-board="board_4"></div>
+        <div class="colorArtifact" data-definition="artifact_5" data-board="board_6"></div>
+        <div class="colorArtifact" data-definition="artifact_6" data-board="board_7"></div>
+        <div class="colorArtifact" data-definition="artifact_7" data-board="board_8"></div>
+        <div class="colorArtifact" data-definition="artifact_8" data-board="board_9"></div>
+
+
+
+      </section>
+
+
+
+      <!-- TemplateEngineColor -->
+
+
+      <template id="templateExample">
+
+        <div class="artifactColor">
+          <div class="artifactColor__notification transitionNotification " data-show="false">
+            <!-- Selección de franjas inadecuada -->
+
+          </div>
+
+          <div class="artifactColor__Board" id="" data-board="board_" data-artifact="artifact_">
+          </div>
+          <div class="artifactColor__menu">
+            <span class="arrowToClose"></span>
+
+            <div class="artifactColor__menuContent">
+              <div class="artifactColor__menuColors" data-position='positive' data-select="null">
+
+              </div>
+              <div class="artifactColor__menuColors" data-position='negative' data-select="null">
+
+              </div>
+            </div>
+          </div>
+          <div class="artifactColor__btnContainer btn-all">
+
+            <div class="choseColors">
+
+              <div class="choseColors__elements">
+
+                <button class="choseColors__select" id="btnChose-0" data-status='inactive' data-select='null'>
+
+                </button>
+                <button class="btnChangePosition" title="Aplicar la inversa a los puntos"></button>
+                <button class="choseColors__select" id="btnChose-1" data-status='inactive' data-select='null'>
+                </button>
+              </div>
+            </div>
+            <div class="artifactColor__Otherbtn">
+            </div>
+            <div>
+              <button class="  help-btn button-marg buttonSecundary buttonKey d-none"></button>
+              <button class=" reset button-marg buttonSecundary buttonKey"></button>
+              <button class="  check button-marg buttonPrimary buttonKey"></button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- fin TemplateEngineColor -->
+
+
+
+
+    </div>
+    </div>
+    <%- include(rutes+'/bodyClose.min.ejs'); %>

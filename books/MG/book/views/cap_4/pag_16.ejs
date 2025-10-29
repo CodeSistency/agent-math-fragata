@@ -1,0 +1,107 @@
+<%- include(rutes+'/head.min.ejs'); %>
+    <template id="template">
+        <div id="artifact">
+        </div>
+    </template>
+
+    <div class="containerNormal background-gray">
+        <h3>Fórmulas y Curvas</h3>
+        <hr>
+        <br>
+        <h3 class="superTitle"><strong>Curvas de altura constante.</strong></h3>
+        <br>
+        <div class="note">
+            <p>Hacer click en la elipses del diagrama para completar la gráfica</small> </p>
+            </p>
+        </div>
+        <div class="itemContenFlex flexGrid">
+            <div class="itemContenFlex marginTop-2 marginBottom-2">
+                <div id="globalContainer" class="">
+                    <div id="mainArtifact" style="max-width: 1200px" class="d-flex justify-content-center">
+                        <div id="contenedor" class="mainContent justify-content-start"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="rendering_1" class="itemContenFlex marginTop-2 marginBottom-2"></div>
+        </div>
+
+        <br>
+        <br>
+
+        <p class="infoText centerText">En la calculadora las teclas constantes corresponden a las numéricas. Al
+            "terminar una operación" con la calculadora, si se presiona el 2, en la pantalla aparecerá el 2 (sin
+            importar cual era el número que estaba en la pantalla). Se dice que la tecla es "independiente del x " (el
+            valor resultante no va a depender del valor que había en la pantalla). Esto se refleja en la notación que se
+            ha utilizado: observe que se ha puesto <span class="expression">c</span> en vez de <span
+                class="expression">c()</span>. (La letra c, es la inicial de constante). Para los valores que usted
+            escoja en el eje x, grafique los puntos que corresponden a la tecla 2. Complete con trazos la curva que
+            corresponde a la tecla 2.</p>
+
+        <div class="alphabetEngine centerElement" data-artifact="artifact_2" data-board="board_1">
+        </div>
+        <br>
+        <br>
+        <br>
+        <p class="infoText centerText">La funcion constantes 1.5 también existe, pero para ello hay que presionar tres
+            teclas.</p>
+        <div class="flexGrid">
+            <div id="rendering_2" class="centerText" style="display: flex; justify-content: center;"></div>
+            <div id="rendering_3" class="centerText" style="display: flex; justify-content: center;"></div>
+            <div id="rendering_4" class="centerText" style="display: flex; justify-content: center;"></div>
+            <div id="rendering_5" class="centerText" style="display: flex; justify-content: center;"></div>
+
+
+        </div>
+        <p class="infoText centerText marginTop-2">Las dos "funciones" que se estudian en las próximas páginas no suelen
+            ser teclas de la calculadora. Sin embargo, se dan las instrucciones para construir las imágenes, de manera
+            que usted los pueda calcular.</p>
+    </div>
+
+    <template id="tmp-alphabet">
+        <div class="alphabetEngineContainer">
+            <div class="alphabetEngine__notification transitionNotification" data-show="false">
+                <!-- Selección de franjas inadecuada -->
+            </div>
+
+            <div class="alphabetEngine__Board" id="boad1" data-board="board_" data-artifact="artifact_"></div>
+            <div class="alphabetEngine__questions">
+                <div class="alphabetEngine__diagram">
+                    <div class="alphabetEngine__rounded roundedPositionTop">
+                        <math-field readonly class="alphabetEngine__rounded-math-field"></math-field>
+                    </div>
+                    <div class="alphabetEngine__square">
+                        <math-field readonly class="alphabetEngine__square-math-field"></math-field>
+                    </div>
+                    <div class="arrowDown arrowDown--cap4"></div>
+                    <div class="alphabetEngine__rounded roundedPositionBottom">
+                        <math-field class="alphabetEngine__rounded-math-field" readonly></math-field>
+                    </div>
+                </div>
+
+                <div class="alphabetEngine__btnsPars">
+                    <div class="alphabetEngine__ordenatePars">
+                        <div class="alphabetEngine__ordenatePar-input">
+                            <span class="textOrdenatePar">(</span><math-field readonly
+                                class="alphabetEngine__ordenatePar-mathfield" data-par="x">x</math-field>
+                            <spa class="textOrdenatePar">,</spa>
+                            <math-field readonly class="alphabetEngine__ordenatePar-mathfield"
+                                data-par="y">y</math-field><span class="textOrdenatePar">)</span>
+                        </div>
+                    </div>
+                    <div class="alphabetEngine__createPars">
+                        <button class="createPointBtn">crear punto</button>
+                    </div>
+                </div>
+            </div>
+            <div class="alphabetEngine__btnContainer btn-all">
+                <div class="alphabetEngine__Otherbtn"></div>
+                <div>
+                    <button class="help-btn button-marg buttonSecundary buttonKey d-none">
+                    </button>
+                    <button class="reset button-marg buttonSecundary buttonKey"></button>
+                    <button class="check button-marg buttonPrimary buttonKey"></button>
+                </div>
+            </div>
+        </div>
+    </template>
+    <%- include(rutes+'/bodyClose.min.ejs'); %>
