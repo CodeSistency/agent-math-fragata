@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { processImageToExercises } from "@/lib/ocr/processor";
-import { upsertExercises } from "@/lib/rag/vector-store";
-import { initializeVectorStore } from "@/lib/rag/vector-store";
+import { upsertExercises, initializeVectorStore, initializeBookVectorStore } from "@/lib/rag/vector-store";
 import { initializeDatabase } from "@/lib/db/init";
+import { exerciseRepository } from "@/lib/db/repositories";
 import { Exercise } from "@/types/exercise";
 import { rateLimit, getClientIdentifier } from "@/lib/middleware/rate-limit";
+import { buildEmbeddingText } from "@/lib/rag/rag-helpers";
 
 export const runtime = "nodejs";
 export const maxDuration = 60; // 60 seconds for OCR processing
@@ -41,11 +42,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize vector store if needed
-    await initializeVectorStore();
-
     const formData = await request.formData();
     const files = formData.getAll("images") as File[];
+
+    // Extract optional metadata from form data
+    const bookId = formData.get("bookId") as string | null;
+    const chapterId = formData.get("chapterId") as string | null;
+    const pageId = formData.get("pageId") as string | null;
+    const tema = formData.get("tema") as string | null;
+    const subtema = formData.get("subtema") as string | null;
+    const dificultad = (formData.get("dificultad") as "básica" | "media" | "avanzada") || "media";
+
+    // Initialize vector store - use book-specific if bookId provided
+    if (bookId) {
+      await initializeBookVectorStore(bookId);
+    } else {
+      await initializeVectorStore();
+    }
 
     if (!files || files.length === 0) {
       return NextResponse.json(
@@ -90,17 +103,29 @@ export async function POST(request: NextRequest) {
         // Extract exercises from image
         const exercises = await processImageToExercises(buffer, imageRef);
 
+        // Apply metadata to exercises if provided
+        const exercisesWithMetadata = exercises.map((exercise) => {
+          // Merge provided metadata with exercise metadata
+          const exerciseWithMetadata: Exercise = {
+            ...exercise,
+            tema: tema || exercise.tema,
+            subtema: subtema || exercise.subtema,
+            dificultad: dificultad || exercise.dificultad,
+            metadata: {
+              ...exercise.metadata,
+              bookId: bookId || exercise.metadata?.bookId,
+              chapterId: chapterId || exercise.metadata?.chapterId,
+              pageId: pageId || exercise.metadata?.pageId,
+            },
+          };
+
+          return exerciseWithMetadata;
+        });
+
         // Prepare exercises for vector store
-        return exercises.map((exercise) => {
-          // Create text representation for embedding
-          const text = [
-            exercise.tema,
-            exercise.subtema || "",
-            exercise.enunciado,
-            exercise.solucion,
-          ]
-            .filter(Boolean)
-            .join(" ");
+        return exercisesWithMetadata.map((exercise) => {
+          // Usar buildEmbeddingText para incluir información de artefactos
+          const text = buildEmbeddingText(exercise);
 
           return {
             id: exercise.id,
@@ -128,8 +153,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store exercises in vector database
-    await upsertExercises(allExercises);
+    // Store exercises in vector database (with book context if provided)
+    await upsertExercises(allExercises, bookId || undefined);
+
+    // Save exercises to database with metadata
+    for (const { exercise } of allExercises) {
+      await exerciseRepository.create({
+        ...exercise,
+        pageId: pageId || undefined,
+        bookId: bookId || undefined,
+        chapterId: chapterId || undefined,
+      });
+    }
 
     return NextResponse.json({
       success: true,

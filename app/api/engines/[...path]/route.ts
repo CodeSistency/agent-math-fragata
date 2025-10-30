@@ -12,11 +12,14 @@ export const maxDuration = 30;
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> | { path: string[] } }
 ) {
   try {
+    // Handle both sync and async params (Next.js 15+)
+    const resolvedParams = await Promise.resolve(params);
+    
     // Validate path to prevent directory traversal
-    const pathParts = params.path;
+    const pathParts = resolvedParams.path;
     
     if (pathParts.length === 0) {
       return NextResponse.json(

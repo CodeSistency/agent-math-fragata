@@ -21,6 +21,22 @@ export const ExerciseSchema = z.object({
     pageId: z.string().optional(),
     pageNumber: z.number().optional(),
     variant: z.number().optional(),
+    // Artifact-specific fields
+    artifactKey: z.string().optional(),
+    totalQuestions: z.number().optional(),
+    questionIndex: z.number().optional(),
+    artifactDefBoard: z.string().optional(), // Associated board key for this artifact
+    questionData: z.object({
+      type: z.number().optional(),
+      answers_values: z.array(z.any()).optional(),
+      conditions: z.record(z.any()).optional(),
+    }).optional(),
+    // Artifact definition for visual/interactive exercises
+    artifactDefinition: z.object({
+      defBoards: z.record(z.any()),
+      rDef: z.record(z.any()),
+    }).optional(),
+    suggestedEngine: z.string().optional(),
   }).optional(),
 });
 

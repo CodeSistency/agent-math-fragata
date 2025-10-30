@@ -11,12 +11,17 @@ export const maxDuration = 30;
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { bookId: string } }
+  { params }: { params: Promise<{ bookId: string }> | { bookId: string } }
 ) {
   try {
     await initializeDatabase();
+    
+    // Handle both sync and async params (Next.js 15+)
+    const resolvedParams = await Promise.resolve(params);
+    const bookId = decodeURIComponent(resolvedParams.bookId);
+    
     // Verify book exists
-    const book = await bookRepository.findById(params.bookId);
+    const book = await bookRepository.findById(bookId);
     if (!book) {
       return NextResponse.json(
         { error: "Book not found" },
@@ -24,7 +29,7 @@ export async function GET(
       );
     }
 
-    const chapters = await chapterRepository.findByBookId(params.bookId);
+    const chapters = await chapterRepository.findByBookId(bookId);
 
     return NextResponse.json({
       success: true,

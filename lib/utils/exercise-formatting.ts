@@ -170,4 +170,68 @@ export function extractExercisesFromToolResults(toolResults: any[]): Exercise[] 
   return exercises;
 }
 
+/**
+ * Extrae información de ejercicio con artefacto de un mensaje del chat
+ * Retorna null si no hay ejercicio con artefacto, o un objeto con la información completa
+ */
+export function extractExerciseWithArtifact(message: any): {
+  exercise: Exercise;
+  artifactDefinition: { defBoards: Record<string, any>; rDef: Record<string, any> };
+  suggestedEngine?: string;
+  bookId?: string;
+  chapterId?: string;
+} | null {
+  if (!message.parts || !Array.isArray(message.parts)) {
+    return null;
+  }
+
+  // Buscar en tool calls
+  for (const part of message.parts) {
+    if (part.type === "tool-call" || part.type === "tool") {
+      const toolName = part.toolName || part.name;
+
+      // Buscar generate-variation tool
+      if (toolName === "generateVariation" || toolName === "generate-variation") {
+        if (part.result?.exercise) {
+          const exercise = part.result.exercise as Exercise;
+          
+          // Verificar si tiene artifactDefinition en metadata o en el resultado directo
+          const artifactDef = 
+            part.result.artifactDefinition ||
+            exercise.metadata?.artifactDefinition;
+          
+          const suggestedEngine = 
+            part.result.suggestedEngine ||
+            exercise.metadata?.suggestedEngine;
+
+          if (artifactDef && (artifactDef.defBoards || artifactDef.rDef)) {
+            return {
+              exercise,
+              artifactDefinition: {
+                defBoards: artifactDef.defBoards || {},
+                rDef: artifactDef.rDef || {},
+              },
+              suggestedEngine: suggestedEngine || undefined,
+              bookId: exercise.metadata?.bookId,
+              chapterId: exercise.metadata?.chapterId,
+            };
+          }
+        }
+      }
+
+      // Buscar generate-artifact-definition tool
+      if (toolName === "generateArtifactDefinition" || toolName === "generate-artifact-definition") {
+        if (part.result?.definition) {
+          // En este caso necesitamos encontrar el ejercicio asociado
+          // Podría estar en otro tool call o en el contexto del mensaje
+          // Por ahora retornamos null ya que necesitamos el ejercicio completo
+          // Esto se manejará mejor cuando se integre con el chat
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
 

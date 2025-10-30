@@ -1,6 +1,6 @@
 import { Mastra } from "@mastra/core/mastra";
 import { LibSQLStore } from "@mastra/libsql";
-import { supervisorAgent, exerciseExtractionAgent, intentDetectionAgent, variationGenerationAgent } from "./agent";
+import { supervisorAgent, exerciseExtractionAgent, intentDetectionAgent, variationGenerationAgent, artifactGenerationAgent } from "./agent";
 import { env } from "@/lib/env";
 
 export const mastra = new Mastra({
@@ -9,6 +9,7 @@ export const mastra = new Mastra({
     exerciseExtractionAgent,
     intentDetectionAgent,
     variationGenerationAgent,
+    artifactGenerationAgent,
   },
   storage: new LibSQLStore({
     url: env.DATABASE_URL,

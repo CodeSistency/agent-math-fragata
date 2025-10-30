@@ -1,6 +1,7 @@
-import { readdir, stat } from "fs/promises";
-import { join, basename } from "path";
+import { readdir } from "fs/promises";
+import { join } from "path";
 import type { Chapter, Page } from "@/types/book";
+import { isDirectory } from "./utils";
 
 interface ParsedBookStructure {
   chapters: Chapter[];
@@ -17,45 +18,27 @@ function extractChapterNumber(folderName: string): number | null {
 }
 
 /**
- * Extract page number and variant from filename (e.g., "pag_1.js" -> {page: 1, variant: 0}, "pag_1_2.js" -> {page: 1, variant: 2})
+ * Extract page number and subpage from filename (e.g., "pag_1.js" -> {page: 1, subPage: 0}, "pag_1_2.js" -> {page: 1, subPage: 2})
+ * The format pag_X_Y means page X.Y (subpage), not a variant
  */
-function extractPageInfo(fileName: string): { page: number; variant: number } | null {
+function extractPageInfo(fileName: string): { page: number; subPage: number } | null {
   // Remove .js extension
   const nameWithoutExt = fileName.replace(/\.js$/, "");
   
   // Match pag_X or pag_X_Y pattern
+  // pag_1.js -> page 1, subPage 0
+  // pag_1_1.js -> page 1, subPage 1 (which means page 1.1)
+  // pag_10_2.js -> page 10, subPage 2 (which means page 10.2)
   const match = nameWithoutExt.match(/^pag_(\d+)(?:_(\d+))?$/);
   if (!match) return null;
   
   const page = parseInt(match[1], 10);
-  const variant = match[2] ? parseInt(match[2], 10) : 0;
+  const subPage = match[2] ? parseInt(match[2], 10) : 0;
   
-  return { page, variant };
+  return { page, subPage };
 }
 
-/**
- * Check if a path is a directory
- */
-async function isDirectory(path: string): Promise<boolean> {
-  try {
-    const stats = await stat(path);
-    return stats.isDirectory();
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Check if a path is a file
- */
-async function isFile(path: string): Promise<boolean> {
-  try {
-    const stats = await stat(path);
-    return stats.isFile();
-  } catch {
-    return false;
-  }
-}
+// Utilities moved to lib/books/utils.ts
 
 /**
  * Parse book structure from filesystem
@@ -118,15 +101,17 @@ export async function parseBookStructure(
         continue;
       }
 
-      const pageId = `${chapterId}_pag_${pageInfo.page}${pageInfo.variant > 0 ? `_${pageInfo.variant}` : ""}`;
+      // Create page ID: MG_cap_1_pag_1 or MG_cap_1_pag_1_1
+      const pageId = `${chapterId}_pag_${pageInfo.page}${pageInfo.subPage > 0 ? `_${pageInfo.subPage}` : ""}`;
       const filePath = join(itemPath, pageFile);
       
       // Create page (content will be loaded later)
+      // Store subPage as variant for backward compatibility, but treat it as decimal part
       const page: Page = {
         id: pageId,
         chapterId,
         pageNumber: pageInfo.page,
-        variant: pageInfo.variant > 0 ? pageInfo.variant : undefined,
+        variant: pageInfo.subPage > 0 ? pageInfo.subPage : undefined,
         filePath,
         createdAt: new Date().toISOString(),
       };
@@ -137,24 +122,25 @@ export async function parseBookStructure(
   // Sort chapters by number
   chapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
 
-  // Sort pages by chapter, then page number, then variant
+  // Sort pages by chapter, then by decimal page number (1, 1.1, 1.2, 2, 2.1, etc.)
   pages.sort((a, b) => {
     const aChapter = chapters.find((c) => c.id === a.chapterId);
     const bChapter = chapters.find((c) => c.id === b.chapterId);
     
     if (!aChapter || !bChapter) return 0;
     
+    // First sort by chapter
     if (aChapter.chapterNumber !== bChapter.chapterNumber) {
       return aChapter.chapterNumber - bChapter.chapterNumber;
     }
     
-    if (a.pageNumber !== b.pageNumber) {
-      return a.pageNumber - b.pageNumber;
-    }
+    // Then sort by decimal page number
+    // Convert to decimal: pageNumber + (variant/10)
+    // e.g., page 1 variant 1 -> 1.1, page 10 variant 2 -> 10.2
+    const aDecimal = a.pageNumber + (a.variant ? a.variant / 10 : 0);
+    const bDecimal = b.pageNumber + (b.variant ? b.variant / 10 : 0);
     
-    const aVariant = a.variant || 0;
-    const bVariant = b.variant || 0;
-    return aVariant - bVariant;
+    return aDecimal - bDecimal;
   });
 
   return { chapters, pages };

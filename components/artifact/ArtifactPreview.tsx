@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Code, Eye, Split, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { discoverEngines, type Engine } from "@/lib/books/engine-discovery";
+import type { Engine } from "@/lib/books/engine-discovery";
 
 interface ArtifactDefinition {
   defBoards?: Record<string, any>;
@@ -48,7 +48,17 @@ export function ArtifactPreview({
       if (!bookId || !chapterId) return;
       
       try {
-        const engines = await discoverEngines(bookId, chapterId);
+        const response = await fetch(`/api/engines/discover?bookId=${encodeURIComponent(bookId)}&chapterId=${encodeURIComponent(chapterId)}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch engines: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        if (!data.success || !data.data) {
+          throw new Error("Invalid response format");
+        }
+        
+        const engines = data.data as Engine[];
         setAvailableEngines(engines);
         
         // Auto-select first engine if none selected

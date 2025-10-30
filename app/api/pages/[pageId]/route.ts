@@ -12,21 +12,32 @@ export const maxDuration = 30;
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { pageId: string } }
+  { params }: { params: Promise<{ pageId: string }> | { pageId: string } }
 ) {
   try {
     await initializeDatabase();
-    const page = await pageRepository.findById(params.pageId);
+    
+    // Handle both sync and async params (Next.js 15+)
+    const resolvedParams = await Promise.resolve(params);
+    const pageId = decodeURIComponent(resolvedParams.pageId);
+    
+    console.log(`[GET /api/pages/${pageId}] Looking for page with ID: "${pageId}"`);
+    
+    const page = await pageRepository.findById(pageId);
     
     if (!page) {
+      console.log(`[GET /api/pages/${pageId}] Page not found in database`);
       return NextResponse.json(
-        { error: "Page not found" },
+        { 
+          error: "Page not found",
+          message: `Page with ID "${pageId}" not found`,
+        },
         { status: 404 }
       );
     }
 
     // Get exercises for this page
-    const exercises = await exerciseRepository.findByPageId(params.pageId);
+    const exercises = await exerciseRepository.findByPageId(pageId);
 
     // Load file content if available
     let fileContent: string | null = null;

@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Exercise } from "@/types/exercise";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { Eye, X } from "lucide-react";
+import { ArtifactPreview } from "@/components/artifact/ArtifactPreview";
+import type { Book } from "@/types/book";
 
 function UploadPageContent() {
   const [files, setFiles] = useState<File[]>([]);
@@ -12,6 +19,39 @@ function UploadPageContent() {
   const [extractedExercises, setExtractedExercises] = useState<Exercise[]>([]);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Metadata state
+  const [bookId, setBookId] = useState<string>("");
+  const [chapterId, setChapterId] = useState<string>("");
+  const [pageId, setPageId] = useState<string>("");
+  const [tema, setTema] = useState<string>("");
+  const [subtema, setSubtema] = useState<string>("");
+  const [dificultad, setDificultad] = useState<"básica" | "media" | "avanzada">("media");
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loadingBooks, setLoadingBooks] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewExercise, setPreviewExercise] = useState<Exercise | null>(null);
+
+  // Load available books
+  useEffect(() => {
+    const loadBooks = async () => {
+      try {
+        setLoadingBooks(true);
+        const response = await fetch("/api/books");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setBooks(data.data);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading books:", err);
+      } finally {
+        setLoadingBooks(false);
+      }
+    };
+    loadBooks();
+  }, []);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
@@ -54,6 +94,14 @@ function UploadPageContent() {
         formData.append("images", file);
       });
 
+      // Add metadata if provided
+      if (bookId) formData.append("bookId", bookId);
+      if (chapterId) formData.append("chapterId", chapterId);
+      if (pageId) formData.append("pageId", pageId);
+      if (tema) formData.append("tema", tema);
+      if (subtema) formData.append("subtema", subtema);
+      formData.append("dificultad", dificultad);
+
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
@@ -86,6 +134,106 @@ function UploadPageContent() {
           <p className="text-zinc-600 dark:text-zinc-400">
             Sube imágenes de páginas de libro para extraer ejercicios matemáticos
           </p>
+        </div>
+
+        {/* Metadata Form */}
+        <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
+            Metadata (Opcional)
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Libro (bookId)
+              </label>
+              <div className="flex gap-2">
+                <Select value={bookId} onValueChange={setBookId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar libro" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingBooks ? (
+                      <SelectItem value="loading" disabled>Cargando...</SelectItem>
+                    ) : books.length === 0 ? (
+                      <SelectItem value="none" disabled>No hay libros disponibles</SelectItem>
+                    ) : (
+                      books.map((book) => (
+                        <SelectItem key={book.id} value={book.id}>
+                          {book.name} ({book.code})
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="text"
+                  placeholder="O escribir bookId"
+                  value={bookId}
+                  onChange={(e) => setBookId(e.target.value)}
+                  className="flex-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Capítulo (chapterId)
+              </label>
+              <Input
+                type="text"
+                placeholder="Ej: MG_cap_1"
+                value={chapterId}
+                onChange={(e) => setChapterId(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Página (pageId)
+              </label>
+              <Input
+                type="text"
+                placeholder="Ej: MG_cap_1_pag_1"
+                value={pageId}
+                onChange={(e) => setPageId(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Dificultad
+              </label>
+              <Select value={dificultad} onValueChange={(value: "básica" | "media" | "avanzada") => setDificultad(value)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="básica">Básica</SelectItem>
+                  <SelectItem value="media">Media</SelectItem>
+                  <SelectItem value="avanzada">Avanzada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Tema (opcional)
+              </label>
+              <Input
+                type="text"
+                placeholder="Ej: Álgebra lineal"
+                value={tema}
+                onChange={(e) => setTema(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                Subtema (opcional)
+              </label>
+              <Input
+                type="text"
+                placeholder="Ej: Sistemas de ecuaciones"
+                value={subtema}
+                onChange={(e) => setSubtema(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
 
         {/* File Input */}
@@ -190,29 +338,91 @@ function UploadPageContent() {
               Ejercicios Extraídos ({extractedExercises.length})
             </h2>
             <div className="space-y-4">
-              {extractedExercises.map((exercise, index) => (
-                <div
-                  key={exercise.id || index}
-                  className="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
-                        {exercise.tema}
-                        {exercise.subtema && ` - ${exercise.subtema}`}
-                      </h3>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                        Dificultad: {exercise.dificultad}
+              {extractedExercises.map((exercise, index) => {
+                const hasDefinition = exercise.metadata?.definition && 
+                  (exercise.metadata.definition.defBoards || exercise.metadata.definition.rDef);
+                
+                return (
+                  <div
+                    key={exercise.id || index}
+                    className="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-zinc-900 dark:text-zinc-50">
+                          {exercise.tema}
+                          {exercise.subtema && ` - ${exercise.subtema}`}
+                        </h3>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                          Dificultad: {exercise.dificultad}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        {hasDefinition && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setPreviewExercise(exercise);
+                              setShowPreview(true);
+                            }}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            Ver Preview
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                        >
+                          <Link href={`/dashboard/exercises/${exercise.id}`}>
+                            Ver Detalles
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                        <strong>Enunciado:</strong> {exercise.enunciado.substring(0, 100)}
+                        {exercise.enunciado.length > 100 && "..."}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      <strong>Enunciado:</strong> {exercise.enunciado.substring(0, 100)}...
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Preview Modal */}
+        {showPreview && previewExercise && previewExercise.metadata?.definition && (
+          <div className="fixed inset-0 z-50 bg-white dark:bg-zinc-900">
+            <div className="h-full flex flex-col">
+              <div className="border-b border-zinc-200 dark:border-zinc-800 px-6 py-4 flex items-center justify-between bg-white dark:bg-zinc-950">
+                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                  Vista Previa de Artefacto - {previewExercise.tema}
+                </h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setShowPreview(false);
+                    setPreviewExercise(null);
+                  }}
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Cerrar
+                </Button>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <ArtifactPreview
+                  bookId={previewExercise.metadata?.bookId}
+                  chapterId={previewExercise.metadata?.chapterId}
+                  pageId={previewExercise.metadata?.pageId}
+                  initialDefinition={previewExercise.metadata.definition}
+                />
+              </div>
             </div>
           </div>
         )}

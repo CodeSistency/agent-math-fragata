@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, FileText, ChevronRight, Upload } from "lucide-react";
+import { ArrowLeft, FileText, ChevronRight, Upload, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Book } from "@/types/book";
 import type { Chapter } from "@/types/book";
+import type { Page } from "@/types/book";
 
 export default function BookPage() {
   const params = useParams();
@@ -17,6 +18,7 @@ export default function BookPage() {
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,23 +26,38 @@ export default function BookPage() {
         setLoading(true);
         setError(null);
 
+        // Encode bookId for URL (in case it has special characters)
+        const encodedBookId = encodeURIComponent(bookId);
+
         // Fetch book details
-        const bookResponse = await fetch(`/api/books/${bookId}`);
+        const bookResponse = await fetch(`/api/books/${encodedBookId}`);
         if (!bookResponse.ok) {
-          throw new Error("Book not found");
+          const errorData = await bookResponse.json().catch(() => ({}));
+          const errorMessage = errorData.message || errorData.error || `Book not found (status: ${bookResponse.status})`;
+          throw new Error(errorMessage);
         }
         const bookData = await bookResponse.json();
+        
+        if (!bookData.success || !bookData.data) {
+          throw new Error("Invalid response format from server");
+        }
+        
         setBook(bookData.data);
 
         // Fetch chapters
-        const chaptersResponse = await fetch(`/api/books/${bookId}/chapters`);
+        const chaptersResponse = await fetch(`/api/books/${encodedBookId}/chapters`);
         if (!chaptersResponse.ok) {
-          throw new Error("Failed to fetch chapters");
+          const errorData = await chaptersResponse.json().catch(() => ({}));
+          const errorMessage = errorData.message || errorData.error || "Failed to fetch chapters";
+          console.warn("Failed to fetch chapters:", errorMessage);
+          // Don't throw, just log and continue with empty chapters
+        } else {
+          const chaptersData = await chaptersResponse.json();
+          setChapters(chaptersData.data || []);
         }
-        const chaptersData = await chaptersResponse.json();
-        setChapters(chaptersData.data || []);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Error loading book");
+        const errorMessage = err instanceof Error ? err.message : "Error loading book";
+        setError(errorMessage);
         console.error("Error fetching book data:", err);
       } finally {
         setLoading(false);
@@ -84,6 +101,67 @@ export default function BookPage() {
     }
   };
 
+  const handlePreviewBook = async () => {
+    if (!bookId || chapters.length === 0) {
+      alert("No hay capítulos disponibles para preview");
+      return;
+    }
+
+    setLoadingPreview(true);
+    try {
+      // Get first chapter
+      const firstChapter = chapters[0];
+      
+      // Get pages for first chapter
+      const pagesResponse = await fetch(`/api/chapters/${encodeURIComponent(firstChapter.id)}/pages`);
+      if (!pagesResponse.ok) {
+        throw new Error("Failed to fetch pages");
+      }
+      
+      const pagesData = await pagesResponse.json();
+      const pages: Page[] = pagesData.data || [];
+      
+      if (pages.length === 0) {
+        alert("No hay páginas disponibles para preview");
+        return;
+      }
+
+      // Get first page with content
+      const firstPage = pages[0];
+      const pageResponse = await fetch(`/api/pages/${encodeURIComponent(firstPage.id)}`);
+      if (!pageResponse.ok) {
+        throw new Error("Failed to fetch page content");
+      }
+      
+      const pageData = await pageResponse.json();
+      const page: Page = pageData.data;
+      
+      // Extract definition from page content
+      if (page.content && (page.content.defBoards || page.content.rDef)) {
+        const definition = {
+          defBoards: page.content.defBoards || {},
+          rDef: page.content.rDef || {},
+        };
+        
+        // Navigate to playground with params
+        const params = new URLSearchParams();
+        params.set("bookId", bookId);
+        params.set("chapterId", firstChapter.id);
+        params.set("pageId", firstPage.id);
+        params.set("definition", encodeURIComponent(JSON.stringify(definition)));
+        
+        router.push(`/dashboard/playground?${params.toString()}`);
+      } else {
+        alert("Esta página no tiene contenido de definición disponible para preview");
+      }
+    } catch (err) {
+      alert(`Error al cargar preview: ${err instanceof Error ? err.message : String(err)}`);
+      console.error("Preview error:", err);
+    } finally {
+      setLoadingPreview(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center">
@@ -98,16 +176,29 @@ export default function BookPage() {
   if (error || !book) {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 dark:text-red-400 mb-4">
+        <div className="text-center max-w-md px-4">
+          <p className="text-red-600 dark:text-red-400 mb-2 font-semibold">
             {error || "Libro no encontrado"}
           </p>
-          <Button asChild variant="outline">
-            <Link href="/dashboard">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver al Dashboard
-            </Link>
-          </Button>
+          {bookId && (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
+              ID del libro: <code className="bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">{bookId}</code>
+            </p>
+          )}
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+            Si acabas de sincronizar, espera unos segundos y recarga la página.
+          </p>
+          <div className="flex gap-2 justify-center">
+            <Button asChild variant="outline">
+              <Link href="/dashboard">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Volver al Dashboard
+              </Link>
+            </Button>
+            <Button onClick={() => window.location.reload()} variant="default">
+              Recargar Página
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -133,10 +224,20 @@ export default function BookPage() {
                 Código: {book.code} • {chapters.length} capítulos • {book.metadata?.totalPages || 0} páginas
               </p>
             </div>
-            <Button onClick={handleUploadBook} variant="outline">
-              <Upload className="h-4 w-4 mr-2" />
-              Sobrescribir Libro
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={handlePreviewBook} 
+                variant="outline"
+                disabled={loadingPreview || chapters.length === 0}
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                {loadingPreview ? "Cargando..." : "Ver Preview"}
+              </Button>
+              <Button onClick={handleUploadBook} variant="outline">
+                <Upload className="h-4 w-4 mr-2" />
+                Sobrescribir Libro
+              </Button>
+            </div>
           </div>
         </div>
 

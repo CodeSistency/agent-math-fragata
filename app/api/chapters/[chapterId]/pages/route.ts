@@ -7,6 +7,7 @@ import { exerciseRepository } from "@/lib/db/repositories";
 import { initializeBookVectorStore } from "@/lib/rag/vector-store";
 import { initializeDatabase } from "@/lib/db/init";
 import type { Exercise } from "@/types/exercise";
+import { buildEmbeddingText } from "@/lib/rag/rag-helpers";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -16,12 +17,17 @@ export const maxDuration = 60;
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { chapterId: string } }
+  { params }: { params: Promise<{ chapterId: string }> | { chapterId: string } }
 ) {
   try {
     await initializeDatabase();
+    
+    // Handle both sync and async params (Next.js 15+)
+    const resolvedParams = await Promise.resolve(params);
+    const chapterId = decodeURIComponent(resolvedParams.chapterId);
+    
     // Verify chapter exists
-    const chapter = await chapterRepository.findById(params.chapterId);
+    const chapter = await chapterRepository.findById(chapterId);
     if (!chapter) {
       return NextResponse.json(
         { error: "Chapter not found" },
@@ -29,7 +35,7 @@ export async function GET(
       );
     }
 
-    const pages = await pageRepository.findByChapterId(params.chapterId);
+    const pages = await pageRepository.findByChapterId(chapterId);
 
     return NextResponse.json({
       success: true,
@@ -52,12 +58,17 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { chapterId: string } }
+  { params }: { params: Promise<{ chapterId: string }> | { chapterId: string } }
 ) {
   try {
     await initializeDatabase();
+    
+    // Handle both sync and async params (Next.js 15+)
+    const resolvedParams = await Promise.resolve(params);
+    const chapterId = decodeURIComponent(resolvedParams.chapterId);
+    
     // Verify chapter exists
-    const chapter = await chapterRepository.findById(params.chapterId);
+    const chapter = await chapterRepository.findById(chapterId);
     if (!chapter) {
       return NextResponse.json(
         { error: "Chapter not found" },
@@ -85,7 +96,7 @@ export async function POST(
 
     // Verify page exists
     const page = await pageRepository.findById(pageId);
-    if (!page || page.chapterId !== params.chapterId) {
+    if (!page || page.chapterId !== chapterId) {
       return NextResponse.json(
         { error: "Page not found or doesn't belong to this chapter" },
         { status: 404 }
@@ -110,7 +121,7 @@ export async function POST(
             metadata: {
               ...exercise.metadata,
               bookId: chapter.bookId,
-              chapterId: params.chapterId,
+              chapterId: chapterId,
               chapterNumber: chapter.chapterNumber,
               pageId: page.id,
               pageNumber: page.pageNumber,
@@ -118,14 +129,8 @@ export async function POST(
             },
           };
 
-          const text = [
-            exercise.tema,
-            exercise.subtema || "",
-            exercise.enunciado,
-            exercise.solucion,
-          ]
-            .filter(Boolean)
-            .join(" ");
+          // Usar buildEmbeddingText para incluir información de artefactos
+          const text = buildEmbeddingText(exerciseWithContext);
 
           return {
             id: exerciseWithContext.id,
@@ -158,7 +163,7 @@ export async function POST(
         ...exercise,
         pageId: page.id,
         bookId: chapter.bookId,
-        chapterId: params.chapterId,
+        chapterId: chapterId,
       });
     }
 

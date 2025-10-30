@@ -301,21 +301,28 @@ export const pageRepository = {
    * List all pages for a chapter
    */
   async findByChapterId(chapterId: string): Promise<Page[]> {
+    // Order by decimal page number: page_number + (variant / 10.0)
+    // This ensures proper ordering: 1, 1.1, 1.2, 2, 2.1, 10, 10.1, etc.
+    // COALESCE handles NULL variants as 0
     const result = await client.execute({
-      sql: "SELECT * FROM pages WHERE chapter_id = ? ORDER BY page_number ASC, variant ASC",
+      sql: "SELECT * FROM pages WHERE chapter_id = ? ORDER BY (page_number + (COALESCE(variant, 0) / 10.0)) ASC",
       args: [chapterId],
     });
     
-    return result.rows.map((row) => ({
-      id: row.id as string,
-      chapterId: row.chapter_id as string,
-      pageNumber: row.page_number as number,
-      variant: row.variant as number | undefined,
-      content: row.content ? JSON.parse(row.content as string) : undefined,
-      filePath: row.file_path as string,
-      processedAt: row.processed_at as string | undefined,
-      createdAt: row.created_at as string,
-    }));
+    return result.rows.map((row) => {
+      const variant = row.variant as number | null;
+      return {
+        id: row.id as string,
+        chapterId: row.chapter_id as string,
+        pageNumber: row.page_number as number,
+        // Only set variant if it's greater than 0 (for display as decimal part)
+        variant: variant && variant > 0 ? variant : undefined,
+        content: row.content ? JSON.parse(row.content as string) : undefined,
+        filePath: row.file_path as string,
+        processedAt: row.processed_at as string | undefined,
+        createdAt: row.created_at as string,
+      };
+    });
   },
 
   /**
@@ -380,6 +387,23 @@ export const exerciseRepository = {
         now,
       ],
     });
+  },
+
+  /**
+   * Get exercise by ID
+   */
+  async findById(id: string): Promise<Exercise | null> {
+    const result = await client.execute({
+      sql: "SELECT exercise_data FROM exercises WHERE id = ?",
+      args: [id],
+    });
+    
+    if (result.rows.length === 0) {
+      return null;
+    }
+    
+    const row = result.rows[0];
+    return JSON.parse(row.exercise_data as string) as Exercise;
   },
 
   /**

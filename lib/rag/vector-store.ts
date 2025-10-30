@@ -138,6 +138,22 @@ export async function deleteBookVectorStore(bookId: string): Promise<void> {
 }
 
 /**
+ * Infiere el tipo de artefacto basado en la estructura de defBoards
+ */
+function inferArtifactType(defBoards: Record<string, any>): string | null {
+  if (!defBoards || Object.keys(defBoards).length === 0) return null;
+  
+  const defBoardsStr = JSON.stringify(defBoards).toLowerCase();
+  
+  if (defBoardsStr.match(/geometry|geometría|geometria|triangle|rect|shape|figure/i)) return "geometry";
+  if (defBoardsStr.match(/curve|curva|function|función|funcion|graph|gráfico|grafico|plot/i)) return "graph";
+  if (defBoardsStr.match(/matrix|matriz|system|sistema|table|tabla/i)) return "matrix";
+  if (defBoardsStr.match(/3d|three|dimensional|tridimensional/i)) return "3d";
+  
+  return "generic";
+}
+
+/**
  * Upsert exercises into the vector store
  */
 export async function upsertExercises(
@@ -186,6 +202,12 @@ export async function upsertExercises(
         pageId: e.exercise.metadata?.pageId || null,
         pageNumber: e.exercise.metadata?.pageNumber || null,
         variant: e.exercise.metadata?.variant || null,
+        // Artifact metadata
+        hasArtifact: !!(e.exercise.metadata?.artifactDefinition),
+        artifactEngine: e.exercise.metadata?.suggestedEngine || null,
+        artifactType: e.exercise.metadata?.artifactDefinition 
+          ? inferArtifactType(e.exercise.metadata.artifactDefinition.defBoards)
+          : null,
       })),
     });
   } catch (error) {
@@ -233,6 +255,12 @@ export async function upsertExercises(
               pageId: e.exercise.metadata?.pageId || null,
               pageNumber: e.exercise.metadata?.pageNumber || null,
               variant: e.exercise.metadata?.variant || null,
+              // Artifact metadata
+              hasArtifact: !!(e.exercise.metadata?.artifactDefinition),
+              artifactEngine: e.exercise.metadata?.suggestedEngine || null,
+              artifactType: e.exercise.metadata?.artifactDefinition 
+                ? inferArtifactType(e.exercise.metadata.artifactDefinition.defBoards)
+                : null,
             })),
           });
         } catch (fixError) {
@@ -259,9 +287,11 @@ export async function querySimilarExercises(
     bookId?: string;
     chapterId?: string;
     pageId?: string;
+    hasArtifact?: boolean;
+    artifactType?: string;
   } = {}
 ) {
-  const { topK = 5, tema, dificultad, bookId, chapterId, pageId } = options;
+  const { topK = 5, tema, dificultad, bookId, chapterId, pageId, hasArtifact, artifactType } = options;
   const indexName = getIndexName(bookId);
 
   // Ensure index exists before querying
@@ -289,6 +319,12 @@ export async function querySimilarExercises(
   }
   if (pageId) {
     filter.pageId = pageId;
+  }
+  if (hasArtifact !== undefined) {
+    filter.hasArtifact = hasArtifact;
+  }
+  if (artifactType) {
+    filter.artifactType = artifactType;
   }
 
   try {

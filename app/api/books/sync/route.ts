@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseBookStructure, validateBookStructure } from "@/lib/books/parser";
 import { processDefinitionFiles } from "@/lib/books/definition-processor";
+import { clearEngineCacheFor } from "@/lib/books/engine-discovery";
 import { bookRepository, chapterRepository, pageRepository, exerciseRepository } from "@/lib/db/repositories";
 import { deleteBookVectorStore, initializeBookVectorStore, upsertExercises } from "@/lib/rag/vector-store";
 import { vectorStore } from "@/lib/rag/vector-store";
@@ -8,6 +9,8 @@ import { initializeDatabase } from "@/lib/db/init";
 import { readdir, stat } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+import { buildEmbeddingText } from "@/lib/rag/rag-helpers";
+import { ExerciseSchema } from "@/types/exercise";
 
 export const runtime = "nodejs";
 export const maxDuration = 600; // 10 minutes for multiple books
@@ -100,6 +103,9 @@ export async function POST(request: NextRequest) {
         if (existingBook) {
           console.log(`Deleting existing book data for ${bookId}...`);
           
+          // Clear engine cache for this book
+          clearEngineCacheFor(bookId);
+          
           // Delete vector store index (force delete even if dimension mismatch)
           try {
             await deleteBookVectorStore(bookId);
@@ -158,6 +164,8 @@ export async function POST(request: NextRequest) {
         // Collect all exercises with book context
         const allExercises: Array<{ id: string; exercise: any; text: string }> = [];
         let totalExercisesExtracted = 0;
+        // Global flag to disable validation if schema is broken during this request
+        let canValidateExercises = !!ExerciseSchema && typeof (ExerciseSchema as any).safeParse === "function";
 
         for (const processed of processedPages) {
           if (processed.error) {
@@ -178,35 +186,65 @@ export async function POST(request: NextRequest) {
             totalExercisesExtracted += processed.exercises.length;
             
             for (const exercise of processed.exercises) {
-              const text = [
-                exercise.tema,
-                exercise.subtema || "",
-                exercise.enunciado,
-                exercise.solucion,
-              ]
-                .filter(Boolean)
-                .join(" ");
+              // Validate exercise structure before saving
+              try {
+                // Parse and validate with Zod schema (best-effort, non-blocking)
+                if (!canValidateExercises) {
+                  console.warn(`[sync] ExerciseSchema not available, skipping validation for ${exercise.id}`);
+                } else {
+                  let validationFailed = false;
+                  try {
+                    const result = (ExerciseSchema as any).safeParse(exercise);
+                    if (!result.success) {
+                      console.warn(`[sync] Invalid exercise structure for ${exercise.id}:`, result.error);
+                      validationFailed = true;
+                    }
+                  } catch (schemaErr) {
+                    console.warn(`[sync] ExerciseSchema threw during validation for ${exercise.id}, disabling further validation this run:`, schemaErr);
+                    canValidateExercises = false;
+                  }
+                  if (validationFailed) {
+                    continue;
+                  }
+                }
+                
+                // Usar buildEmbeddingText para incluir información de artefactos
+                const text = buildEmbeddingText(exercise);
 
-              allExercises.push({
-                id: exercise.id,
-                exercise,
-                text,
-              });
+                allExercises.push({
+                  id: exercise.id,
+                  exercise,
+                  text,
+                });
 
-              // Save to database
-              await exerciseRepository.create({
-                ...exercise,
-                pageId: processed.page.id,
-                bookId,
-                chapterId: processed.page.chapterId,
-              });
+                // Save to database
+                await exerciseRepository.create({
+                  ...exercise,
+                  pageId: processed.page.id,
+                  bookId,
+                  chapterId: processed.page.chapterId,
+                });
+              } catch (validationError) {
+                console.warn(`[sync] Invalid exercise structure for ${exercise.id}:`, validationError);
+                // Skip invalid exercises but continue processing
+                continue;
+              }
             }
           }
         }
 
-        // Upsert exercises to vector store
+        // Upsert exercises to vector store (best-effort; skip on embedding quota/rate-limit errors)
         if (allExercises.length > 0) {
-          await upsertExercises(allExercises, bookId);
+          try {
+            await upsertExercises(allExercises, bookId);
+          } catch (embedErr) {
+            const msg = embedErr instanceof Error ? embedErr.message : String(embedErr);
+            if (msg.includes("BatchEmbedContentsRequest") || msg.includes("quota") || msg.includes("RATE") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("429")) {
+              console.warn(`[sync] Skipping vector indexing for ${bookId} due to embedding service limits/quota:`, msg);
+            } else {
+              throw embedErr;
+            }
+          }
         }
 
         processedBooks.push({

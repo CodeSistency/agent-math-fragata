@@ -69,8 +69,12 @@ export default function DashboardPage() {
         const msg = `Sincronización completada:\n${data.data.successful} exitosos, ${data.data.failed} fallidos\n\nLibros procesados:\n${data.data.books.map((b: any) => `  • ${b.bookId}: ${b.success ? '✓ Exitoso' : '✗ Error'}${b.summary ? ` (${b.summary.chaptersCreated} capítulos, ${b.summary.pagesCreated} páginas, ${b.summary.exercisesExtracted} ejercicios)` : ''}${b.error ? ` - ${b.error}` : ''}`).join('\n')}`;
         setSyncResult(msg);
         
-        // Reload books list
+        // Reload books list - wait a bit to ensure DB is consistent
+        await new Promise(resolve => setTimeout(resolve, 500));
         await fetchBooks();
+        
+        // Clear sync result after 10 seconds
+        setTimeout(() => setSyncResult(null), 10000);
       } else {
         throw new Error("Sincronización falló");
       }

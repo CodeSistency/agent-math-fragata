@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseBookStructure, validateBookStructure } from "@/lib/books/parser";
 import { processDefinitionFiles } from "@/lib/books/definition-processor";
+import { clearEngineCacheFor } from "@/lib/books/engine-discovery";
 import { bookRepository, chapterRepository, pageRepository, exerciseRepository } from "@/lib/db/repositories";
 import { deleteBookVectorStore, initializeBookVectorStore, upsertExercises } from "@/lib/rag/vector-store";
 import { initializeDatabase } from "@/lib/db/init";
@@ -104,6 +105,9 @@ export async function POST(request: NextRequest) {
     if (existingBook) {
       console.log(`Deleting existing book data for ${bookId}...`);
       
+      // Clear engine cache for this book
+      clearEngineCacheFor(bookId);
+      
       // Delete vector store index
       await deleteBookVectorStore(bookId);
       
@@ -172,28 +176,32 @@ export async function POST(request: NextRequest) {
         totalExercisesExtracted += processed.exercises.length;
         
         for (const exercise of processed.exercises) {
-          const text = [
-            exercise.tema,
-            exercise.subtema || "",
-            exercise.enunciado,
-            exercise.solucion,
-          ]
-            .filter(Boolean)
-            .join(" ");
+          // Validate exercise structure before saving
+          try {
+            // Parse and validate with Zod schema
+            ExerciseSchema.parse(exercise);
+            
+            // Usar buildEmbeddingText para incluir información de artefactos
+            const text = buildEmbeddingText(exercise);
 
-          allExercises.push({
-            id: exercise.id,
-            exercise,
-            text,
-          });
+            allExercises.push({
+              id: exercise.id,
+              exercise,
+              text,
+            });
 
-          // Save to database
-          await exerciseRepository.create({
-            ...exercise,
-            pageId: processed.page.id,
-            bookId,
-            chapterId: processed.page.chapterId,
-          });
+            // Save to database
+            await exerciseRepository.create({
+              ...exercise,
+              pageId: processed.page.id,
+              bookId,
+              chapterId: processed.page.chapterId,
+            });
+          } catch (validationError) {
+            console.warn(`[upload] Invalid exercise structure for ${exercise.id}:`, validationError);
+            // Skip invalid exercises but continue processing
+            continue;
+          }
         }
       }
     }
