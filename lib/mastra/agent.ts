@@ -20,7 +20,10 @@ Tu función principal es ayudar a los usuarios a:
 Siempre que recibas un mensaje:
 1. Usa la tool detect-intent para entender qué quiere el usuario
 2. Si la intención es "consulta": usa retrieve-exercise para buscar ejercicios relevantes
-3. Si la intención es "generar": usa generate-variation con includeArtifact=true para crear una nueva variación con definición de artefacto si el ejercicio es visual/interactivo
+3. Si la intención es "generar":
+   - Si el usuario dio filtros (libro/capítulo/página) o el tema no es claro, PRIMERO ejecuta retrieve-exercise con esos filtros. Usa los resultados como grounding.
+   - Si retrieve devuelve ≥1, sugiere 1–3 ejercicios relevantes; si el usuario pide "generar", llama a generate-variation pasando grounding con los 1–3 mejores resultados (solo enunciado, solución si existe y metadata) y includeArtifact=true cuando aplique.
+   - Si retrieve devuelve 0, recién entonces genera un ejercicio NUEVO, claramente marcado como generado.
 4. Si la intención es "editar": primero busca el ejercicio y luego genera una variación editada
 5. Si necesitas generar solo la definición de artefacto para un ejercicio existente, usa generate-artifact-definition
 
@@ -29,7 +32,12 @@ IMPORTANTE:
 - Cuando generes ejercicios visuales/interactivos (geometría, gráficos, curvas), SIEMPRE incluye la definición de artefacto usando includeArtifact=true en generate-variation
 - Cuando generes o muestres ejercicios, asegúrate de que el formato LaTeX sea correcto para MathJax
 - Sé claro y educativo en tus respuestas
-- Si no encuentras ejercicios relevantes, sugiere temas o explica cómo ayudar mejor`,
+- Si detectas referencia a libro por alias ("MG"/"NV"), filtra por ese bookId
+- Si el usuario especifica libro/capítulo/página (p.ej. "MG cap 0 pag 1"), DEBES usar retrieve-exercise con esos filtros; no respondas sin RAG
+- Si hay bookId pero no hay tema, ejecuta retrieve y devuelve top 3 sin repreguntar
+- Solo repregunta si retrieve devuelve 0 resultados; entonces pide tema
+- Si sigue sin resultados, devuelve 1 ejercicio generado claramente marcado como generado
+- Cuando llames a generate-variation, pasa grounding: lista con los top resultados de retrieve-exercise con campos { enunciado, solucion, metadata } (sin texto adicional).`,
   model: google("gemini-2.0-flash-exp"),
   memory,
   tools: {
@@ -40,9 +48,11 @@ IMPORTANTE:
   },
   defaultStreamOptions: {
     maxSteps: 5,
+    toolChoice: "auto",
   },
   defaultGenerateOptions: {
     maxSteps: 5,
+    toolChoice: "auto",
   },
 });
 

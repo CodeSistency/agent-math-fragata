@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-10-30T17:52:38.390Z",
+  "bookId": "global-sync",
+  "totalFiles": 4,
+  "successfulFiles": 0,
+  "failedFiles": 4,
+  "formats": {
+    "MG": 0,
+    "NV": 0,
+    "basic": 0,
+    "unknown": 0
+  },
+  "engines": {},
+  "errors": [
+    {
+      "file": "vector-store-MG",
+      "error": "actualDimension is not defined",
+      "phase": "embedding",
+      "recovered": false
+    },
+    {
+      "file": "MG",
+      "error": "actualDimension is not defined",
+      "phase": "database",
+      "recovered": false
+    },
+    {
+      "file": "vector-store-NV",
+      "error": "actualDimension is not defined",
+      "phase": "embedding",
+      "recovered": false
+    },
+    {
+      "file": "NV",
+      "error": "actualDimension is not defined",
+      "phase": "database",
+      "recovered": false
+    }
+  ],
+  "performance": {
+    "totalTime": 1189,
+    "avgTimePerFile": 396.3333333333333,
+    "embeddingCorrections": 0,
+    "fallbackReductions": 0
+  },
+  "recovery": {
+    "recoveredFiles": 0,
+    "fallbackExercises": 0,
+    "unknownFormatsRecovered": 0
+  }
+}

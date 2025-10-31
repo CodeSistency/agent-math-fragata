@@ -7,13 +7,15 @@ import { useEffect, useRef } from "react";
 import type { Exercise } from "@/types/exercise";
 
 interface ExerciseCheckpointProps {
-  exercise: Exercise;
+  exercise?: Exercise;
+  definition?: { defBoards?: Record<string, any>; artifacts?: Record<string, any>; rDef?: Record<string, any> };
   isCanvasOpen: boolean;
   onToggleCanvas: () => void;
 }
 
 export function ExerciseCheckpoint({
   exercise,
+  definition,
   isCanvasOpen,
   onToggleCanvas,
 }: ExerciseCheckpointProps) {
@@ -32,9 +34,14 @@ export function ExerciseCheckpoint({
     }
   }, [exercise]);
 
+  const hasContent = exercise || definition;
+  if (!hasContent) return null;
+
   return (
     <div className="border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 mt-4">
       <div className="mb-3">
+        {exercise ? (
+          <>
         <div className="flex items-center justify-between mb-2">
           <div>
             <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -55,6 +62,24 @@ export function ExerciseCheckpoint({
           <p className="font-medium mb-1">Enunciado:</p>
           <div>{exercise.enunciado}</div>
         </div>
+          </>
+        ) : definition ? (
+          <div>
+            <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 mb-2">
+              Definición de Artefacto
+            </h3>
+            <div className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
+              {definition.defBoards && Object.keys(definition.defBoards).length > 0 && (
+                <div>DefBoards: {Object.keys(definition.defBoards).length} board(s)</div>
+              )}
+              {(definition.artifacts || definition.rDef) && (
+                <div>
+                  Artifacts: {Object.keys(definition.artifacts || definition.rDef || {}).length} definición(es)
+                </div>
+              )}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <Button

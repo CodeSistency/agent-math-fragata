@@ -1,61 +1,65 @@
-import { NextRequest, NextResponse } from "next/server";
-import { discoverAllEngines } from "@/lib/books/engine-discovery";
-import { bookRepository } from "@/lib/db/repositories";
-import { initializeDatabase } from "@/lib/db/init";
+import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = "nodejs";
-export const maxDuration = 30;
+// Engine metadata for known engines
+const ENGINE_METADATA = {
+  'engineInterval': {
+    id: 'engineInterval',
+    name: 'Interval Engine',
+    description: 'For working with mathematical intervals',
+    file: 'cap_0/engineInterval.js',
+    bookId: 'MG',
+    chapterId: '0',
+    css: [
+      'css/generic/jsxgraph.min.css',
+      'css/generic/styles.min.css',
+      'css/cap_0/styles.css'
+    ]
+  },
+  'horizontalSegment': {
+    id: 'horizontalSegment',
+    name: 'Horizontal Segment',
+    description: 'For horizontal line segments',
+    file: 'cap_1/horizontalSegment.js',
+    bookId: 'NV',
+    chapterId: '1',
+    css: [
+      'css/generic/jsxgraph.css',
+      'css/generic/styles.css',
+      'css/cap_1/styles.css'
+    ]
+  },
+  'engineOwner': {
+    id: 'engineOwner',
+    name: 'Engine Owner',
+    description: 'General purpose engine',
+    file: 'cap_1/engineOwner.js',
+    bookId: 'NV',
+    chapterId: '1',
+    css: [
+      'css/generic/jsxgraph.css',
+      'css/generic/styles.css',
+      'css/cap_1/engineOwner.css'
+    ]
+  }
+};
 
-/**
- * GET /api/engines/list - List all available engines
- * Optional query params: bookId, chapterId
- */
 export async function GET(request: NextRequest) {
   try {
-    await initializeDatabase();
+    // Return all available engines with their metadata
+    const engines = Object.values(ENGINE_METADATA);
     
-    const { searchParams } = new URL(request.url);
-    const bookId = searchParams.get("bookId");
-    const chapterId = searchParams.get("chapterId");
-
-    let engines: any[] = [];
-
-    if (bookId && chapterId) {
-      // Get engines for specific book/chapter
-      const { discoverEngines } = await import("@/lib/books/engine-discovery");
-      engines = await discoverEngines(bookId, chapterId);
-    } else if (bookId) {
-      // Get all engines for a book
-      engines = await discoverAllEngines(bookId);
-    } else {
-      // Get engines from all books
-      const books = await bookRepository.findAll();
-      
-      for (const book of books) {
-        try {
-          const bookEngines = await discoverAllEngines(book.id);
-          engines.push(...bookEngines);
-        } catch (err) {
-          console.warn(`Failed to load engines for book ${book.id}:`, err);
-        }
-      }
-    }
-
     return NextResponse.json({
       success: true,
-      data: engines,
+      data: engines
     });
   } catch (error) {
-    console.error("List Engines API error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to list engines",
-        message: error instanceof Error ? error.message : String(error),
+      { 
+        success: false,
+        error: 'Failed to fetch engines',
+        details: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }
     );
   }
 }
-
-
-

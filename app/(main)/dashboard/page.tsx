@@ -54,7 +54,7 @@ export default function DashboardPage() {
       setSyncResult(null);
       setError(null);
 
-      const response = await fetch("/api/books/sync", {
+      const response = await fetch("/api/books/sync-v2", {
         method: "POST",
       });
 
@@ -66,7 +66,7 @@ export default function DashboardPage() {
       const data = await response.json();
       
       if (data.success) {
-        const msg = `Sincronización completada:\n${data.data.successful} exitosos, ${data.data.failed} fallidos\n\nLibros procesados:\n${data.data.books.map((b: any) => `  • ${b.bookId}: ${b.success ? '✓ Exitoso' : '✗ Error'}${b.summary ? ` (${b.summary.chaptersCreated} capítulos, ${b.summary.pagesCreated} páginas, ${b.summary.exercisesExtracted} ejercicios)` : ''}${b.error ? ` - ${b.error}` : ''}`).join('\n')}`;
+        const msg = `Sincronización completada (v2):\n${data.data.successful} exitosos, ${data.data.failed} fallidos (${data.data.duration})\n\nLibros procesados:\n${data.data.books.map((b: any) => `  • ${b.bookId}: ${b.success ? '✓ Exitoso' : '✗ Error'}${b.summary ? ` (${b.summary.totalPages} páginas, ${b.summary.totalExercises} ejercicios)` : ''}${b.error ? ` - ${b.error}` : ''}`).join('\n')}`;
         setSyncResult(msg);
         
         // Reload books list - wait a bit to ensure DB is consistent

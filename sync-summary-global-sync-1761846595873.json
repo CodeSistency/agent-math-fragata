@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-10-30T17:49:46.585Z",
+  "bookId": "global-sync",
+  "totalFiles": 4,
+  "successfulFiles": 0,
+  "failedFiles": 4,
+  "formats": {
+    "MG": 0,
+    "NV": 0,
+    "basic": 0,
+    "unknown": 0
+  },
+  "engines": {},
+  "errors": [
+    {
+      "file": "vector-store-MG",
+      "error": "Vector dimension mismatch: Index \"MG_exercises\" expects 384 dimensions but got 6912 dimensions. Either use a matching embedding model or delete and recreate the index with the new dimension.",
+      "phase": "embedding",
+      "recovered": false
+    },
+    {
+      "file": "MG",
+      "error": "Vector dimension mismatch: Index \"MG_exercises\" expects 384 dimensions but got 6912 dimensions. Either use a matching embedding model or delete and recreate the index with the new dimension.",
+      "phase": "database",
+      "recovered": false
+    },
+    {
+      "file": "vector-store-NV",
+      "error": "Vector dimension mismatch: Index \"NV_exercises\" expects 384 dimensions but got 6912 dimensions. Either use a matching embedding model or delete and recreate the index with the new dimension.",
+      "phase": "embedding",
+      "recovered": false
+    },
+    {
+      "file": "NV",
+      "error": "Vector dimension mismatch: Index \"NV_exercises\" expects 384 dimensions but got 6912 dimensions. Either use a matching embedding model or delete and recreate the index with the new dimension.",
+      "phase": "database",
+      "recovered": false
+    }
+  ],
+  "performance": {
+    "totalTime": 1565,
+    "avgTimePerFile": 521.6666666666666,
+    "embeddingCorrections": 0,
+    "fallbackReductions": 0
+  },
+  "recovery": {
+    "recoveredFiles": 0,
+    "fallbackExercises": 0,
+    "unknownFormatsRecovered": 0
+  }
+}

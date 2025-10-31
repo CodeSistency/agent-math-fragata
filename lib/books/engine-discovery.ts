@@ -1,14 +1,10 @@
 import { readdir } from "fs/promises";
 import { join } from "path";
 import { isDirectory } from "./utils";
+import type { Engine } from "./types";
 
-export interface Engine {
-  id: string;
-  name: string;
-  file: string; // Relative path from books/ root
-  description?: string;
-  chapterId?: string;
-}
+// Re-export type for backward compatibility
+export type { Engine };
 
 // Cache for discovered engines
 const engineCache = new Map<string, Engine[]>();

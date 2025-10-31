@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Loader2, Code, Eye, Split, AlertCircle, Play } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import type { Engine } from "@/lib/books/engine-discovery";
+import type { Engine } from "@/lib/books/types";
 
 interface ArtifactDefinition {
   defBoards?: Record<string, any>;

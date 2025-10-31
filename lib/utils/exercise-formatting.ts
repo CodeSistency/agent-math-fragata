@@ -1,4 +1,5 @@
 import { Exercise } from "@/types/exercise";
+import type { Engine } from "@/lib/books/types";
 
 /**
  * Formatea un ejercicio para su visualización en la UI
@@ -175,11 +176,14 @@ export function extractExercisesFromToolResults(toolResults: any[]): Exercise[] 
  * Retorna null si no hay ejercicio con artefacto, o un objeto con la información completa
  */
 export function extractExerciseWithArtifact(message: any): {
-  exercise: Exercise;
+  exercise?: Exercise;
+  definition?: { defBoards?: Record<string, any>; artifacts?: Record<string, any>; rDef?: Record<string, any> };
   artifactDefinition: { defBoards: Record<string, any>; rDef: Record<string, any> };
   suggestedEngine?: string;
+  engines?: Engine[];
   bookId?: string;
   chapterId?: string;
+  viewConfig?: any; // ViewConfiguration from view-config-extractor
 } | null {
   if (!message.parts || !Array.isArray(message.parts)) {
     return null;
@@ -187,21 +191,51 @@ export function extractExerciseWithArtifact(message: any): {
 
   // Buscar en tool calls
   for (const part of message.parts) {
-    if (part.type === "tool-call" || part.type === "tool") {
-      const toolName = part.toolName || part.name;
+    // Handle AI SDK v5 tool parts: type like "tool-generateVariation" or "tool-generate-variation"
+    const isToolV5 = typeof part.type === "string" && part.type.startsWith("tool-");
+    const isToolCall = part.type === "tool-call" || part.type === "tool" || isToolV5;
+    
+    if (isToolCall) {
+      // Extract tool name from different formats
+      let toolName: string | undefined;
+      if (isToolV5) {
+        // Extract from "tool-generateVariation" -> "generateVariation"
+        toolName = part.type.slice("tool-".length);
+      } else {
+        toolName = part.toolName || part.name;
+      }
+
+      console.log("[extractExerciseWithArtifact] Checking tool part:", {
+        type: part.type,
+        toolName,
+        hasOutput: !!(part.output || part.result),
+        outputKeys: part.output ? Object.keys(part.output) : [],
+        resultKeys: part.result ? Object.keys(part.result) : [],
+      });
 
       // Buscar generate-variation tool
-      if (toolName === "generateVariation" || toolName === "generate-variation") {
-        if (part.result?.exercise) {
-          const exercise = part.result.exercise as Exercise;
+      if (toolName === "generateVariation" || toolName === "generate-variation" || toolName === "generateVariation-v2" || toolName === "generate-variation-v2") {
+        const output = part.result || part.output;
+        
+        console.log("[extractExerciseWithArtifact] generateVariation tool found, output:", {
+          hasOutput: !!output,
+          hasExercise: !!(output?.exercise),
+          hasDefinition: !!(output?.definition),
+          hasArtifactDefinition: !!(output?.artifactDefinition),
+          outputKeys: output ? Object.keys(output) : [],
+        });
+        
+        // Caso 1: Tiene exercise con artifactDefinition (mantener lógica actual)
+        if (output?.exercise) {
+          const exercise = output.exercise as Exercise;
           
           // Verificar si tiene artifactDefinition en metadata o en el resultado directo
           const artifactDef = 
-            part.result.artifactDefinition ||
+            output.artifactDefinition ||
             exercise.metadata?.artifactDefinition;
           
           const suggestedEngine = 
-            part.result.suggestedEngine ||
+            output.suggestedEngine ||
             exercise.metadata?.suggestedEngine;
 
           if (artifactDef && (artifactDef.defBoards || artifactDef.rDef)) {
@@ -217,6 +251,28 @@ export function extractExerciseWithArtifact(message: any): {
             };
           }
         }
+        
+        // Caso 2: Tiene definition directamente (sin exercise)
+        if (output?.definition) {
+          const definition = output.definition;
+          const artifactDef = output.artifactDefinition || {
+            defBoards: definition.defBoards || {},
+            rDef: definition.rDef || (definition.artifacts ? { artifacts: definition.artifacts } : {}),
+          };
+          
+          if (artifactDef && (artifactDef.defBoards || artifactDef.rDef || definition.artifacts)) {
+            return {
+              definition,
+              artifactDefinition: {
+                defBoards: artifactDef.defBoards || definition.defBoards || {},
+                rDef: artifactDef.rDef || definition.rDef || (definition.artifacts ? { artifacts: definition.artifacts } : {}),
+              },
+              suggestedEngine: output.suggestedEngine,
+              bookId: output.bookId,
+              chapterId: output.chapterId,
+            };
+          }
+        }
       }
 
       // Buscar generate-artifact-definition tool
@@ -228,9 +284,105 @@ export function extractExerciseWithArtifact(message: any): {
           // Esto se manejará mejor cuando se integre con el chat
         }
       }
+
+      // Buscar retrieve-exercise tool
+      if (toolName === "retrieveExercise" || toolName === "retrieve-exercise" || toolName === "retrieveExercise-v2" || toolName === "retrieve-exercise-v2") {
+        // Intentar múltiples formatos posibles del output
+        const output = part.result || part.output || {};
+        
+        // El tool retorna { results: [...], ambiguous: boolean }
+        const results = output.results || (Array.isArray(output) ? output : []);
+        
+        console.log("[extractExerciseWithArtifact] retrieve-exercise tool found, output structure:", {
+          hasResult: !!part.result,
+          hasOutput: !!part.output,
+          resultKeys: part.result ? Object.keys(part.result) : [],
+          outputKeys: part.output ? Object.keys(part.output) : [],
+          resultsIsArray: Array.isArray(results),
+          resultsCount: Array.isArray(results) ? results.length : 0,
+          firstResultKeys: Array.isArray(results) && results.length > 0 ? Object.keys(results[0]) : [],
+        });
+        
+        // Buscar el primer resultado que tenga definition con artefactos
+        for (const result of results) {
+          const artifactDef = result.definition || result.artifactDefinition;
+          if (artifactDef && (artifactDef.defBoards || artifactDef.rDef || artifactDef.artifacts)) {
+            // Normalizar chapterId: "MG_cap_0" -> "0" o extraer número
+            let normalizedChapterId = result.chapterId;
+            if (normalizedChapterId && typeof normalizedChapterId === 'string' && normalizedChapterId.includes('_cap_')) {
+              // Extraer el número: "MG_cap_0" -> "0"
+              const match = normalizedChapterId.match(/cap_(\d+)/);
+              normalizedChapterId = match ? match[1] : normalizedChapterId.replace(/.*cap_/, '');
+            }
+            
+            // Crear un ejercicio mínimo basado en la información disponible
+            const exercise: Exercise = {
+              id: result.pageId || `page_${Date.now()}`,
+              tema: result.text?.split(':')[0]?.trim() || 'Ejercicio matemático',
+              dificultad: 'media',
+              enunciado: `Ejercicio de ${result.bookId || 'libro'} - ${normalizedChapterId || 'capítulo'} - Página ${result.pageNumber || '?'}`,
+              solucion: '',
+            };
+            
+            // Convertir engines del formato del tool al formato Engine
+            const enginesRaw = result.engines;
+            console.log("[extractExerciseWithArtifact] Raw engines from result:", {
+              enginesRaw,
+              isArray: Array.isArray(enginesRaw),
+              count: Array.isArray(enginesRaw) ? enginesRaw.length : 0,
+              firstEngine: Array.isArray(enginesRaw) && enginesRaw.length > 0 ? enginesRaw[0] : null,
+            });
+            
+            const engines = enginesRaw?.map((eng: any) => {
+              // El tool retorna: { name, path, type, chapterId }
+              const engineId = eng.name?.replace(/\.js$/, '') || 
+                             eng.path?.split('/').pop()?.replace(/\.js$/, '') || 
+                             'unknown';
+              const engineName = eng.name || eng.path?.split('/').pop() || 'unknown';
+              const engineFile = eng.path || 
+                               `class/engines/cap_${normalizedChapterId}/${eng.name || 'unknown.js'}`;
+              
+              return {
+                id: engineId,
+                name: engineName,
+                file: engineFile,
+                description: `${eng.type === 'generic' ? 'Generic' : 'Chapter-specific'} engine`,
+                chapterId: normalizedChapterId,
+                // Campos adicionales para compatibilidad
+                bookId: result.bookId,
+                type: eng.type === 'generic' ? 'general' : (eng.type || 'general'),
+              } as Engine & { bookId?: string; type?: string };
+            }) || [];
+            
+            console.log("[extractExerciseWithArtifact] retrieve-exercise engines extracted:", {
+              enginesCount: engines.length,
+              engines: engines.map(e => ({ id: e.id, name: e.name, file: e.file })),
+              suggestedEngine: result.suggestedEngine,
+              bookId: result.bookId,
+              chapterId: normalizedChapterId,
+              hasEnginesInResult: !!result.engines,
+              hasSuggestedEngineInResult: !!result.suggestedEngine,
+            });
+            
+            return {
+              exercise,
+              artifactDefinition: {
+                defBoards: artifactDef.defBoards || {},
+                rDef: artifactDef.rDef || (artifactDef.artifacts ? { artifacts: artifactDef.artifacts } : {}),
+              },
+              suggestedEngine: result.suggestedEngine,
+              engines,
+              bookId: result.bookId,
+              chapterId: normalizedChapterId,
+              viewConfig: result.viewConfig, // Include viewConfig if available
+            };
+          }
+        }
+      }
     }
   }
 
+  console.log("[extractExerciseWithArtifact] No artifact data found in message parts");
   return null;
 }
 

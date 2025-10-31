@@ -7,7 +7,7 @@ export const ExerciseSchema = z.object({
   dificultad: z.enum(["básica", "media", "avanzada"]).describe("Nivel de dificultad"),
   enunciado: z.string().describe("Enunciado del ejercicio en formato LaTeX para MathJax"),
   solucion: z.string().describe("Solución del ejercicio en formato LaTeX"),
-  variables: z.record(z.string()).optional().describe("Variables para generación dinámica con valores aleatorios"),
+  variables: z.record(z.string(), z.string()).optional().describe("Variables para generación dinámica con valores aleatorios"),
   image_ref: z.string().optional().describe("Referencia a la imagen original del libro"),
   metadata: z.object({
     pagina: z.number().optional(),
@@ -29,14 +29,19 @@ export const ExerciseSchema = z.object({
     questionData: z.object({
       type: z.number().optional(),
       answers_values: z.array(z.any()).optional(),
-      conditions: z.record(z.any()).optional(),
+      conditions: z.record(z.string(), z.any()).optional(),
     }).optional(),
     // Artifact definition for visual/interactive exercises
     artifactDefinition: z.object({
-      defBoards: z.record(z.any()),
-      rDef: z.record(z.any()),
+      defBoards: z.record(z.string(), z.any()),
+      rDef: z.record(z.string(), z.any()),
     }).optional(),
     suggestedEngine: z.string().optional(),
+    // Additional fields for enhanced parsing
+    exerciseType: z.string().optional(),
+    recovered: z.boolean().optional(),
+    originalFormat: z.string().optional(),
+    exercisesGenerated: z.number().optional(),
   }).optional(),
 });
 

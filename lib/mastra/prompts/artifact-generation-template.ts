@@ -159,21 +159,33 @@ Analiza el ejercicio paso a paso siguiendo estos pasos:
 </analysis_guide>
 
 <output_format>
-Responde SOLO con un JSON válido siguiendo este formato exacto:
+Responde SOLO con un JSON válido siguiendo este formato exacto y LEGACY-COMPATIBLE:
 {
   "definition": {
     "defBoards": {
-      // Estructura basada en ejemplos similares, adaptada al ejercicio actual
-      // Debe ser compatible con JSXGraph
+      "board_1": {
+        "style": {
+          "boundingbox": [number, number, number, number],
+          "axis": true,
+          "grid": boolean
+        }
+      }
     },
     "rDef": {
-      // Datos extraídos del ejercicio
-      // Solo valores, no lógica de programación
+      // SOLO datos (números, arrays, strings). NUNCA funciones ni código.
+      // Ejemplos: "curvePoints": [[x1,y1],[x2,y2],...], "hLineY": number
+    },
+    "artifacts": {
+      "artifact_1": {
+        "board": "board_1",
+        "statementBottom": string,
+        "conditions": [] | [ { "compare": string, "with": string, "tolerance?": number } ]
+      }
     }
   },
   "suggestedEngine": "id_del_engine_seleccionado o null si confidence < 0.5",
   "confidence": 0.0-1.0,
-  "reasoning": "Explicación detallada del proceso de decisión paso a paso",
+  "reasoning": "Explicación breve del porqué del engine y de la estructura",
   "patternUsed": "tipo_de_patrón_usado o null",
   "adaptations": [
     "Cambio 1: razón específica",
@@ -183,21 +195,21 @@ Responde SOLO con un JSON válido siguiendo este formato exacto:
 </output_format>
 
 <constraints>
-- defBoards debe ser compatible con JSXGraph y el engine seleccionado
-- rDef debe contener solo datos (números, strings, arrays, objetos), NO funciones ni lógica
-- Si confidence < 0.5, suggestedEngine debe ser null y defBoards/rDef pueden estar vacíos
-- Mantén consistencia con los ejemplos similares pero adapta la estructura
-- NO copies exactamente los ejemplos, adapta según las necesidades del ejercicio actual
-- Asegúrate de que todos los valores numéricos mencionados en el enunciado estén en rDef
-- Los nombres de elementos en defBoards deben ser descriptivos y únicos
+- ESTRUCTURA OBLIGATORIA: defBoards.board_1.style con boundingbox, axis, grid
+- ESTRUCTURA OBLIGATORIA: artifacts.artifact_1 con board:"board_1", statementBottom, conditions[]
+- rDef debe contener SOLO datos (números, strings, arrays, objetos). PROHIBIDO: funciones, expresiones, "functiongraph", "elements"
+- PROHIBIDO crear claves: "elements", "functiongraph", "curveFunction", o cualquier código JS
+- Si confidence < 0.5, suggestedEngine debe ser null y definition mínima (sin inventar datos)
+- Prioriza valores del enunciado en rDef (números, puntos, parámetros)
+- Usa nombres estables y legibles; no inventes claves fuera de los ejemplos canónicos
 </constraints>
 
 <important_notes>
-- Usa los ejemplos similares como guía de estructura, no como copia exacta
-- Si hay múltiples ejemplos similares, combina las mejores prácticas de todos
-- Los patrones comunes te muestran estructuras probadas, úsalas como base pero adapta
-- El engine sugerido debe existir en la lista de available_engines
-- Si el ejercicio NO requiere visualización (ej: algebra puro), confidence debe ser < 0.5
+- Ajusta la salida al esquema legacy del runtime descrito arriba
+- No generes funciones ni pseudocódigo en rDef; solo datos numéricos o arrays
+- No uses claves desconocidas; si dudas, usa "curvePoints", "hLineY", "vLineX", "points" en rDef
+- El engine sugerido debe existir en available_engines
+- Si el ejercicio NO requiere visualización (álgebra puro), confidence < 0.5
 </important_notes>
 `.trim();
 }

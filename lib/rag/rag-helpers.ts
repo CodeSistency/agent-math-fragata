@@ -1,5 +1,5 @@
 import type { Exercise } from "@/types/exercise";
-import type { Engine } from "@/lib/books/engine-discovery";
+import type { Engine } from "@/lib/books/types";
 
 /**
  * Keywords matemáticos comunes para extracción semántica

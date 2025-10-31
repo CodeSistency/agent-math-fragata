@@ -1,10 +1,20 @@
+"use client";
 import Link from "next/link";
+import { useEffect } from "react";
+import { initializeEngines } from "@/lib/books/init-engines";
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Initialize engine registry when the app starts
+  useEffect(() => {
+    initializeEngines().catch(error => {
+      console.error("Failed to initialize engines:", error);
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <nav className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">

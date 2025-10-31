@@ -8,6 +8,9 @@ const IntentSchema = z.object({
     tema: z.string().optional(),
     dificultad: z.enum(["básica", "media", "avanzada"]).optional(),
     ejercicioId: z.string().optional(),
+    bookId: z.string().optional(),
+    chapterId: z.string().optional(),
+    pageNumber: z.number().int().positive().optional(),
   }).optional(),
   confidence: z.number().min(0).max(1),
 });
@@ -26,6 +29,7 @@ export const detectIntentTool = createTool({
   execute: async ({ context }) => {
     const { mensaje } = context;
 
+    console.log("[detect-intent] input:", { mensajeSample: (mensaje || "").slice(0, 120) });
     try {
       // Use Mastra agent for intent detection
       const agent = mastra.getAgent("intentDetectionAgent");
@@ -45,14 +49,52 @@ export const detectIntentTool = createTool({
       const parsed = JSON.parse(jsonMatch[0]);
       const validated = IntentSchema.parse(parsed);
 
-      return validated;
+      // Heurística: inferir bookId por alias (MG/NV) si no vino en params
+      const lower = (mensaje || "").toLowerCase();
+      let inferredBookId: string | undefined;
+      if (/(^|\b)mg(\b|$)/i.test(lower)) inferredBookId = "MG";
+      if (/(^|\b)nv(\b|$)/i.test(lower)) inferredBookId = "NV";
+
+      // Heurísticas: chapter/page
+      const capMatch = lower.match(/cap\s*(\d{1,3})/);
+      const pagMatch = lower.match(/pag\s*(\d{1,3})/);
+      const inferredChapterId = capMatch ? capMatch[1] : undefined;
+      const inferredPageNumber = pagMatch ? Number(pagMatch[1]) : undefined;
+
+      const finalResult = {
+        ...validated,
+        params: {
+          ...(validated.params || {}),
+          ...(inferredBookId ? { bookId: inferredBookId } : {}),
+          ...(inferredChapterId ? { chapterId: inferredChapterId } : {}),
+          ...(inferredPageNumber ? { pageNumber: inferredPageNumber } : {}),
+        },
+      } as z.infer<typeof IntentSchema>;
+
+      console.log("[detect-intent] output:", finalResult);
+      return finalResult;
     } catch (error) {
       // Fallback: default to consulta
-      return {
+      // Fallback con la misma heurística
+      const lower = (mensaje || "").toLowerCase();
+      let inferredBookId: string | undefined;
+      if (/(^|\b)mg(\b|$)/i.test(lower)) inferredBookId = "MG";
+      if (/(^|\b)nv(\b|$)/i.test(lower)) inferredBookId = "NV";
+      const capMatch = lower.match(/cap\s*(\d{1,3})/);
+      const pagMatch = lower.match(/pag\s*(\d{1,3})/);
+      const inferredChapterId = capMatch ? capMatch[1] : undefined;
+      const inferredPageNumber = pagMatch ? Number(pagMatch[1]) : undefined;
+      const fallback = {
         intent: "consulta" as const,
-        params: {},
+        params: {
+          ...(inferredBookId ? { bookId: inferredBookId } : {}),
+          ...(inferredChapterId ? { chapterId: inferredChapterId } : {}),
+          ...(inferredPageNumber ? { pageNumber: inferredPageNumber } : {}),
+        },
         confidence: 0.5,
       };
+      console.warn("[detect-intent] fallback:", fallback);
+      return fallback;
     }
   },
 });

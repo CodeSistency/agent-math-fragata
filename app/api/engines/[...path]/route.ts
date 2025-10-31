@@ -60,10 +60,15 @@ export async function GET(
       );
     }
 
-    // Ensure it's a JavaScript file
-    if (!resolvedPath.endsWith(".js")) {
+    // Check file extension and set appropriate content type
+    let contentType: string;
+    if (resolvedPath.endsWith(".js")) {
+      contentType = "application/javascript";
+    } else if (resolvedPath.endsWith(".css")) {
+      contentType = "text/css";
+    } else {
       return NextResponse.json(
-        { error: "Only JavaScript files are allowed" },
+        { error: "Only JavaScript and CSS files are allowed" },
         { status: 400 }
       );
     }
@@ -73,7 +78,7 @@ export async function GET(
 
     return new NextResponse(content, {
       headers: {
-        "Content-Type": "application/javascript",
+        "Content-Type": contentType,
         "Cache-Control": "public, max-age=3600", // Cache for 1 hour
       },
     });

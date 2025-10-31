@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-10-30T16:08:46.609Z",
+  "bookId": "global-sync",
+  "totalFiles": 0,
+  "successfulFiles": 0,
+  "failedFiles": 0,
+  "formats": {
+    "MG": 0,
+    "NV": 0,
+    "basic": 0,
+    "unknown": 0
+  },
+  "engines": {},
+  "errors": [],
+  "performance": {
+    "totalTime": 0,
+    "avgTimePerFile": 0,
+    "embeddingCorrections": 0,
+    "fallbackReductions": 0
+  },
+  "recovery": {
+    "recoveredFiles": 0,
+    "fallbackExercises": 0,
+    "unknownFormatsRecovered": 0
+  }
+}

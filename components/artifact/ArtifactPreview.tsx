@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Code, Eye, Split, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import type { Engine } from "@/lib/books/engine-discovery";
+import type { Engine } from "@/lib/books/types";
 
 interface ArtifactDefinition {
   defBoards?: Record<string, any>;

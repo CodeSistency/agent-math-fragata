@@ -29,20 +29,39 @@ async function getLocalEmbedder(): Promise<(texts: string[]) => Promise<number[]
 
     return async (texts: string[]): Promise<number[][]> => {
       const outputs: number[][] = [];
+      const to1D = (x: any): number[] | null => {
+        if (Array.isArray(x) && Array.isArray(x[0])) {
+          const cols = x[0].length; const sum = new Array(cols).fill(0);
+          for (const row of x) for (let i = 0; i < cols; i++) sum[i] += row[i] || 0;
+          return sum.map(v => v / x.length);
+        }
+        if (Array.isArray(x)) return x as number[];
+        if (x?.data instanceof Float32Array) return Array.from(x.data as Float32Array);
+        if (x instanceof Float32Array) return Array.from(x);
+        return null;
+      };
       for (let i = 0; i < texts.length; i += maxBatch) {
         const slice = texts.slice(i, i + maxBatch);
         // extractor returns tensor or array; ensure array
         // Mean-pool over sequence dimension
         // @ts-ignore
         const feats: any = await extractor(slice, { pooling: "mean", normalize: true });
-        // feats can be Float32Array[] or Tensor
+        // feats can be Float32Array[] or Tensor; enforce non-empty arrays
         if (Array.isArray(feats)) {
           for (const v of feats as any[]) {
-            outputs.push(Array.from(v as Float32Array));
+            const arr = to1D(v) || [];
+            if (!arr || arr.length === 0) {
+              throw new Error("Empty local embedding vector");
+            }
+            outputs.push(arr as number[]);
           }
         } else if (feats?.data) {
           // Single input case (shouldn't happen with array), fallback
-          outputs.push(Array.from(feats.data as Float32Array));
+          const arr = to1D(feats) || [];
+          if (!arr.length) throw new Error("Empty local embedding vector (data)");
+          outputs.push(arr);
+        } else {
+          throw new Error("Unexpected local embedding output shape");
         }
       }
       return outputs;

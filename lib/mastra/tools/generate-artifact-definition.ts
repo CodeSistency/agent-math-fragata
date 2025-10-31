@@ -13,11 +13,31 @@ const ArtifactDefinitionSchema = z.object({
   definition: z.object({
     defBoards: z.record(z.string(), z.any()).describe("Definición de boards/tablas gráficas"),
     rDef: z.record(z.string(), z.any()).describe("Definición reactiva con datos del ejercicio"),
+    artifacts: z
+      .object({
+        artifact_1: z
+          .object({
+            board: z.string(),
+            statementBottom: z.string().default(""),
+            conditions: z
+              .array(
+                z.object({
+                  compare: z.string(),
+                  with: z.string(),
+                  tolerance: z.number().optional(),
+                })
+              )
+              .default([]),
+          })
+          .optional(),
+      })
+      .partial()
+      .optional(),
   }),
   suggestedEngine: z.string().nullable().optional().describe("ID del engine sugerido para renderizar"),
   confidence: z.number().min(0).max(1).describe("Confianza en que el ejercicio necesita artefacto visual"),
   reasoning: z.string().optional().describe("Razón por la que se genera o no el artefacto"),
-  patternUsed: z.string().optional().describe("Tipo de patrón usado de los ejemplos similares"),
+  patternUsed: z.string().nullable().optional().describe("Tipo de patrón usado de los ejemplos similares"),
   adaptations: z.array(z.string()).optional().describe("Lista de adaptaciones realizadas respecto a los ejemplos"),
 });
 
@@ -32,7 +52,14 @@ export const generateArtifactDefinitionTool = createTool({
       includePatterns: z.boolean().default(true).describe("Si incluir extracción de patrones comunes"),
     }).optional(),
   }),
-  outputSchema: ArtifactDefinitionSchema,
+  outputSchema: ArtifactDefinitionSchema.extend({
+    uiHints: z
+      .object({
+        openCanvas: z.boolean().default(true),
+        width: z.number().int().min(240).max(1600).optional(),
+      })
+      .optional(),
+  }),
   execute: async ({ context }) => {
     const { exerciseJson, ragOptions } = context;
     const topK = ragOptions?.topK ?? 5;
@@ -40,8 +67,24 @@ export const generateArtifactDefinitionTool = createTool({
     const includePatterns = ragOptions?.includePatterns ?? true;
 
     try {
-      // Parse exercise JSON
-      const exerciseData = JSON.parse(exerciseJson);
+      // Parse exercise JSON (tolerante a True/False, comillas simples y claves sin comillas)
+      const normalizeJson = (s: string) =>
+        (s || "")
+          .replace(/\bTrue\b/g, "true")
+          .replace(/\bFalse\b/g, "false")
+          .replace(/(['"])??([a-zA-Z0-9_]+)(['"])?:/g, '"$2":')
+          .replace(/'/g, '"');
+
+      let exerciseData: any;
+      try {
+        exerciseData = JSON.parse(exerciseJson);
+      } catch (e) {
+        const sample = (exerciseJson || "").slice(0, 160);
+        console.warn("[generate-artifact-definition] Primary JSON.parse failed. Applying normalization. Sample:", sample);
+        const normalized = normalizeJson(exerciseJson || "");
+        console.debug("[generate-artifact-definition] Normalized JSON length:", normalized.length);
+        exerciseData = JSON.parse(normalized);
+      }
       const exercise = ExerciseSchema.parse(exerciseData);
 
       // ===== FASE 1: RAG RETRIEVAL =====
@@ -129,16 +172,137 @@ export const generateArtifactDefinitionTool = createTool({
       // Extract text from result
       const text = result.text || "";
 
-      // Extract JSON from response
+      // Extract JSON from response (con normalización tolerante)
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         throw new Error("No JSON found in response");
       }
 
-      const parsed = JSON.parse(jsonMatch[0]);
-      const validated = ArtifactDefinitionSchema.parse(parsed);
+      const normalizeOutJson = (s: string) =>
+        (s || "")
+          .replace(/\bTrue\b/g, "true")
+          .replace(/\bFalse\b/g, "false")
+          .replace(/(['"])??([a-zA-Z0-9_]+)(['"])?:/g, '"$2":')
+          .replace(/'/g, '"');
 
-      // ===== FASE 3: POST-PROCESAMIENTO =====
+      let parsed: any;
+      try {
+        parsed = JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        console.warn("[generate-artifact-definition] Primary JSON.parse (LLM output) failed. Applying normalization.");
+        const normalized = normalizeOutJson(jsonMatch[0]);
+        parsed = JSON.parse(normalized);
+      }
+
+      // ===== FASE 3: REPARACIÓN DE ESTRUCTURA LEGACY =====
+      const repairDefinition = (def: any): any => {
+        if (!def || typeof def !== "object") return def;
+
+        // Asegurar defBoards.board_1.style
+        def.defBoards = def.defBoards || {};
+        def.defBoards.board_1 = def.defBoards.board_1 || {};
+        def.defBoards.board_1.style = def.defBoards.board_1.style || {
+          boundingbox: [-10, 10, 10, -10],
+          axis: true,
+          grid: true,
+        };
+
+        // Mapear esquemas no legacy -> legacy rDef
+        if (def.defBoards.elements || def.defBoards.functiongraph) {
+          // Intentar extraer curvas/líneas simples a rDef
+          const elements = def.defBoards.elements || {};
+          // Curva definida por función: samplear puntos no es posible aquí sin función; eliminar y dejar hint vacío
+          if (elements.curve && !def.rDef?.curvePoints) {
+            // No podemos ejecutar funciones; preferimos datos. Omitimos.
+          }
+          // Líneas horizontales/verticales
+          if (elements.horizontalLine && !def.rDef?.hLineY) {
+            const y = elements.horizontalLine.y || elements.horizontalLine.value;
+            if (typeof y === "number") {
+              def.rDef = { ...(def.rDef || {}), hLineY: y };
+            }
+          }
+          if (elements.verticalLine && !def.rDef?.vLineX) {
+            const x = elements.verticalLine.x || elements.verticalLine.value;
+            if (typeof x === "number") {
+              def.rDef = { ...(def.rDef || {}), vLineX: x };
+            }
+          }
+          // Eliminar claves no legacy
+          delete def.defBoards.elements;
+          delete def.defBoards.functiongraph;
+        }
+
+        // Asegurar artifacts.artifact_1
+        def.artifacts = def.artifacts || {};
+        if (!def.artifacts.artifact_1) {
+          def.artifacts.artifact_1 = {
+            board: "board_1",
+            statementBottom: "",
+            conditions: [],
+          };
+        }
+
+        return def;
+      };
+
+      const repairedParsed = {
+        ...parsed,
+        definition: repairDefinition(parsed.definition),
+      };
+
+      // Validación de esquema legacy y avisos
+      const validateAgainstEngine = (def: any): string[] => {
+        const errors: string[] = [];
+        if (!def?.defBoards?.board_1?.style) {
+          errors.push("defBoards.board_1.style ausente");
+        } else {
+          const s = def.defBoards.board_1.style;
+          if (!Array.isArray(s.boundingbox) || s.boundingbox.length !== 4) {
+            errors.push("style.boundingbox inválido");
+          }
+          if (typeof s.axis !== "boolean") errors.push("style.axis debe ser booleano");
+          if (typeof s.grid !== "boolean") errors.push("style.grid debe ser booleano");
+        }
+        if (!def?.artifacts?.artifact_1) {
+          errors.push("artifacts.artifact_1 ausente");
+        }
+        // rDef: no funciones
+        const hasFunction = JSON.stringify(def.rDef || {}).includes("function (") || JSON.stringify(def.rDef || {}).includes("=>");
+        if (hasFunction) errors.push("rDef contiene funciones/código");
+        return errors;
+      };
+
+      const validationWarnings = validateAgainstEngine(repairedParsed.definition);
+      if (validationWarnings.length) {
+        console.warn("[generate-artifact-definition] Legacy validation warnings:", validationWarnings);
+      }
+
+      const validated = ArtifactDefinitionSchema.parse(repairedParsed);
+
+      // Añadir uiHints para abrir el canvas cuando hay definición válida
+      try {
+        if (validated?.definition && (validated.definition.defBoards || validated.definition.rDef)) {
+          (validated as any).uiHints = { openCanvas: true };
+        }
+      } catch {}
+
+      // Telemetría resumida
+      try {
+        console.log("[generate-artifact-definition] Summary", {
+          querySignature,
+          similarExamples: ragContext.similarArtifacts?.length || 0,
+          engines: ragContext.availableEngines?.length || 0,
+          hadValidationWarnings: validationWarnings.length > 0,
+          suggestedEngine: validated.suggestedEngine,
+          confidence: validated.confidence,
+          defBoardsKeys: Object.keys(validated.definition.defBoards || {}).slice(0, 5),
+          rDefKeys: Object.keys(validated.definition.rDef || {}).slice(0, 8),
+          hasArtifact_1: !!validated.definition.artifacts?.artifact_1,
+        });
+      } catch {}
+
+      // ===== FASE 4: POST-PROCESAMIENTO =====
       
       // Validar que el engine sugerido existe
       if (validated.suggestedEngine && ragContext.availableEngines.length > 0) {

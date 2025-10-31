@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-10-30T18:27:33.402Z",
+  "bookId": "global-sync",
+  "totalFiles": 4,
+  "successfulFiles": 4,
+  "failedFiles": 0,
+  "formats": {
+    "MG": 0,
+    "NV": 0,
+    "basic": 0,
+    "unknown": 0
+  },
+  "engines": {},
+  "errors": [],
+  "performance": {
+    "totalTime": 46901,
+    "avgTimePerFile": 11725.25,
+    "embeddingCorrections": 0,
+    "fallbackReductions": 0,
+    "embeddingsNormalized": 0,
+    "embeddingsSkipped": 0,
+    "embeddingsUpserted": 0
+  },
+  "recovery": {
+    "recoveredFiles": 0,
+    "fallbackExercises": 0,
+    "unknownFormatsRecovered": 0
+  }
+}

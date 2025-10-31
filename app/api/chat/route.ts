@@ -1,14 +1,22 @@
 import { NextRequest } from "next/server";
 import { mastra } from "@/lib/mastra";
 import { rateLimit, getClientIdentifier } from "@/lib/middleware/rate-limit";
-import { initializeVectorStore } from "@/lib/rag/vector-store";
+import { VectorStoreV2 } from "@/lib/rag/vector-store-v2";
+import { env } from "@/lib/env";
+
+let vectorInitPromise: Promise<void> | null = null;
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
-  // Ensure vector store is initialized before processing chat
-  await initializeVectorStore();
+  // Initialize vector store only if using v1 (v2 doesn't need it)
+  if (!env.USE_MASTRA_V2) {
+  if (!vectorInitPromise) {
+    vectorInitPromise = VectorStoreV2.initializeBookVectorStore();
+  }
+  await vectorInitPromise;
+  }
   try {
     // Rate limiting: 20 requests per minute per IP
     const clientId = getClientIdentifier(request);
@@ -56,7 +64,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const agent = mastra.getAgent("supervisorAgent");
+    // Use v2 if feature flag is enabled, otherwise use v1
+    let agent;
+    if (env.USE_MASTRA_V2) {
+      const { mastraV2 } = await import("@/lib/mastra/v2");
+      agent = mastraV2.getAgent("supervisorAgentV2");
+    } else {
+      agent = mastra.getAgent("supervisorAgent");
+    }
 
     // When using format: "aisdk", Mastra accepts AI SDK messages directly
     // No manual conversion needed - Mastra handles format conversion internally
