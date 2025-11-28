@@ -4,6 +4,8 @@ import { mastra } from "@/lib/mastra";
 import { ExerciseSchema, type Exercise } from "@/types/exercise";
 import { readDefinitionByPage } from "../filesystem/definition-reader";
 import { generateArtifactDefinitionToolV2 } from "./generate-artifact-definition-v2";
+import { extractViewConfig } from "../filesystem/view-config-extractor";
+import { getPageEngines } from "../filesystem/engine-extractor";
 
 export const generateVariationToolV2 = createTool({
   id: "generate-variation",
@@ -123,23 +125,46 @@ export const generateVariationToolV2 = createTool({
       let definitionVariation: { defBoards: Record<string, any>; artifacts?: Record<string, any>; rDef?: Record<string, any> } | undefined;
       let artifactDefinition: { defBoards: Record<string, any>; rDef: Record<string, any> } | undefined;
       let suggestedEngine: string | null | undefined;
+      let viewConfig: any = null;
 
       if (isDefinition) {
         // Caso 1: Generar variación de Definition directamente
-        const prompt = `Genera una variación de la siguiente definición de artefacto matemático.
-Mantén la misma estructura pero cambia los valores numéricos en:
-- conditions.compare.values (valores a comparar)
-- interval (rangos de intervalos)
-- representation (representaciones textuales)
-- statementBottom (enunciados de funciones)
-- enumTop (títulos de ejercicios)
-- preDefPar, preDefPoint (puntos predefinidos)
+        const prompt = `Eres un experto generando variaciones de definiciones de artefactos matemáticos.
+
+CRÍTICO: La variación DEBE mantener la estructura EXACTA de la definición original. Solo cambia valores numéricos, NO la estructura.
+
+REGLAS ESTRICTAS:
+1. MANTÉN TODOS los campos y claves de la estructura original
+2. MANTÉN el mismo formato de datos (arrays, objetos, strings, números)
+3. MANTÉN las mismas claves en defBoards (ej: artifact_1, artifact_2, etc.)
+4. MANTÉN las mismas claves en rDef/artifacts (ej: artifacts.artifact_1, etc.)
+5. MANTÉN la misma estructura de conditions (valRepre, valInterval, board, etc.)
+6. SOLO cambia valores numéricos dentro de los campos existentes
+7. NO agregues campos nuevos que no existan en el original
+8. NO elimines campos que existan en el original
+9. NO cambies el tipo de dato de ningún campo
+
+CAMPOS QUE PUEDES VARIAR (solo valores numéricos/textuales dentro de ellos):
+- conditions.compare.values: cambia los números pero mantén el formato
+- interval: cambia los rangos pero mantén el formato de string (ej: "[2,3]" -> "[5,7]")
+- representation: cambia los valores pero mantén el formato de string
+- preDefPar: cambia las coordenadas pero mantén el formato de array
+- preDefPoint: cambia las coordenadas pero mantén el formato de array
+- conditions.valRepre: cambia los valores pero mantén el formato de array de strings
+- conditions.valInterval: cambia los valores pero mantén el formato de array de strings
+- conditions.board: cambia los valores en pares/points pero mantén la estructura
 
 Definición original:
 ${JSON.stringify(parsedInput, null, 2)}
 ${filesystemContext}
 
-Responde SOLO con un JSON válido de la definición variada (mismo formato: defBoards, artifacts/rDef, sin campos artificiales como tema, dificultad, enunciado, solucion).`;
+IMPORTANTE: 
+- La respuesta DEBE ser un JSON válido con la MISMA estructura que el original
+- Todos los campos del original DEBEN estar presentes en la variación
+- Solo cambia los valores numéricos/textuales, NO la estructura
+- Verifica que cada clave del original existe en tu respuesta
+
+Responde SOLO con un JSON válido de la definición variada (mismo formato exacto: defBoards, artifacts/rDef, sin campos artificiales como tema, dificultad, enunciado, solucion).`;
 
         const result = await agent.generate(prompt, { format: "mastra" });
         const text = (result as any).text || "";
@@ -159,9 +184,48 @@ Responde SOLO con un JSON válido de la definición variada (mismo formato: defB
           }
         }
 
+        // VALIDACIÓN: Verificar que la estructura se mantiene
+        const originalKeys = {
+          defBoards: Object.keys(parsedInput.defBoards || {}),
+          artifacts: Object.keys(parsedInput.artifacts || parsedInput.rDef?.artifacts || {}),
+          rDef: Object.keys(parsedInput.rDef || {}),
+        };
+        
+        const variationKeys = {
+          defBoards: Object.keys(parsedDefinition.defBoards || {}),
+          artifacts: Object.keys(parsedDefinition.artifacts || parsedDefinition.rDef?.artifacts || {}),
+          rDef: Object.keys(parsedDefinition.rDef || {}),
+        };
+
+        // Verificar que todas las claves principales se mantienen
+        const missingDefBoardsKeys = originalKeys.defBoards.filter(k => !variationKeys.defBoards.includes(k));
+        const missingArtifactKeys = originalKeys.artifacts.filter(k => !variationKeys.artifacts.includes(k));
+        
+        if (missingDefBoardsKeys.length > 0 || missingArtifactKeys.length > 0) {
+          console.warn("[generate-variation-v2] Missing keys in variation, merging with original:", {
+            missingDefBoardsKeys,
+            missingArtifactKeys,
+          });
+          
+          // Merge: mantener estructura original, usar valores de variación donde existan
+          parsedDefinition.defBoards = {
+            ...parsedInput.defBoards,
+            ...parsedDefinition.defBoards,
+          };
+          
+          if (parsedInput.artifacts || parsedInput.rDef?.artifacts) {
+            const originalArtifacts = parsedInput.artifacts || parsedInput.rDef.artifacts;
+            const variationArtifacts = parsedDefinition.artifacts || parsedDefinition.rDef?.artifacts || {};
+            parsedDefinition.artifacts = {
+              ...originalArtifacts,
+              ...variationArtifacts,
+            };
+          }
+        }
+
         definitionVariation = {
           defBoards: parsedDefinition.defBoards || parsedInput.defBoards || {},
-          artifacts: parsedDefinition.artifacts || parsedDefinition.rDef || parsedInput.artifacts || parsedInput.rDef,
+          artifacts: parsedDefinition.artifacts || parsedDefinition.rDef?.artifacts || parsedInput.artifacts || parsedInput.rDef?.artifacts,
           rDef: parsedDefinition.rDef || parsedInput.rDef,
         };
 
@@ -171,6 +235,40 @@ Responde SOLO con un JSON válido de la definición variada (mismo formato: defB
             defBoards: definitionVariation.defBoards,
             rDef: definitionVariation.rDef || (definitionVariation.artifacts ? { artifacts: definitionVariation.artifacts } : {}),
           };
+        }
+
+        // Si tenemos bookId, chapterId, pageId, obtener suggestedEngine y engines del contexto
+        if (bookId && chapterId && pageId && !suggestedEngine) {
+          try {
+            const normalizedChapterId = chapterId.replace(/^.+_/, "");
+            // Intentar obtener viewConfig para obtener suggestedEngine
+            const extractedViewConfig = await extractViewConfig(bookId, normalizedChapterId, pageId);
+            if (extractedViewConfig && extractedViewConfig.engines.length > 0) {
+              viewConfig = extractedViewConfig; // Guardar viewConfig para retornarlo
+              // Obtener suggestedEngine del viewConfig (first specific engine)
+              suggestedEngine = extractedViewConfig.engines
+                .filter(e => e.type === 'specific')
+                .sort((a, b) => a.order - b.order)[0]?.name || 
+                extractedViewConfig.engines
+                  .filter(e => e.type !== 'library')
+                  .sort((a, b) => a.order - b.order)[0]?.name ||
+                null;
+              console.log("[generate-variation-v2] Obtained suggestedEngine from viewConfig:", suggestedEngine);
+            } else {
+              // Fallback: obtener engines directamente
+              const pageEngines = await getPageEngines(bookId, normalizedChapterId, pageId);
+              if (pageEngines?.engines && pageEngines.engines.length > 0) {
+                // Obtener el primer engine específico del capítulo
+                const chapterEngine = pageEngines.chapterEngines?.[0];
+                if (chapterEngine) {
+                  suggestedEngine = chapterEngine.name?.replace(/\.js$/, '') || null;
+                  console.log("[generate-variation-v2] Obtained suggestedEngine from pageEngines:", suggestedEngine);
+                }
+              }
+            }
+          } catch (error) {
+            console.warn("[generate-variation-v2] Could not obtain suggestedEngine from context:", error);
+          }
         }
 
       } else if (isExercise) {
@@ -247,6 +345,9 @@ Responde SOLO con un JSON válido de la definición variada (mismo formato: defB
         ...(definitionVariation ? { definition: definitionVariation } : {}),
         ...(artifactDefinition ? { artifactDefinition } : {}),
         ...(suggestedEngine !== undefined ? { suggestedEngine } : {}),
+        ...(bookId ? { bookId } : {}),
+        ...(chapterId ? { chapterId } : {}),
+        ...(viewConfig ? { viewConfig } : {}),
         ...(hasArtifact ? { uiHints: { openCanvas: true } } : {}),
       };
     } catch (error) {

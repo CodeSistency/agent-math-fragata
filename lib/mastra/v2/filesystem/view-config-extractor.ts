@@ -28,6 +28,7 @@ export interface ViewConfiguration {
   };
   definitionPath: string; // Ruta a la definición usada
   viewType: 'html' | 'ejs'; // Tipo de view procesado
+  originalHTML?: string; // HTML original completo del archivo (para debugging)
 }
 
 /**
@@ -220,6 +221,22 @@ function extractHTMLStructure(htmlContent: string): {
     }
   }
   
+  // Prioritize known artifact containers (container-all-artifact is most important)
+  const priorityContainers = ['container-all-artifact', 'containerBasePage'];
+  const prioritized: string[] = [];
+  const others: string[] = [];
+  
+  for (const container of containers) {
+    if (priorityContainers.includes(container)) {
+      prioritized.push(container);
+    } else {
+      others.push(container);
+    }
+  }
+  
+  // Reorder: priority containers first, then others
+  const reorderedContainers = [...prioritized, ...others];
+  
   // Extract data attributes from boards and artifacts
   const dataAttrRegex = /data-(board|artifact)=["']([^"']+)["']/gi;
   while ((match = dataAttrRegex.exec(htmlContent)) !== null) {
@@ -228,7 +245,7 @@ function extractHTMLStructure(htmlContent: string): {
     dataAttributes[attrName] = attrValue;
   }
   
-  return { containers, dataAttributes };
+  return { containers: reorderedContainers, dataAttributes };
 }
 
 /**
@@ -306,6 +323,7 @@ async function parseHTMLView(viewPath: string, bookId: string): Promise<ViewConf
       htmlStructure,
       definitionPath,
       viewType: 'html',
+      originalHTML: htmlContent, // Guardar HTML original para debugging
     };
   } catch (error) {
     console.error(`[view-config-extractor] Error parsing HTML view ${viewPath}:`, error);
@@ -421,6 +439,7 @@ async function parseEJSView(viewPath: string, bookId: string): Promise<ViewConfi
       htmlStructure,
       definitionPath,
       viewType: 'ejs',
+      originalHTML: ejsContent, // Guardar EJS resuelto para debugging
     };
   } catch (error) {
     console.error(`[view-config-extractor] Error parsing EJS view ${viewPath}:`, error);
@@ -489,7 +508,7 @@ export async function extractViewConfig(
   }
 
   // Fallback to EJS views
-  if (page.viewPath && page.viewPath.includes('views')) {
+  if (page?.viewPath && page.viewPath.includes('views')) {
     const viewPath = join(BOOKS_ROOT, bookId, "book", page.viewPath);
     try {
       await stat(viewPath);

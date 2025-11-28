@@ -27,7 +27,7 @@ interface ExerciseCanvasProps {
   onUpdate?: (definition: ArtifactDefinition) => void;
 }
 
-type ViewMode = "preview" | "code";
+type ViewMode = "preview" | "code" | "original" | "reconstruido";
 
 export function ExerciseCanvas({
   exercise,
@@ -50,6 +50,7 @@ export function ExerciseCanvas({
   const [error, setError] = useState<string | null>(null);
   const [availableEngines, setAvailableEngines] = useState<Engine[]>([]);
   const [loadingEngines, setLoadingEngines] = useState(false);
+  const [reconstructedHTML, setReconstructedHTML] = useState<string>("");
   const previewIframeRef = useRef<HTMLIFrameElement>(null);
   
   // Stabilize enginesFromProps to prevent infinite loops
@@ -500,9 +501,16 @@ export function ExerciseCanvas({
       })
       .join('\n');
     
-    // Get containers from viewConfig
-    const primaryContainer = vc.htmlStructure?.containers?.[0] || 'containerBasePage';
-    const containerTag = primaryContainer.startsWith('#') 
+    // Get containers from viewConfig - prioritize container-all-artifact if it exists
+    let primaryContainer = vc.htmlStructure?.containers?.[0] || 'containerBasePage';
+    
+    // If container-all-artifact exists in containers, use it (it should be first after prioritization)
+    if (vc.htmlStructure?.containers?.includes('container-all-artifact')) {
+      primaryContainer = 'container-all-artifact';
+    }
+    
+    // Ensure container-all-artifact is created with ID, not class
+    const containerTag = primaryContainer === 'container-all-artifact' || primaryContainer.startsWith('#')
       ? `<div id="${primaryContainer.replace('#', '')}"></div>`
       : `<div class="${primaryContainer}"></div>`;
     
@@ -573,8 +581,14 @@ ${scripts.join('\n')}
       rDefKeys: Object.keys(rDef || {}),
     });
     
-    // Get primary container ID from viewConfig
-    const primaryContainerRaw = ${JSON.stringify(vc.htmlStructure?.containers?.[0] || 'container-all-artifact')};
+    // Get primary container ID from viewConfig - prioritize container-all-artifact
+    let primaryContainerRaw = ${JSON.stringify(vc.htmlStructure?.containers?.[0] || 'container-all-artifact')};
+    
+    // If container-all-artifact exists, use it
+    if (${JSON.stringify(vc.htmlStructure?.containers?.includes('container-all-artifact') || false)}) {
+      primaryContainerRaw = 'container-all-artifact';
+    }
+    
     const primaryContainerId = primaryContainerRaw.replace('#', '');
     const containerId = primaryContainerId || 'container-all-artifact';
     
@@ -585,12 +599,32 @@ ${scripts.join('\n')}
         let attempts = 0;
         const check = () => {
           attempts++;
-          const container = document.getElementById(containerId) || 
-                           document.querySelector('#' + containerId) ||
-                           document.querySelector('.' + containerId);
+          // For container-all-artifact, search specifically by ID
+          let container = null;
+          if (containerId === 'container-all-artifact') {
+            container = document.getElementById('container-all-artifact') || 
+                        document.querySelector('#container-all-artifact');
+          } else {
+            // For other containers, try ID first, then class
+            container = document.getElementById(containerId) || 
+                       document.querySelector('#' + containerId) ||
+                       document.querySelector('.' + containerId);
+          }
+          
+          // Verify the container has the correct ID
           if (container) {
-            console.log('[iframe] Container found:', containerId);
-            resolve(container);
+            if (container.id === containerId || (containerId === 'container-all-artifact' && container.id === 'container-all-artifact')) {
+              console.log('[iframe] Container found:', containerId, 'with ID:', container.id);
+              resolve(container);
+            } else {
+              // Container found but wrong ID, keep searching
+              if (attempts >= maxAttempts) {
+                console.warn('[iframe] Container found but wrong ID:', container.id, 'expected:', containerId);
+                resolve(null);
+              } else {
+                setTimeout(check, 50);
+              }
+            }
           } else if (attempts >= maxAttempts) {
             console.warn('[iframe] Container not found after', maxAttempts, 'attempts:', containerId);
             resolve(null);
@@ -654,7 +688,7 @@ ${scripts.join('\n')}
       });
     };
     
-    // Intercept generation() to wait for container before executing
+    // Intercept generation() to wait for container AND template before executing
     let originalGeneration = null;
     const interceptGeneration = () => {
       // Override generation before script loads
@@ -662,18 +696,88 @@ ${scripts.join('\n')}
         originalGeneration = window.generation;
       }
       window.generation = function(def) {
-        console.log('[iframe] generation() intercepted, waiting for container...');
-        waitForContainer(containerId).then((container) => {
+        console.log('[iframe] generation() intercepted, waiting for container and template...');
+        
+        // Wait for both container and template
+        Promise.all([
+          waitForContainer(containerId),
+          new Promise((resolve) => {
+            let attempts = 0;
+            const checkTemplate = () => {
+              attempts++;
+              const template = document.getElementById('template-interval');
+              if (template && template.content && template.content.firstElementChild) {
+                console.log('[iframe] Template found');
+                resolve(template);
+              } else if (attempts >= 50) {
+                console.warn('[iframe] Template not found after', attempts, 'attempts');
+                resolve(null);
+              } else {
+                setTimeout(checkTemplate, 50);
+              }
+            };
+            checkTemplate();
+          })
+        ]).then(([container, template]) => {
           if (!container) {
             console.error('[iframe] Container not found, generation cannot proceed');
             return;
           }
-          console.log('[iframe] Container ready, executing generation...');
+          if (!template) {
+            console.error('[iframe] Template not found, generation cannot proceed');
+            return;
+          }
+          
+          // Double-check that main container exists (generation() will query it again)
+          // Use the same search method that generation() uses: document.querySelector('#container-all-artifact')
+          // But first verify the container we found is the right one
+          if (container && container.id !== 'container-all-artifact') {
+            console.warn('[iframe] Container found has different ID:', container.id, 'expected: container-all-artifact');
+          }
+          
+          let main = document.querySelector('#container-all-artifact');
+          if (!main) {
+            // Try alternative search methods
+            main = document.getElementById('container-all-artifact');
+            if (!main) {
+              // Use the container we already found if it matches
+              if (container && (container.id === 'container-all-artifact' || container.id === containerId)) {
+                main = container;
+                console.log('[iframe] Using container from waitForContainer:', container.id);
+              } else {
+                console.error('[iframe] Main container #container-all-artifact not found with any method', {
+                  containerId: container?.id,
+                  containerTagName: container?.tagName,
+                  waitForContainerId: containerId,
+                  allContainers: Array.from(document.querySelectorAll('[id*="container"]')).map(el => el.id)
+                });
+                return;
+              }
+            }
+          }
+          
+          console.log('[iframe] Container and template ready, executing generation...', {
+            containerId: container?.id,
+            templateId: template?.id,
+            mainContainer: !!main,
+            mainContainerId: main?.id,
+            templateContent: !!template?.content,
+            templateFirstChild: !!template?.content?.firstElementChild
+          });
+          
           // Restore original and call it
           if (originalGeneration) {
             window.generation = originalGeneration;
           }
-          originalGeneration(def);
+          
+          // Execute with a small delay to ensure DOM is fully ready
+          setTimeout(() => {
+            try {
+              originalGeneration(def);
+            } catch (err) {
+              console.error('[iframe] Error executing generation:', err);
+            }
+          }, 50);
         });
       };
     };
@@ -1064,6 +1168,9 @@ ${scripts.join('\n')}
         const htmlContent = generatePreviewHTML('', parsedDefinition, undefined, null, loadedEngineCodes);
         console.log("[ExerciseCanvas] HTML generated from viewConfig, length:", htmlContent.length);
         
+        // Guardar HTML reconstruido para el tab de debugging
+        setReconstructedHTML(htmlContent);
+        
         await new Promise(resolve => setTimeout(resolve, 0));
         
         if (!previewIframeRef.current) {
@@ -1108,6 +1215,9 @@ ${scripts.join('\n')}
       console.log("[ExerciseCanvas] HTML generated, length:", htmlContent.length);
       console.log("[ExerciseCanvas] HTML preview (first 500 chars):", htmlContent.substring(0, 500));
 
+      // Guardar HTML reconstruido para el tab de debugging
+      setReconstructedHTML(htmlContent);
+
       // Wait for iframe to be available (it should always be mounted now)
       // Add a small delay to ensure DOM is ready
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -1143,8 +1253,11 @@ ${scripts.join('\n')}
   };
 
   // Auto-render when switching to preview mode - use definitionJson to track changes
+  // Wait for engines to load before auto-rendering
   useEffect(() => {
     const hasValidDefinition = !!definition && (definition.defBoards || definition.rDef);
+    const hasEngines = availableEngines.length > 0 || (useManualPath && manualEnginePath);
+    const shouldRender = viewMode === "preview" && hasValidDefinition && hasEngines && (selectedEngine || (useManualPath && manualEnginePath)) && !loadingEngines;
     
     console.log("[ExerciseCanvas] Auto-render effect triggered", {
       viewMode,
@@ -1152,17 +1265,25 @@ ${scripts.join('\n')}
       selectedEngine,
       useManualPath,
       manualEnginePath,
-      shouldRender: viewMode === "preview" && hasValidDefinition && (selectedEngine || (useManualPath && manualEnginePath)),
+      availableEnginesCount: availableEngines.length,
+      loadingEngines,
+      shouldRender,
     });
     
-    if (viewMode === "preview" && hasValidDefinition && (selectedEngine || (useManualPath && manualEnginePath))) {
+    if (shouldRender) {
       console.log("[ExerciseCanvas] Auto-rendering preview");
       renderPreview();
     } else {
-      console.log("[ExerciseCanvas] Auto-render skipped - conditions not met");
+      console.log("[ExerciseCanvas] Auto-render skipped - conditions not met", {
+        viewModeOk: viewMode === "preview",
+        hasDefinition: hasValidDefinition,
+        hasEngines,
+        hasSelectedEngine: !!(selectedEngine || (useManualPath && manualEnginePath)),
+        notLoading: !loadingEngines,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewMode, selectedEngine, useManualPath, manualEnginePath, definitionJson]);
+  }, [viewMode, selectedEngine, useManualPath, manualEnginePath, definitionJson, availableEngines.length, loadingEngines]);
 
   // Handle view mode change from code to preview
   const handleViewModeChange = (mode: ViewMode) => {
@@ -1209,6 +1330,29 @@ ${scripts.join('\n')}
             <Code className="h-4 w-4 mr-2" />
             Código
           </Button>
+          {viewConfig?.originalHTML && (
+            <>
+              <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-700" />
+              <Button
+                variant={viewMode === "original" ? "default" : "outline"}
+                size="sm"
+                onClick={() => handleViewModeChange("original")}
+              >
+                <Code className="h-4 w-4 mr-2" />
+                Original
+              </Button>
+            </>
+          )}
+          {reconstructedHTML && (
+            <Button
+              variant={viewMode === "reconstruido" ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleViewModeChange("reconstruido")}
+            >
+              <Code className="h-4 w-4 mr-2" />
+              Reconstruido
+            </Button>
+          )}
         </div>
 
         {/* Engine Selection */}
@@ -1298,6 +1442,32 @@ ${scripts.join('\n')}
                 </>
               )}
             </Button>
+          </div>
+        ) : viewMode === "original" ? (
+          <div className="h-full flex flex-col p-4 overflow-hidden">
+            <div className="mb-2 flex-shrink-0">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300 block mb-2">
+                HTML Original:
+              </label>
+            </div>
+            <div className="flex-1 overflow-auto border border-zinc-300 dark:border-zinc-700 rounded-md bg-zinc-50 dark:bg-zinc-950">
+              <pre className="p-4 text-xs font-mono whitespace-pre-wrap break-words text-zinc-900 dark:text-zinc-100">
+                {viewConfig?.originalHTML || ""}
+              </pre>
+            </div>
+          </div>
+        ) : viewMode === "reconstruido" ? (
+          <div className="h-full flex flex-col p-4 overflow-hidden">
+            <div className="mb-2 flex-shrink-0">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300 block mb-2">
+                HTML Reconstruido:
+              </label>
+            </div>
+            <div className="flex-1 overflow-auto border border-zinc-300 dark:border-zinc-700 rounded-md bg-zinc-50 dark:bg-zinc-950">
+              <pre className="p-4 text-xs font-mono whitespace-pre-wrap break-words text-zinc-900 dark:text-zinc-100">
+                {reconstructedHTML}
+              </pre>
+            </div>
           </div>
         ) : (
           <div className="h-full p-4 overflow-auto relative">

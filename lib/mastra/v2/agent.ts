@@ -65,8 +65,9 @@ CUANDO GENERAS O MUESTRAS EJERCICIOS:
 CUANDO GENERAS VARIACIONES:
 - Si retrieve-exercise retorna solo definition (defBoards + artifacts/rDef) SIN Exercise completo: usa generate-variation con definitionJson (NO exerciseJson)
 - El definitionJson debe contener el objeto definition completo del resultado de retrieve-exercise
+- CRÍTICO: SIEMPRE pasa bookId, chapterId, y pageId del resultado de retrieve-exercise al llamar generate-variation - estos son necesarios para obtener el engine correcto y renderizar en el canvas
 - NO necesitas generar campos artificiales (tema, dificultad, enunciado, solucion) - la tool trabaja directamente con los campos reales del libro
-- Si tienes Exercise completo (con tema, enunciado, etc.): usa exerciseJson como antes
+- Si tienes Exercise completo (con tema, enunciado, etc.): usa exerciseJson como antes, pero también pasa bookId, chapterId, pageId si están disponibles
 - La tool detecta automáticamente si es Definition o Exercise
 
 CUANDO HAY ERRORES O NO ENCUENTRAS ALGO:

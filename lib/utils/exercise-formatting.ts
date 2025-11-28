@@ -189,7 +189,8 @@ export function extractExerciseWithArtifact(message: any): {
     return null;
   }
 
-  // Buscar en tool calls
+  // PRIMERO: Buscar generate-variation (prioridad alta)
+  // Si encontramos una variación generada, esa es la que queremos mostrar
   for (const part of message.parts) {
     // Handle AI SDK v5 tool parts: type like "tool-generateVariation" or "tool-generate-variation"
     const isToolV5 = typeof part.type === "string" && part.type.startsWith("tool-");
@@ -213,7 +214,7 @@ export function extractExerciseWithArtifact(message: any): {
         resultKeys: part.result ? Object.keys(part.result) : [],
       });
 
-      // Buscar generate-variation tool
+      // Buscar generate-variation tool PRIMERO
       if (toolName === "generateVariation" || toolName === "generate-variation" || toolName === "generateVariation-v2" || toolName === "generate-variation-v2") {
         const output = part.result || part.output;
         
@@ -225,7 +226,7 @@ export function extractExerciseWithArtifact(message: any): {
           outputKeys: output ? Object.keys(output) : [],
         });
         
-        // Caso 1: Tiene exercise con artifactDefinition (mantener lógica actual)
+        // Caso 1: Tiene exercise con artifactDefinition
         if (output?.exercise) {
           const exercise = output.exercise as Exercise;
           
@@ -238,6 +239,14 @@ export function extractExerciseWithArtifact(message: any): {
             output.suggestedEngine ||
             exercise.metadata?.suggestedEngine;
 
+          // Normalizar chapterId si viene con formato "MG_cap_0"
+          let normalizedChapterId = exercise.metadata?.chapterId || output.chapterId;
+          if (normalizedChapterId && typeof normalizedChapterId === 'string' && normalizedChapterId.includes('_cap_')) {
+            const match = normalizedChapterId.match(/cap_(\d+)/);
+            normalizedChapterId = match ? match[1] : normalizedChapterId.replace(/.*cap_/, '');
+          }
+          
+          // Si tiene artifactDefinition, retornar inmediatamente (prioridad)
           if (artifactDef && (artifactDef.defBoards || artifactDef.rDef)) {
             return {
               exercise,
@@ -246,10 +255,25 @@ export function extractExerciseWithArtifact(message: any): {
                 rDef: artifactDef.rDef || {},
               },
               suggestedEngine: suggestedEngine || undefined,
-              bookId: exercise.metadata?.bookId,
-              chapterId: exercise.metadata?.chapterId,
+              bookId: exercise.metadata?.bookId || output.bookId,
+              chapterId: normalizedChapterId,
+              viewConfig: output.viewConfig,
             };
           }
+          
+          // Si tiene exercise pero no artifactDefinition, aún así retornarlo
+          // (puede que el usuario quiera ver la variación aunque no tenga visualización)
+          return {
+            exercise,
+            artifactDefinition: {
+              defBoards: {},
+              rDef: {},
+            },
+            suggestedEngine: suggestedEngine || undefined,
+            bookId: exercise.metadata?.bookId || output.bookId,
+            chapterId: normalizedChapterId,
+            viewConfig: output.viewConfig,
+          };
         }
         
         // Caso 2: Tiene definition directamente (sin exercise)
@@ -260,7 +284,15 @@ export function extractExerciseWithArtifact(message: any): {
             rDef: definition.rDef || (definition.artifacts ? { artifacts: definition.artifacts } : {}),
           };
           
+          // Si tiene definition con artefactos, retornar inmediatamente (prioridad)
           if (artifactDef && (artifactDef.defBoards || artifactDef.rDef || definition.artifacts)) {
+            // Normalizar chapterId si viene con formato "MG_cap_0"
+            let normalizedChapterId = output.chapterId;
+            if (normalizedChapterId && typeof normalizedChapterId === 'string' && normalizedChapterId.includes('_cap_')) {
+              const match = normalizedChapterId.match(/cap_(\d+)/);
+              normalizedChapterId = match ? match[1] : normalizedChapterId.replace(/.*cap_/, '');
+            }
+            
             return {
               definition,
               artifactDefinition: {
@@ -269,10 +301,29 @@ export function extractExerciseWithArtifact(message: any): {
               },
               suggestedEngine: output.suggestedEngine,
               bookId: output.bookId,
-              chapterId: output.chapterId,
+              chapterId: normalizedChapterId,
+              viewConfig: output.viewConfig,
             };
           }
         }
+      }
+    }
+  }
+
+  // SEGUNDO: Si no encontramos generate-variation válido, buscar retrieve-exercise
+  for (const part of message.parts) {
+    // Handle AI SDK v5 tool parts: type like "tool-generateVariation" or "tool-generate-variation"
+    const isToolV5 = typeof part.type === "string" && part.type.startsWith("tool-");
+    const isToolCall = part.type === "tool-call" || part.type === "tool" || isToolV5;
+    
+    if (isToolCall) {
+      // Extract tool name from different formats
+      let toolName: string | undefined;
+      if (isToolV5) {
+        // Extract from "tool-generateVariation" -> "generateVariation"
+        toolName = part.type.slice("tool-".length);
+      } else {
+        toolName = part.toolName || part.name;
       }
 
       // Buscar generate-artifact-definition tool
